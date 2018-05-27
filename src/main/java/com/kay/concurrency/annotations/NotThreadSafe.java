@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Created by kay on 2018/5/27.
+ *
  * 标记线程不安全的类
  */
 
