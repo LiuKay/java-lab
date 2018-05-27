@@ -10,7 +10,7 @@ import java.util.concurrent.Semaphore;
 
 /**
  * Created by kay on 2018/5/27.
- * 并发模拟测试
+ * 使用代码并发模拟测试
  */
 
 @NotThreadSafe
