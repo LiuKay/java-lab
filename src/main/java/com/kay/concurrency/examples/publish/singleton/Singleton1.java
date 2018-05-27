@@ -5,7 +5,6 @@ import com.kay.concurrency.annotations.NotThreadSafe;
 
 /**
  * Created by kay on 2018/5/27.
- *
  *  懒汉式单例模式，第一次调用时初始化
  */
 

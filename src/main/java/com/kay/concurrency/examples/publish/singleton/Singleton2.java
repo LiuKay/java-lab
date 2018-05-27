@@ -4,7 +4,6 @@ import com.kay.concurrency.annotations.ThreadSafe;
 
 /**
  * Created by kay on 2018/5/27.
- *
  * 恶汉式单例模式，类加载时初始化
  */
 

@@ -4,6 +4,7 @@ import com.kay.concurrency.annotations.NotThreadSafe;
 
 /**
  * Created by kay on 2018/5/27.
+ * 双重检验的懒汉式
  */
 
 @NotThreadSafe
