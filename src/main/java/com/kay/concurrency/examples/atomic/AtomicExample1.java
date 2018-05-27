@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by kay on 2018/5/27.
- * 并发模拟测试
+ * AtomicInteger
  */
 
 @ThreadSafe

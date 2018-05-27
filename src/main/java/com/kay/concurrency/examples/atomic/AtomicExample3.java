@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.LongAdder;
 
 /**
  * Created by kay on 2018/5/27.
- *
+ * AtomicIntegerFieldUpdater
  * AtomicIntegerFieldUpdater 指定摸个对象的属性原子性更新
  */
 
