@@ -1,4 +1,4 @@
-package com.kay.concurrency.examples;
+package com.kay.concurrency.examples.locks;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;

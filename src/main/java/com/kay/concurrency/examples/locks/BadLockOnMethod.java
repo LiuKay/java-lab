@@ -1,4 +1,4 @@
-package com.kay.concurrency.examples;
+package com.kay.concurrency.examples.locks;
 
 
 public class BadLockOnMethod implements Runnable{

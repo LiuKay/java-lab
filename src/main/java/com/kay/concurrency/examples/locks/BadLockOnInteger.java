@@ -1,4 +1,4 @@
-package com.kay.concurrency.examples;
+package com.kay.concurrency.examples.locks;
 
 /**
  * Created by kay on 2017/9/1.
