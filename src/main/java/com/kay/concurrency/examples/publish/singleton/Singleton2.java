@@ -11,9 +11,7 @@ import com.kay.concurrency.annotations.ThreadSafe;
 public class Singleton2 {
 
     public Singleton2() {
-
-        //如果在实例化有大量的资源操作等，调用少，浪费资源
-
+        //过多处理的加载很慢，加载慢，使用少的话造成性能问题
     }
 
     private static Singleton2 singleton2 = new Singleton2();
