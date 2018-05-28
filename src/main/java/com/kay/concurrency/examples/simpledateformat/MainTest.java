@@ -1,10 +1,8 @@
-package com.kay.concurrency.examples.threadlocal;
+package com.kay.concurrency.examples.simpledateformat;
 
 import com.kay.concurrency.annotations.NotThreadSafe;
 import lombok.extern.slf4j.Slf4j;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -13,22 +11,18 @@ import java.util.concurrent.Semaphore;
 
 /**
  * Created by kay on 2018/5/28.
- *
- *  JDK API文档：Date formats are not synchronized. It is recommended to create separate format instances for each thread.
- *   If multiple threads access a format concurrently, it must be synchronized externally.
- *
- */
+ * 模拟测试多线程环境的日期转换
+ * */
 @Slf4j
-@NotThreadSafe
-public class SimpleDateFormatTest {
-
-    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+public class MainTest {
 
     //并发数
-    private final static int threadCount = 10;
+    private final static int threadCount = 100;
 
     //请求数
-    private final static int requsetCount = 10;
+    private final static int requsetCount = 100;
+
+    private final static String TESTSTR = "2018-05-28 15:04:30";
 
     public static void main(String[] args) throws InterruptedException {
         Date date = new Date();
@@ -42,7 +36,18 @@ public class SimpleDateFormatTest {
                 try {
                     semaphore.acquire();
 
-                    log.info("get date:{}",formatDate(parse("2018-05-28 15:04:30")));
+                    //SimpleDateFormat 线程不安全
+                    //log.info("get date:{}",SimpleDateFormatUtil.formatDate(SimpleDateFormatUtil.parse(TESTSTR)));
+
+                    //Joda-time 实现日期转换，线程安全
+                    //log.info("get date:{}",DateTimeUtil.dateToStr(DateTimeUtil.strToDate(TESTSTR)));
+
+                    //使用ThreadLocal 实现 SimpleDateFormat 的线程安全
+//                    log.info("get date:{}",ThreadLocalTimeUtil.format(ThreadLocalTimeUtil.parse(TESTSTR)));
+
+                    //jdk 1.8 time api
+                    log.info("get date:{}",Java8TimeUtil.format(Java8TimeUtil.parse(TESTSTR)));
+
                     semaphore.release();
                 } catch (Exception e) {
                     log.error("exception",e);
@@ -55,14 +60,4 @@ public class SimpleDateFormatTest {
         executorService.shutdown();
         log.info("请求完毕");
     }
-
-    public static  String formatDate(Date date)throws ParseException{
-        return simpleDateFormat.format(date);
-    }
-
-    public static Date parse(String strDate) throws ParseException {
-
-        return simpleDateFormat.parse(strDate);
-    }
-
 }
