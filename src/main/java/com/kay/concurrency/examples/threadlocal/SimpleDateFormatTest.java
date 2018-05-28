@@ -24,14 +24,13 @@ public class SimpleDateFormatTest {
 
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    //并发数
     private final static int threadCount = 10;
 
+    //请求数
     private final static int requsetCount = 10;
 
-    private static int count = 0;
-
     public static void main(String[] args) throws InterruptedException {
-
         Date date = new Date();
 
         ExecutorService executorService = Executors.newCachedThreadPool();
