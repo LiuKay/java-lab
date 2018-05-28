@@ -1,4 +1,4 @@
-package com.kay.concurrency.examples.design;
+package com.kay.concurrency.examples.publish.singleton;
 
 /**
  * Created by kay on 2017/9/5.
@@ -26,8 +26,8 @@ public class StaticSingleton {
     }
 
     public static void main(String[] args) {
-        //StaticSingleton s=getInstance();
-        System.out.println(StaticSingleton.status);
+        StaticSingleton s=getInstance();
+//        System.out.println(StaticSingleton.status);
     }
 
 }
