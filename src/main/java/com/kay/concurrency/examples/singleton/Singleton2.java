@@ -1,4 +1,4 @@
-package com.kay.concurrency.examples.publish.singleton;
+package com.kay.concurrency.examples.singleton;
 
 import com.kay.concurrency.annotations.ThreadSafe;
 

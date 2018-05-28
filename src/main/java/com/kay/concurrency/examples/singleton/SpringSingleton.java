@@ -1,4 +1,4 @@
-package com.kay.concurrency.examples.publish.singleton;
+package com.kay.concurrency.examples.singleton;
 
 /**
  * Created by kay on 2018/5/28.
