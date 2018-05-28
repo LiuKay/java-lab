@@ -13,6 +13,9 @@ public class Singleton3 {
     public Singleton3() {
     }
 
+    //TODO 解决方案 valatile + 双重检测 =禁止指令重排
+   // private volatile static Singleton3 singleton3 = null;
+
     private static Singleton3 singleton3 = null;
 
     /**
