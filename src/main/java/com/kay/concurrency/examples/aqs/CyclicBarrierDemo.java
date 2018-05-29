@@ -1,4 +1,4 @@
-package com.kay.concurrency.examples.locks;
+package com.kay.concurrency.examples.aqs;
 
 import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
@@ -42,6 +42,9 @@ public class CyclicBarrierDemo {
         }
     }
 
+    /**
+     * 所有线程都到达屏障时，优先执行该 Runnable
+     */
     public static class BarrierRun implements Runnable {
 
         boolean flag;

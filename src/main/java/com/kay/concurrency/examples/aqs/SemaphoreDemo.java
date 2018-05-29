@@ -1,4 +1,4 @@
-package com.kay.concurrency.examples.locks;
+package com.kay.concurrency.examples.aqs;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

@@ -1,4 +1,4 @@
-package com.kay.concurrency.examples.locks;
+package com.kay.concurrency.examples.aqs;
 
 /**
  * Created by kay on 2017/9/1.
@@ -18,8 +18,7 @@ public class DeadLock implements Runnable{
     public void run() {
         if (i == 1) {
             synchronized (d1) {
-                System.out.println(Thread.currentThread().getName());
-                System.out.println(d1.i);
+                System.out.println("获取d1锁线程："+Thread.currentThread().getName());
                 try {
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {
@@ -31,8 +30,7 @@ public class DeadLock implements Runnable{
             }
         }else {
             synchronized (d2) {
-                System.out.println(Thread.currentThread().getName());
-                System.out.println(d2.i);
+                System.out.println("获取d2锁线程："+Thread.currentThread().getName());
                 try {
                     Thread.sleep(6000);
                 } catch (InterruptedException e) {
@@ -52,7 +50,7 @@ public class DeadLock implements Runnable{
         Thread t2 = new Thread(r1, "t2");
         t1.start();
         t2.start();
-        t1.join();
-        t2.join();
+//        t1.join();
+//        t2.join();
     }
 }
