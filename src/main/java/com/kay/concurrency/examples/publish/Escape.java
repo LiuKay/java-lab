@@ -2,6 +2,7 @@ package com.kay.concurrency.examples.publish;
 
 import com.kay.concurrency.annotations.NotRecommend;
 import com.kay.concurrency.annotations.NotThreadSafe;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -14,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * this 引用逸出
  */
-@Slf4j
+@Log4j2
 @NotThreadSafe
 @NotRecommend
 public class Escape {

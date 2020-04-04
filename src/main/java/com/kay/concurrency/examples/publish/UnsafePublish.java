@@ -1,6 +1,7 @@
 package com.kay.concurrency.examples.publish;
 
 import com.kay.concurrency.annotations.NotThreadSafe;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -13,7 +14,7 @@ import java.util.Arrays;
  * 其他对象获取对象状态未知
  *
  */
-@Slf4j
+@Log4j2
 @NotThreadSafe
 public class UnsafePublish {
 

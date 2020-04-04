@@ -9,6 +9,7 @@ import java.util.Set;
  *
  * JDK7 or higher : java.lang.OutOfMemoryError: Java heap space
  * -Xmx6m
+ * Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
  */
 public class RuntimeConstantPoolOOM {
 
