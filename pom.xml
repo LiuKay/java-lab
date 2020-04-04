@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.kay</groupId>
-	<artifactId>javabasic</artifactId>
+	<artifactId>java_professional</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>java_basic</name>
-	<description>Java Basic</description>
+	<name>JavaProfessional</name>
+	<description>JavaProfessional</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
