@@ -4,6 +4,7 @@ import com.kay.concurrency.annotations.ThreadSafe;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CountDownLatch;
@@ -20,7 +21,7 @@ import java.util.concurrent.atomic.LongAdder;
  */
 
 @ThreadSafe
-@Slf4j
+@Log4j2
 @NoArgsConstructor
 public class AtomicExample3 {
 

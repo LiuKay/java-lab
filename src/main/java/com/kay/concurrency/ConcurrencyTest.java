@@ -1,6 +1,7 @@
 package com.kay.concurrency;
 
 import com.kay.concurrency.annotations.NotThreadSafe;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CountDownLatch;
@@ -14,7 +15,7 @@ import java.util.concurrent.Semaphore;
  */
 
 @NotThreadSafe
-@Slf4j
+@Log4j2
 public class ConcurrencyTest {
 
     //最大并发数

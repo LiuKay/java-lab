@@ -1,6 +1,7 @@
 package com.kay.concurrency.examples.atomic;
 
 import com.kay.concurrency.annotations.ThreadSafe;
+import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CountDownLatch;
@@ -15,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 
 @ThreadSafe
-@Slf4j
+@Log4j2
 public class AtomicExample1 {
 
     //最大并发数
