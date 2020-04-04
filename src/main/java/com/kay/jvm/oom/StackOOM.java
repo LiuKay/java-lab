@@ -2,6 +2,9 @@ package com.kay.jvm.oom;
 
 /**
  * VM Args:-Xss128k
+ *
+ * StackOverflow: max stack length
+ * OutOfMemory: cannot create native threads
  */
 public class StackOOM {
 
