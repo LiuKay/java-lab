@@ -1,4 +1,4 @@
-package com.kay.concurrency.examples.other;
+package com.kay.jvm.other;
 
 /**
  * Created by kay on 2017/9/4.

@@ -1,0 +1,22 @@
+package com.kay.jvm.oom;
+
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * JDK6 : OOM:PermGen
+ * VM Args: -XX:PermSize=6M -XX:MaxPermSize=6M
+ *
+ * JDK7 or higher : java.lang.OutOfMemoryError: Java heap space
+ * -Xmx6m
+ */
+public class RuntimeConstantPoolOOM {
+
+    public static void main(String[] args) {
+        Set<String> set = new HashSet<>();
+        short i = 0;
+        while (true) {
+            set.add(String.valueOf(i++).intern());
+        }
+    }
+}
