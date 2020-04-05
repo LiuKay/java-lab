@@ -11,12 +11,18 @@ public class InitTest {
 
     static {
         count++;
+        System.out.println(count);
         System.out.println("static");
     }
 
     public InitTest(){
         count++;
         System.out.println("construct");
+        System.out.println(count);
+    }
+
+    public static void main(String[] args) {
+        new InitTest();
     }
 
 
