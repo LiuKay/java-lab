@@ -1,4 +1,4 @@
-package com.kay.concurrency.examples.future;
+package com.kay.concurrency.examples.future.example;
 
 /**
  * Created by kay on 2017/9/6.
