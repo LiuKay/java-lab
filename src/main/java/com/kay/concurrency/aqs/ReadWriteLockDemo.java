@@ -1,24 +1,21 @@
 package com.kay.concurrency.aqs;
 
+import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/**
- * Created by kay on 2017/9/1.
- * 该例子测试读写分离锁与普通锁的对比
- *1.读操作可以同时并行
- * 2.与写操作有关需要阻塞
- *
- * ---->在读多写少的场景中，特别是大量的读的时候，性能高
- */
+import static com.kay.concurrency.utils.TestUtils.sleep;
+
+
 public class ReadWriteLockDemo {
-    //普通锁
-    private static Lock lock=new ReentrantLock();
+
+    private static ReentrantLock lock = new ReentrantLock();
 
     //读写分离锁
-    private static ReentrantReadWriteLock readWriteLock= new ReentrantReadWriteLock();
+    private static ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
     //读锁
     private static Lock readLock = readWriteLock.readLock();
@@ -27,65 +24,148 @@ public class ReadWriteLockDemo {
 
     private int value;
 
-    //读操作
-    public Object handleRead(Lock lock) throws InterruptedException {
+    public int normalRead() {
         try {
             lock.lock();
-            Thread.sleep(1000);
+            sleep(1, TimeUnit.SECONDS);
             return value;
-        }finally {
+        } finally {
             lock.unlock();
+        }
+    }
+
+    //读操作
+    public int read() {
+        try {
+            readLock.lock();
+            sleep(1, TimeUnit.SECONDS);
+            return value;
+        } finally {
+            readLock.unlock();
         }
     }
 
     //写操作
-    public void handleWrite(Lock lock,int newValue) throws InterruptedException {
+    public void write(int newValue) {
         try {
-            lock.lock();
-            Thread.sleep(1000);
-            value=newValue;
-        }finally {
-            lock.unlock();
+            writeLock.lock();
+            sleep(1, TimeUnit.SECONDS);
+            value = newValue;
+        } finally {
+            writeLock.unlock();
         }
     }
 
-    public static void main(String[] args) {
+    /**
+     * TODO: do not support
+     */
+    public void upgrading() {
+        try {
+            readLock.lock();
+            // get value
+            // ...
+            try {
+                writeLock.lock();
+                // set value...
+            } finally {
+                writeLock.unlock();
+            }
+        } finally {
+            readLock.unlock();
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
         final ReadWriteLockDemo demo = new ReadWriteLockDemo();
+//        testNormalRead(demo);
+//        testRead(demo);
+//        testWrite(demo);
 
-        Runnable read=new Runnable() {
-            @Override
-            public void run() {
+//        demo.upgrading(); TODO: do not support
+    }
+
+    static void testRead(ReadWriteLockDemo demo) throws InterruptedException {
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+        CountDownLatch countDownLatch = new CountDownLatch(10);
+        long start = System.nanoTime();
+        for (int i = 0; i < 10; i++) {
+            executor.execute(() -> {
+                demo.read();
+                countDownLatch.countDown();
+            });
+        }
+        countDownLatch.await();
+        long end = System.nanoTime();
+        executor.shutdown();
+        System.out.println("testRead:" + (end - start) / 1000);
+    }
+
+    static void testNormalRead(ReadWriteLockDemo demo) throws InterruptedException {
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+        CountDownLatch countDownLatch = new CountDownLatch(10);
+        long start = System.nanoTime();
+        for (int i = 0; i < 10; i++) {
+            executor.execute(() -> {
+                demo.normalRead();
+                countDownLatch.countDown();
+            });
+        }
+        countDownLatch.await();
+        long end = System.nanoTime();
+        executor.shutdown();
+        System.out.println("normalRead:" + (end - start) / 1000);
+    }
+
+    static void testWrite(ReadWriteLockDemo demo) throws InterruptedException {
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+        CountDownLatch countDownLatch = new CountDownLatch(10);
+        long start = System.nanoTime();
+        for (int i = 0; i < 10; i++) {
+            executor.execute(() -> {
+                demo.write(1);
+                countDownLatch.countDown();
+            });
+        }
+        countDownLatch.await();
+        long end = System.nanoTime();
+        executor.shutdown();
+        System.out.println("testWrite:" + (end - start) / 1000);
+    }
+
+    /**
+     * Use ReadWriteLock as Cache
+     */
+    static class CachedData {
+        Object data;
+        volatile boolean cacheValid;
+        final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
+
+        void processCachedData() {
+            rwl.readLock().lock();
+            if (!cacheValid) {
+                // Must release read lock before acquiring write lock
+                rwl.readLock().unlock();
+                rwl.writeLock().lock();
                 try {
-                    demo.handleRead(readLock);
-                    //demo.handleRead(lock);  //普通读
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    // Recheck state because another thread might have
+                    // acquired write lock and changed state before we did.
+                    if (!cacheValid) {
+                        //data = ...
+                        cacheValid = true;
+                    }
+                    // Downgrade by acquiring read lock before releasing write lock
+                    rwl.readLock().lock();
+                } finally {
+                    rwl.writeLock().unlock(); // Unlock write, still hold read
                 }
             }
-        };
 
-        Runnable write=new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    demo.handleWrite(writeLock,new Random().nextInt());
-                    //demo.handleWrite(lock,new Random().nextInt());   //普通写
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                //use(data);
+            } finally {
+                rwl.readLock().unlock();
             }
-        };
-
-
-        //10个读线程
-        for (int i=0;i<10;i++) {
-            new Thread(read).start();
         }
-
-        //2个写线程
-        for (int i=0;i<2;i++) {
-            new Thread(write).start();
-        }
-
     }
 }
+
