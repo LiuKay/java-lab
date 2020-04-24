@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *      2.超时等待 tryLock(long waitTime)
  *      3.可以设置公平锁 ReentrantLock(true)
  */
-public class ReenterLock implements Runnable{
+public class ReenterLockTest implements Runnable{
 
     public static ReentrantLock lock= new ReentrantLock();
     public static int count=0;
@@ -27,7 +27,7 @@ public class ReenterLock implements Runnable{
     }
 
     public static void main(String[] args) throws InterruptedException {
-        ReenterLock r = new ReenterLock();
+        ReenterLockTest r = new ReenterLockTest();
         Thread t1 = new Thread(r);
         Thread t2 = new Thread(r);
         t1.start();
