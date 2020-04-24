@@ -1,7 +1,6 @@
 package com.kay.concurrency.atomic;
 
 import com.kay.concurrency.annotations.ThreadSafe;
-import lombok.extern.log4j.Log4j2;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -14,7 +13,6 @@ import java.util.concurrent.Semaphore;
  */
 
 @ThreadSafe
-@Log4j2
 public class AtomicExample4 {
 
     //最大并发数
@@ -39,7 +37,7 @@ public class AtomicExample4 {
                     add();
                     semaphore.release();
                 } catch (InterruptedException e) {
-                    log.error("exception",e);
+                    e.printStackTrace();
                 }
                 countDownLatch.countDown();
             });
@@ -47,7 +45,7 @@ public class AtomicExample4 {
 
         countDownLatch.await();
         executorService.shutdown();
-        log.info("请求完毕，isExcuted:{}", isExcuted);
+        System.out.println("请求完毕，isExcuted:" + isExcuted);
     }
 
     private static void add() {
@@ -55,7 +53,7 @@ public class AtomicExample4 {
 //            log.info("执行一次");
 //        }
         isExcuted = true;
-        log.info("执行一次");
+        System.out.println("执行一次");
     }
 
 }

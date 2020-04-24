@@ -4,7 +4,6 @@ import com.kay.concurrency.annotations.ThreadSafe;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
 
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
@@ -15,7 +14,6 @@ import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
  */
 
 @ThreadSafe
-@Log4j2
 @NoArgsConstructor
 public class AtomicExample3 {
 
@@ -32,15 +30,15 @@ public class AtomicExample3 {
         AtomicExample3 example = new AtomicExample3();
 
         if (updater.compareAndSet(example, 10, 15)) {
-            log.info("1:更新成功，count:{}", example.getCount());
+            System.out.println(("1:更新成功，count:" + example.getCount()));
         }else {
-            log.info("1:更新失败，count:{}", example.getCount());
+            System.out.println("1:更新失败，count:"+ example.getCount());
         }
 
         if (updater.compareAndSet(example, 10, 15)) {
-            log.info("2:更新成功，count:{}", example.getCount());
+            System.out.println("2:更新成功，count:" + example.getCount());
         }else {
-            log.info("2:更新失败，count:{}", example.getCount());
+            System.out.println("2:更新失败，count:" + example.getCount());
         }
 
     }

@@ -1,8 +1,6 @@
 package com.kay.concurrency;
 
 import com.kay.concurrency.annotations.NotThreadSafe;
-import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -15,7 +13,6 @@ import java.util.concurrent.Semaphore;
  */
 
 @NotThreadSafe
-@Log4j2
 public class ConcurrencyTest {
 
     //最大并发数
@@ -38,7 +35,7 @@ public class ConcurrencyTest {
                     add();
                     semaphore.release();
                 } catch (InterruptedException e) {
-                    log.error("exception",e);
+                    e.printStackTrace();
                 }
                 countDownLatch.countDown();
             });
@@ -46,7 +43,7 @@ public class ConcurrencyTest {
 
         countDownLatch.await();
         executorService.shutdown();
-        log.info("请求完毕，count:{}", count);
+        System.out.println("请求完毕，count:" + count);
     }
 
     private static void add() {

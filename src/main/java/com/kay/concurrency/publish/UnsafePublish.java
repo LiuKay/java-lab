@@ -1,7 +1,6 @@
 package com.kay.concurrency.publish;
 
 import com.kay.concurrency.annotations.NotThreadSafe;
-import lombok.extern.log4j.Log4j2;
 
 import java.util.Arrays;
 
@@ -13,7 +12,6 @@ import java.util.Arrays;
  * 其他对象获取对象状态未知
  *
  */
-@Log4j2
 @NotThreadSafe
 public class UnsafePublish {
 
@@ -26,10 +24,10 @@ public class UnsafePublish {
     public static void main(String[] args) {
         UnsafePublish unsafePublish = new UnsafePublish();
 
-        log.info("arr:{}", Arrays.toString(unsafePublish.getArr()));
+        System.out.println("arr=" + Arrays.toString(unsafePublish.getArr()));
 
         unsafePublish.getArr()[1] = "change";
 
-        log.info("arr:{}",Arrays.toString(unsafePublish.getArr()));
+        System.out.println("arr=" + Arrays.toString(unsafePublish.getArr()));
     }
 }

@@ -1,7 +1,5 @@
 package com.kay.concurrency.simpledateformat;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -12,7 +10,6 @@ import java.util.concurrent.Semaphore;
  * Created by kay on 2018/5/28.
  * 模拟测试多线程环境的日期转换
  * */
-@Slf4j
 public class MainTest {
 
     //并发数
@@ -45,11 +42,11 @@ public class MainTest {
 //                    log.info("get date:{}",ThreadLocalTimeUtil.format(ThreadLocalTimeUtil.parse(TESTSTR)));
 
                     //jdk 1.8 time api
-                    log.info("get date:{}",Java8TimeUtil.format(Java8TimeUtil.parse(TESTSTR)));
+                    System.out.println("get date=" + Java8TimeUtil.format(Java8TimeUtil.parse(TESTSTR)));
 
                     semaphore.release();
                 } catch (Exception e) {
-                    log.error("exception",e);
+                    e.printStackTrace();
                 }
                 countDownLatch.countDown();
             });
@@ -57,6 +54,6 @@ public class MainTest {
 
         countDownLatch.await();
         executorService.shutdown();
-        log.info("请求完毕");
+        System.out.println("请求完毕");
     }
 }

@@ -1,7 +1,5 @@
 package com.kay.concurrency.simpledateformat;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -9,7 +7,6 @@ import java.util.Date;
 /**
  * Created by kay on 2018/5/28.
  */
-@Slf4j
 public class Java8TimeUtil {
 
     private static DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -27,22 +24,20 @@ public class Java8TimeUtil {
 
     public static void main(String[] args) {
         LocalDate nowDate = LocalDate.now();
-        log.info("now :{}",nowDate);
-
+        System.out.println("nowDate="+nowDate);
         LocalTime nowTime = LocalTime.now();
-        log.info("now :{}",nowTime);
+        System.out.println("nowTime="+nowTime);
 
         LocalDateTime dateTime = LocalDateTime.now();
 
         Instant timestamp = Instant.now();
-        log.info(timestamp.toString());
 
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String landing = dateTime.format(format);
-        log.info("date to str :{}",landing);
+        System.out.println(("date to str :" + landing));
 
         LocalDateTime dateTime1 = LocalDateTime.of(2018, 5, 28, 14, 30, 12);
         LocalDateTime dateTime2=LocalDateTime.parse("2018-05-30 18:31:55",format);
-        log.info("str to date :{}",dateTime2.toString());
+        System.out.println("str to date :"+dateTime2.toString());
     }
 }
