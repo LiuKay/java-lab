@@ -4,10 +4,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 
-public class CompletableTest {
+public class CompletableFutureTest {
 
     public static void main(String[] args) {
-        CompletableTest test = new CompletableTest();
+        CompletableFutureTest test = new CompletableFutureTest();
 
 //        test.drinkTea();
 //        test.upperCase();
