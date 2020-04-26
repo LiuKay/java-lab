@@ -1,16 +1,15 @@
-package com.kay.concurrency.immutable;
+package com.kay.concurrency.design;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by kay on 2018/5/28.
  */
-public class ImmutableExample1 {
+public class ImmutableTest {
 
     private /*final*/ static Map<Integer, Integer> MAP = Maps.newHashMap();
 
@@ -27,13 +26,20 @@ public class ImmutableExample1 {
     }
 
     public static void main(String[] args) {
-       // i = 2
-        MAP.put(1, 22);
-
-        //提示不可变
+//       // i = 2
+//        MAP.put(1, 22);
+//        //提示不可变
 //        immutableList.add("d");
+//        //不提示
+//        map.put(3, 4);
 
-        //不提示
-        map.put(3, 4);
+        List<String> initList = Arrays.asList("A", "B", "C");
+        MyImmutableArrayList<String> list = MyImmutableArrayList.of("A", "B", "C");
+        list.add("D"); // UnsupportedOperationException
+        Iterator<String> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+//            iterator.remove(); // UnsupportedOperationException
+        }
     }
 }
