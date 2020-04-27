@@ -1,4 +1,4 @@
-package com.kay.concurrency.threadlocal;
+package com.kay.concurrency.design;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

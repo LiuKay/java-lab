@@ -1,4 +1,4 @@
-package com.kay.concurrency.threadlocal;
+package com.kay.concurrency.design;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,7 +8,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Created by kay on 2017/9/5.
+ * 线程池使用 ThreadLocal 内存泄漏
+ * GC 回收 ThreadLocal 对象，但是无法回收 ThreadLocalMap 中以 ThreadLocal为键，以 SimpleDateFormat为值的对象
+ * 切记在 finally 中 threadLocal.remove();
  */
 public class ThreadLocalGCDemo {
 
@@ -47,6 +49,8 @@ public class ThreadLocalGCDemo {
                 e.printStackTrace();
             }finally {
                 countDown.countDown();
+                //FIXME: Don't forget
+               // threadLocal.remove();
             }
         }
     }
