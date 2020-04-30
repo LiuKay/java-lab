@@ -3,6 +3,7 @@ package com.kay.concurrency.design;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Map;
 import java.util.Objects;
@@ -12,12 +13,12 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
 
-import static com.kay.concurrency.utils.TestUtils.log;
 import static com.kay.concurrency.utils.TestUtils.sleep;
 
 /**
  * How to turn async to sync 如何异步转同步案例
  */
+@Log4j2
 public class GuardedSuspensionDemo {
 
     public static void main(String[] args) {
@@ -38,7 +39,7 @@ public class GuardedSuspensionDemo {
         // wait for result
         Message re = guardedObject.get(Objects::nonNull);
 
-        log("Received callback:" + re);
+        log.info("Received callback:{}", re);
 
         callBackService.shutdown();
     }
@@ -56,10 +57,10 @@ public class GuardedSuspensionDemo {
     //Another thread will call this as callback
     void callBack() {
         try {
-            log("Call back invoke.");
+            log.info("Call back invoke.");
             Message message = queue.poll(3, TimeUnit.SECONDS);
 
-            log("Consume:"+message);
+            log.info("Consume:"+message);
 
             Message result = new Message(message.getId(), "call back result");
 
@@ -109,7 +110,7 @@ public class GuardedSuspensionDemo {
             lock.lock();
             try {
                 while (!p.test(obj)) {
-                    log(">>AWAIT FOR RESULT");
+                    log.info(">>AWAIT FOR RESULT");
                     done.await(timeout, TimeUnit.SECONDS);
                 }
             } catch (InterruptedException e) {
@@ -117,7 +118,7 @@ public class GuardedSuspensionDemo {
             }finally {
                 lock.unlock();
             }
-            log("Wake up and return");
+            log.info("Wake up and return");
             return obj;
         }
 
@@ -125,7 +126,7 @@ public class GuardedSuspensionDemo {
             lock.lock();
             try{
                 this.obj = obj;
-                log(">>Set result.Signal waiting threads.");
+                log.info(">>Set result.Signal waiting threads.");
                 done.signalAll();
             }finally {
                 lock.unlock();

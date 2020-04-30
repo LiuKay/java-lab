@@ -1,11 +1,13 @@
 package com.kay.concurrency.aqs;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.Vector;
 import java.util.concurrent.*;
 
-import static com.kay.concurrency.utils.TestUtils.log;
 import static com.kay.concurrency.utils.TestUtils.sleep;
 
+@Log4j2
 public class CyclicBarrierDemo {
 
     /**
@@ -40,19 +42,19 @@ public class CyclicBarrierDemo {
                 String order = orderVector.remove(0);
                 String deliver = deliverVector.remove(0);
 
-                log("执行对账,order=" + order + ",deliver=" + deliver);
+                log.info("执行对账,order={},deliver={}", order, deliver);
                 sleep(1, TimeUnit.SECONDS);
             });
         }
 
         private static String getOrders(int taskId) {
-            log("查询订单库,taskId=" + taskId);
+            log.info("查询订单库,taskId={}", taskId);
             sleep(1, TimeUnit.SECONDS);
             return "order-" + taskId;
         }
 
         private static String getDelivers(int taskId) {
-            log("查询派送库,taskId=" + taskId);
+            log.info("查询派送库,taskId={}", taskId);
             sleep(2, TimeUnit.SECONDS);
             return "deliver-" + taskId;
         }
