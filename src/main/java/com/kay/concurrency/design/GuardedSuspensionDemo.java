@@ -27,17 +27,17 @@ public class GuardedSuspensionDemo {
     }
 
     // Mock MQ
-    private static BlockingQueue<Message> queue = new ArrayBlockingQueue<>(10);
+    private static final BlockingQueue<Message> queue = new ArrayBlockingQueue<>(10);
 
-    private ExecutorService callBackService = Executors.newSingleThreadExecutor();
+    private final ExecutorService callBackService = Executors.newSingleThreadExecutor();
 
     void mockService() {
         Message message = new Message(1L, "hello");
         sendMessage(message);
 
-        GuardedObject<Message> guardedObject = GuardedObject.create(message.getId());
+        GuardedObject guardedObject = GuardedObject.create(message.getId());
         // wait for result
-        Message re = guardedObject.get(Objects::nonNull);
+        Message re = (Message) guardedObject.get(Objects::nonNull, 2, TimeUnit.SECONDS);
 
         log.info("Received callback:{}", re);
 
@@ -56,20 +56,28 @@ public class GuardedSuspensionDemo {
 
     //Another thread will call this as callback
     void callBack() {
+        Message message = null;
         try {
             log.info("Call back invoke.");
-            Message message = queue.poll(3, TimeUnit.SECONDS);
-
-            log.info("Consume:"+message);
-
-            Message result = new Message(message.getId(), "call back result");
-
-            GuardedObject.fireEvent(message.getId(), result);
-
+            message = queue.take();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+        Object key = message.getId();
+        Message result = null;
+        try{
+            log.info("Consume:"+message);
+            // consume logic...do sth..
+            result = new Message((Long) key, "call back result");
+        }finally {
+            /**
+             *  TODO: 触发结果回写，唤醒等待线程，如果该方法始终无法得到调用，将导致等待线程超时释放，
+             *  而对于 GuardedObject持有的 map 对应的 (key,value)不会移除，map将产生内存泄漏，
+             *  所有不管是正常返回也好，还是消费异常情况，都要调用此方法
+             */
+            GuardedObject.fireEvent(key, result);
+        }
     }
 
 
@@ -85,33 +93,31 @@ public class GuardedSuspensionDemo {
 
         private T obj;
 
-        private Lock lock = new ReentrantLock();
+        private final Lock lock = new ReentrantLock();
 
-        private Condition done = lock.newCondition();
-
-        private int timeout = 2;
+        private final Condition done = lock.newCondition();
 
         private static Map<Object, GuardedObject> map = new ConcurrentHashMap<>();
 
-        static <K> GuardedObject create(K key) {
+        static GuardedObject create(Object key) {
             GuardedObject guardedObject = new GuardedObject();
             map.put(key, guardedObject);
             return guardedObject;
         }
 
         static <K, T> void fireEvent(K key, T obj) {
-            GuardedObject guardedObject = map.get(key);
+            GuardedObject guardedObject = map.remove(key);
             if (guardedObject != null) {
                 guardedObject.onChange(obj);
             }
         }
 
-        T get(Predicate<T> p) {
+        T get(Predicate<T> p, int timeout, TimeUnit timeUnit) {
             lock.lock();
             try {
                 while (!p.test(obj)) {
                     log.info(">>AWAIT FOR RESULT");
-                    done.await(timeout, TimeUnit.SECONDS);
+                    done.await(timeout, timeUnit);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
