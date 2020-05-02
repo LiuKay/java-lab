@@ -9,6 +9,10 @@ public class NamedThreadFactory implements ThreadFactory {
     private final AtomicInteger threadNumber = new AtomicInteger(1);
     private final String namePrefix;
 
+    public static ThreadFactory namedThreadFactory(String prefix) {
+        return new NamedThreadFactory(prefix);
+    }
+
     public NamedThreadFactory(String namePrefix) {
         SecurityManager s = System.getSecurityManager();
         group = (s != null) ? s.getThreadGroup() :
