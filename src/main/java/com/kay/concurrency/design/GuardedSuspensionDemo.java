@@ -1,5 +1,6 @@
 package com.kay.concurrency.design;
 
+import com.kay.concurrency.utils.NamedThreadFactory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
@@ -29,7 +30,13 @@ public class GuardedSuspensionDemo {
     // Mock MQ
     private static final BlockingQueue<Message> queue = new ArrayBlockingQueue<>(10);
 
-    private final ExecutorService callBackService = Executors.newSingleThreadExecutor();
+    private final ExecutorService consumerService = new ThreadPoolExecutor(1, 1,
+            0L, TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<>(),new NamedThreadFactory("Consumer"));
+
+    private final ExecutorService callBackService = new ThreadPoolExecutor(1, 1,
+            0L, TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<>(), new NamedThreadFactory("Callback"));
 
     void mockService() {
         Message message = new Message(1L, "hello");
@@ -42,44 +49,67 @@ public class GuardedSuspensionDemo {
         log.info("Received callback:{}", re);
 
         callBackService.shutdown();
+        consumerService.shutdown();
     }
 
     void sendMessage(Message message) {
+        log.info("Provider send a message to MQ.");
         queue.offer(message);
 
         //mock callback
-        callBackService.execute(()->{
-            sleep(2,TimeUnit.SECONDS);
-            callBack();
-        });
+        mockAsyncCallback(message.getId());
     }
 
     //Another thread will call this as callback
-    void callBack() {
-        Message message = null;
-        try {
-            log.info("Call back invoke.");
-            message = queue.take();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        Object key = message.getId();
-        Message result = null;
-        try{
-            log.info("Consume:"+message);
-            // consume logic...do sth..
-            result = new Message((Long) key, "call back result");
-        }finally {
-            /**
-             *  TODO: 触发结果回写，唤醒等待线程，如果该方法始终无法得到调用，将导致等待线程超时释放，
-             *  而对于 GuardedObject持有的 map 对应的 (key,value)不会移除，map将产生内存泄漏，
-             *  所有不管是正常返回也好，还是消费异常情况，都要调用此方法
-             */
-            GuardedObject.fireEvent(key, result);
-        }
+    void mockAsyncCallback(Object key) {
+        callBackService.execute(()->{
+            Message result = null;
+            try{
+                result = mockConsumer();
+                log.info("Callback is invoked.");
+            }finally {
+                /**
+                 *  TODO: 触发结果回写，唤醒等待线程，如果该方法始终无法得到调用，将导致等待线程超时释放，
+                 *  而对于 GuardedObject持有的 map 对应的 (key,value)不会移除，map将产生内存泄漏，
+                 *  所有不管是正常返回也好，还是消费异常情况，都要调用此方法
+                 */
+                GuardedObject.fireEvent(key, result);
+            }
+        });
     }
 
+    /**
+     * Mock consume message
+     */
+    Message mockConsumer() {
+        FutureTask<Message> futureTask = new FutureTask<>(()->{
+            Message result = null;
+            try {
+                Message message = queue.take();
+                log.info("Consumer received message from MQ.");
+
+                // consume logic...do sth..
+                log.info("Consume message :" + message);
+                sleep(2,TimeUnit.SECONDS);
+
+                long key = message.getId();
+                result = new Message(key, "call back result");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return result;
+        });
+
+        consumerService.submit(futureTask);
+
+        Message r = null;
+        try {
+            r = futureTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return r;
+    }
 
     @Data
     @ToString
@@ -97,16 +127,16 @@ public class GuardedSuspensionDemo {
 
         private final Condition done = lock.newCondition();
 
-        private static Map<Object, GuardedObject> map = new ConcurrentHashMap<>();
+        private static Map<Object, GuardedObject> guardedObjectMap = new ConcurrentHashMap<>();
 
         static GuardedObject create(Object key) {
             GuardedObject guardedObject = new GuardedObject();
-            map.put(key, guardedObject);
+            guardedObjectMap.put(key, guardedObject);
             return guardedObject;
         }
 
         static <K, T> void fireEvent(K key, T obj) {
-            GuardedObject guardedObject = map.remove(key);
+            GuardedObject guardedObject = guardedObjectMap.remove(key);
             if (guardedObject != null) {
                 guardedObject.onChange(obj);
             }
@@ -132,7 +162,7 @@ public class GuardedSuspensionDemo {
             lock.lock();
             try{
                 this.obj = obj;
-                log.info(">>Set result.Signal waiting threads.");
+                log.info(">>onChange is called. Signal waiting threads.");
                 done.signalAll();
             }finally {
                 lock.unlock();
