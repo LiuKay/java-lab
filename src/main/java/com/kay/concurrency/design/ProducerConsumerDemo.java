@@ -162,12 +162,12 @@ public class ProducerConsumerDemo {
                     try {
                         writer.flush();
                         writer.close();
-                        es.shutdown(); //TODO: Is it reasonable?
                     } catch (IOException e) {
                         log.error(e);
                     }
                 }
             });
+            es.shutdown();
         }
 
         enum LEVEL {
