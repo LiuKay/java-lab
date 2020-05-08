@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Created on 5/7/2020 Demo for invokeAll()
  *
  * @author: LiuKay
  */
+@Log4j2
 public class MultiRecursiveTaskDemo {
 
     public static void main(String[] args) {
@@ -20,7 +22,8 @@ public class MultiRecursiveTaskDemo {
         for (int i = 0; i < arr.length; i++) {
             arr[i] = i;
         }
-        ForkJoinPool pool = new ForkJoinPool(4);
+        ForkJoinPool pool = new ForkJoinPool(4, NamedForkJoinFactory.create("invokeAll"), null,
+            false);
         CustomRecursiveTask task = new CustomRecursiveTask(arr);
         Integer integer = pool.invoke(task);
         System.out.println(integer);

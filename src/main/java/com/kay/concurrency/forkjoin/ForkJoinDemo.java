@@ -5,10 +5,12 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * <a href="http://gee.cs.oswego.edu/dl/papers/fj.pdf"> <i>A Java Fork/Join Framework</i></a>
  */
+@Log4j2
 public class ForkJoinDemo {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         ForkJoinDemo demo = new ForkJoinDemo();
@@ -42,12 +44,13 @@ public class ForkJoinDemo {
 
     void testWordCount() {
         String[] lines = new String[]{
-                "hello world",
-                "hello kay",
-                "test hello",
-                "kay hi"
+            "hello world",
+            "hello kay",
+            "test hello",
+            "kay hi"
         };
-        ForkJoinPool pool = new ForkJoinPool(4);
+        ForkJoinPool pool = new ForkJoinPool(4, NamedForkJoinFactory.create("WordCount"), null,
+            false);
         WordCount wordCount = new WordCount(lines, 0, lines.length);
         Map<String, Long> result = pool.invoke(wordCount);
 
@@ -78,6 +81,7 @@ public class ForkJoinDemo {
         }
 
         private Map<String,Long> merge(Map<String, Long> r2, Map<String, Long> r1){
+            log.info("merge");
             Map<String, Long> result = new HashMap<>(r2);
             r1.forEach((key,count)->{
                 if (result.containsKey(key)) {
@@ -90,6 +94,7 @@ public class ForkJoinDemo {
         }
 
         private Map<String, Long> calculate(String line) {
+            log.info("calculate,line={}", line);
             HashMap<String, Long> map = new HashMap<>();
             String[] split = line.split(" ");
             for (String s : split) {
