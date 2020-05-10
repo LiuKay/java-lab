@@ -38,11 +38,12 @@ public class RateLimiterDemo {
     }
 
     void testMyRateLimiter() {
-        MySimpleRateLimiter myRateLimiter = new MySimpleRateLimiter(1.0);
+//        MySimpleRateLimiter rateLimiter = new MySimpleRateLimiter(1.0);
+        SimpleRateLimiter rateLimiter = new SimpleRateLimiter(1.0, 1);
         ExecutorService service = Executors.newFixedThreadPool(1);
         AtomicLong prev = new AtomicLong(System.nanoTime());
         for (int i = 0; i < 10; i++) {
-            myRateLimiter.acquire();
+            rateLimiter.acquire();
             service.execute(() -> {
                 long cur = System.nanoTime();
                 log.info((cur - prev.get()) / 1000_000);
@@ -57,10 +58,10 @@ public class RateLimiterDemo {
     static class MySimpleRateLimiter {
 
         private long next_token_time = System.nanoTime();
-        private long internal;
+        private long interval;
 
         public MySimpleRateLimiter(double rate) {
-            this.internal = (long) ((1.0 / rate) * 1000_000_000);
+            this.interval = (long) ((1.0 / rate) * 1000_000_000);
         }
 
         /**
@@ -72,7 +73,7 @@ public class RateLimiterDemo {
                 next_token_time = now;
             }
             long at = next_token_time;
-            next_token_time += internal;
+            next_token_time += interval;
             return Math.max(at, 0L);
         }
 
@@ -90,4 +91,50 @@ public class RateLimiterDemo {
         }
     }
 
+    static class SimpleRateLimiter {
+
+        private long interval;
+        private long maxPermits;
+        private long storedPermits = 0;
+        private long next = System.nanoTime();
+
+        public SimpleRateLimiter(double rate, long burst) {
+            this.maxPermits = burst;
+            this.interval = (long) ((1.0 / rate) * 1000_000_000);
+        }
+
+        private void reset(long now) {
+            if (now > next) {
+                //新产生令牌数
+                long increasedPermits = (now - next) / interval;
+                //存储的令牌数
+                storedPermits = Math.min(maxPermits, storedPermits + increasedPermits);
+                next = now;
+            }
+        }
+
+        private synchronized long reserve(long now) {
+            reset(now);
+            long at = next; //能够预占令牌的时间
+            long canGetPermit = Math.min(1, storedPermits);
+            long nr = 1 - canGetPermit;
+
+            next = next + nr * interval; //下一个令牌产生时间
+            this.storedPermits = storedPermits - canGetPermit;
+            return at;
+        }
+
+        void acquire() {
+            long now = System.nanoTime(); // acquire time
+            long at = reserve(now); // next token create time
+            long waitTime = Math.max(at - now, 0L); // current thread sleep time
+            if (waitTime > 0) {
+                try {
+                    TimeUnit.NANOSECONDS.sleep(waitTime);
+                } catch (InterruptedException e) {
+                    log.error(e);
+                }
+            }
+        }
+    }
 }
