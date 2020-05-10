@@ -116,11 +116,13 @@ public class RateLimiterDemo {
         private synchronized long reserve(long now) {
             reset(now);
             long at = next; //能够预占令牌的时间
-            long canGetPermit = Math.min(1, storedPermits);
-            long nr = 1 - canGetPermit;
-
-            next = next + nr * interval; //下一个令牌产生时间
-            this.storedPermits = storedPermits - canGetPermit;
+            // if the available permits is enough to offer 1, then the next does not change
+            if (storedPermits >= 1) {
+                storedPermits = storedPermits - 1;
+            } else {
+                //if there is no available permits, the next token create time should increase by interval
+                next = next + interval;
+            }
             return at;
         }
 
