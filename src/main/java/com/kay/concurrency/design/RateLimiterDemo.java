@@ -91,10 +91,14 @@ public class RateLimiterDemo {
         }
     }
 
+    /**
+     * 1. 令牌以固定的速率添加到令牌桶中，假设限流的速率是 r/秒，则令牌添加到桶中的速率是 1/r。 2. 假设令牌桶的容量是 b, 如果令牌桶已满，则新的令牌会被丢弃。 3.
+     * 请求能够通过限流器的前提是令牌桶中有令牌。
+     */
     static class SimpleRateLimiter {
 
         private long interval;
-        private long maxPermits;
+        private long maxPermits; // 即 Burst size
         private long storedPermits = 0;
         private long next = System.nanoTime();
 
@@ -103,18 +107,31 @@ public class RateLimiterDemo {
             this.interval = (long) ((1.0 / rate) * 1000_000_000);
         }
 
-        private void reset(long now) {
+        /**
+         * 当请求时间晚于 next_token_create_time 时，直接获取令牌，并重置 next_token_create_time为请求时间，
+         * 在这期间还会产生新的令牌，所以还要累加到 storedPermits 上，但不大于 maxPermits
+         * @param now 当前请求时间
+         */
+        private void refreshNextTokenTime(long now) {
             if (now > next) {
                 //新产生令牌数
                 long increasedPermits = (now - next) / interval;
-                //存储的令牌数
+                //存储的令牌数, 不超过 maxPermits
                 storedPermits = Math.min(maxPermits, storedPermits + increasedPermits);
                 next = now;
             }
         }
 
+        /**
+         *
+         *  当请求时间早于 next_token_create_time 时，当前线程需要等待（sleep），其获取令牌的时间即为 next_token_create_time，
+         *  由于当前线程预占了下一个生成的令牌（当令牌数不够时），所以 next_token_create_time 要往后推迟 interval
+         *  若令牌桶中的令牌数足够当前请求，则 next_token_create_time 无需推迟
+         * @param now 当前请求时间
+         * @return 当前线程能够获取令牌的时间
+         */
         private synchronized long reserve(long now) {
-            reset(now);
+            refreshNextTokenTime(now);
             long at = next; //能够预占令牌的时间
             // if the available permits is enough to offer 1, then the next does not change
             if (storedPermits >= 1) {
