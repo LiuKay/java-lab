@@ -40,7 +40,6 @@ public class ConcurrencyTest {
                 countDownLatch.countDown();
             });
         }
-
         countDownLatch.await();
         executorService.shutdown();
         System.out.println("请求完毕，count:" + count);
