@@ -36,7 +36,7 @@ public class Sum3 {
         public List<List<Integer>> threeSum(int[] nums) {
             Arrays.sort(nums);
             List<List<Integer>> result = new LinkedList<>();
-            for (int i = 0; i < nums.length && nums[i] <= 0; i++) {
+            for (int i = 0; i < nums.length && nums[i] <= 0; i++) { //sorted, if nums[i]>0, then will be no result.
                 if (i == 0 || nums[i] != nums[i - 1]) {
                     twoSum(nums, result, i);
                 }
@@ -47,14 +47,15 @@ public class Sum3 {
         private void twoSum(int[] nums, List<List<Integer>> result, int i) {
             int lo = i + 1;
             int hi = nums.length - 1;
-            int sum = nums[lo] + nums[i] + nums[hi];
             while (lo < hi) {
-                if (sum < 0 || nums[lo] == nums[lo - 1]) {
+                int sum = nums[i] + nums[lo] + nums[hi];
+                // lo > i+1 means the element after lo should not repeat lo cause lo start from i+1.
+                if (sum < 0 || (lo > i + 1 && nums[lo] == nums[lo - 1])) {
                     lo++;
-                } else if (sum > 0 || nums[hi] == nums[hi + 1]) {
+                } else if (sum > 0 || (hi < nums.length - 1 && nums[hi] == nums[hi + 1])) {
                     hi--;
                 } else {
-                    result.add(Arrays.asList(nums[i], nums[lo], nums[hi]));
+                    result.add(Arrays.asList(nums[i], nums[lo++], nums[hi--]));
                 }
             }
         }
