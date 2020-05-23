@@ -20,7 +20,7 @@
 //Input: [1,8,6,2,5,4,8,3,7]
 //Output: 49 Related Topics Array Two Pointers
 
-package com.kay.leetcode;
+package com.kay.leetcode.arrary;
 
 /**
  * Created on 2020/5/22

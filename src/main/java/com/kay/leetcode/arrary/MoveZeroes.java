@@ -1,4 +1,4 @@
-package com.kay.leetcode;
+package com.kay.leetcode.arrary;
 
 /**
  * Created on 2020/5/21

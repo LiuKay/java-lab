@@ -18,7 +18,7 @@
 //]
 //
 // Related Topics Array Two Pointers
-package com.kay.leetcode;
+package com.kay.leetcode.arrary;
 
 import java.util.ArrayList;
 import java.util.Arrays;

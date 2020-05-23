@@ -6,7 +6,7 @@
  * Note: Given n will be a positive integer.
  */
 
-package com.kay.leetcode;
+package com.kay.leetcode.arrary;
 
 /**
  * Created on 2020/5/22
