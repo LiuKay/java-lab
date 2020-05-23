@@ -3,9 +3,9 @@ package com.kay.jvm.other;
 /**
  * Created by kay on 2017/9/4.
  */
-public class Dispatch {
+class Dispatch {
 
-    public static class SuperClass{
+    static class SuperClass{
 
         public void show(A a){
             System.out.println("父类showA");
@@ -16,7 +16,7 @@ public class Dispatch {
         }
     }
 
-    public static class SubClass extends SuperClass{
+    static class SubClass extends SuperClass{
 
         public void show(A a){
             System.out.println("子类showA");
@@ -27,9 +27,9 @@ public class Dispatch {
         }
     }
 
-    public static class A{}
+    private static class A{}
 
-    public static class B{}
+    private static class B{}
 
     public static void main(String[] args) {
         SuperClass father = new SuperClass();
