@@ -1,17 +1,4 @@
-package com.kay.leetcode;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
-/**
- * Created on 2020/5/20
- *
- * @author: LiuKay
- */
-public class Sum3 {
-
-    //Given an array nums of n integers, are there elements a, b, c in nums such tha
+//Given an array nums of n integers, are there elements a, b, c in nums such tha
 //t a + b + c = 0? Find all unique triplets in the array which gives the sum of ze
 //ro.
 //
@@ -31,35 +18,24 @@ public class Sum3 {
 //]
 //
 // Related Topics Array Two Pointers
-    class Solution {
+package com.kay.leetcode;
 
-        public List<List<Integer>> threeSum(int[] nums) {
-            Arrays.sort(nums);
-            List<List<Integer>> result = new LinkedList<>();
-            for (int i = 0; i < nums.length && nums[i] <= 0; i++) { //sorted, if nums[i]>0, then will be no result.
-                if (i == 0 || nums[i] != nums[i - 1]) {
-                    twoSum(nums, result, i);
-                }
-            }
-            return result;
-        }
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javafx.util.Pair;
 
-        private void twoSum(int[] nums, List<List<Integer>> result, int i) {
-            int lo = i + 1;
-            int hi = nums.length - 1;
-            while (lo < hi) {
-                int sum = nums[i] + nums[lo] + nums[hi];
-                // lo > i+1 means the element after lo should not repeat lo cause lo start from i+1.
-                if (sum < 0 || (lo > i + 1 && nums[lo] == nums[lo - 1])) {
-                    lo++;
-                } else if (sum > 0 || (hi < nums.length - 1 && nums[hi] == nums[hi + 1])) {
-                    hi--;
-                } else {
-                    result.add(Arrays.asList(nums[i], nums[lo++], nums[hi--]));
-                }
-            }
-        }
-    }
+/**
+ * Created on 2020/5/20
+ *
+ * @author: LiuKay
+ */
+public class Sum3 {
 
     /**
      * Solution:
@@ -109,4 +85,59 @@ public class Sum3 {
      * Use another hash set dups to skip duplicates in the outer loop.
      * Instead of re-populating a hash set every time in the inner loop, we can populate a hashmap once and then only modify values. After we process nums[j] in the inner loop, we set the hashmap value to i. This indicates that we can now use nums[j] to find pairs for nums[i].
      */
+
+    class Solution1 {
+        public List<List<Integer>> threeSum(int[] nums) {
+            Arrays.sort(nums);
+            List<List<Integer>> result = new LinkedList<>();
+            for (int i = 0; i < nums.length && nums[i] <= 0; i++) { //sorted, if nums[i]>0, then will be no result.
+                if (i == 0 || nums[i] != nums[i - 1]) {
+                    twoSum(nums, result, i);
+                }
+            }
+            return result;
+        }
+
+        private void twoSum(int[] nums, List<List<Integer>> result, int i) {
+            int lo = i + 1;
+            int hi = nums.length - 1;
+            while (lo < hi) {
+                int sum = nums[i] + nums[lo] + nums[hi];
+                // lo > i+1 means the element after lo should not repeat lo cause lo start from i+1.
+                if (sum < 0 || (lo > i + 1 && nums[lo] == nums[lo - 1])) {
+                    lo++;
+                } else if (sum > 0 || (hi < nums.length - 1 && nums[hi] == nums[hi + 1])) {
+                    hi--;
+                } else {
+                    result.add(Arrays.asList(nums[i], nums[lo++], nums[hi--]));
+                }
+            }
+        }
+    }
+
+    class Solution2{
+        public List<List<Integer>> threeSum(int[] nums) {
+            List<List<Integer>> res = new ArrayList<>();
+            Set<Pair<Integer,Integer>> set = new HashSet<>();
+            Set<Integer> dups = new HashSet<>();
+            Map<Integer, Integer> seen = new HashMap<>();
+            for (int i = 0; i < nums.length; i++) {
+                if (dups.add(nums[i])) {
+                    for (int j = i + 1; j < nums.length; j++) {
+                        int target = -nums[i] - nums[j];
+                        if (seen.containsKey(target) && seen.get(target).equals(i)) {
+                            int v1 = Math.min(nums[i], Math.min(nums[j], target));
+                            int v2 = Math.max(nums[i], Math.max(nums[j], target));
+                            if (set.add(new Pair(v1, v2))) {
+                                res.add(Arrays.asList(nums[i], nums[j], target));
+                            }
+                        }
+                        seen.put(nums[j], i);
+                    }
+                }
+            }
+            return res;
+        }
+    }
+
 }
