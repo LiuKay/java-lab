@@ -1,14 +1,15 @@
 package com.kay.concurrency.aqs;
 
-import org.omg.CORBA.TIMEOUT;
-
 import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * For better understand "Monitor"
+ * @param <T>
+ */
 public class MyBlockingQueue<T> {
 
     private Queue<T> queue;
@@ -29,8 +30,9 @@ public class MyBlockingQueue<T> {
     public void add(T t) {
         lock.lock();
         try {
-            while (capacity == queue.size()) {
-                System.out.println(Thread.currentThread().getName() + ": queue is full, wait on notFull condition...");
+            while (capacity == queue.size()) { // condition not match, then await
+                System.out.println(Thread.currentThread().getName()
+                    + ": queue is full, wait on notFull condition...");
                 notFull.await();
             }
             queue.add(t);
@@ -39,7 +41,7 @@ public class MyBlockingQueue<T> {
             notEmpty.signalAll();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             lock.unlock();
         }
     }
@@ -48,8 +50,9 @@ public class MyBlockingQueue<T> {
         T t = null;
         try {
             lock.lock();
-            while (queue.size() == 0) {
-                System.out.println(Thread.currentThread().getName() + ": queue is empty. wait on notEmpty condition...");
+            while (queue.size() == 0) { // condition not match, then await
+                System.out.println(Thread.currentThread().getName()
+                    + ": queue is empty. wait on notEmpty condition...");
                 notEmpty.await();
             }
             t = queue.poll();
@@ -58,7 +61,7 @@ public class MyBlockingQueue<T> {
             notFull.signalAll();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             lock.unlock();
         }
         return t;
@@ -68,20 +71,19 @@ public class MyBlockingQueue<T> {
     public static void main(String[] args) throws InterruptedException {
         MyBlockingQueue<String> myQueue = new MyBlockingQueue<>(3);
 
-        Thread taken1 = new Thread(()->{
+        Thread taken1 = new Thread(() -> {
             while (true) {
                 sleep();
                 String pop = myQueue.pop();
                 System.out.println(pop);
             }
-        },"TAKEN1");
+        }, "TAKEN1");
 
         Thread offer1 = new Thread(() -> {
             while (true) {
                 myQueue.add("Hello");
             }
         }, "OFFER1");
-
 
         offer1.start();
         Thread.sleep(1000);
