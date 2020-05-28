@@ -35,4 +35,16 @@ public class ListNode {
         }
         return head;
     }
+
+    public static void print(ListNode head) {
+        System.out.print("[");
+        while (head != null) {
+            System.out.print(head.val);
+            head = head.next;
+            if (head != null) {
+                System.out.print(",");
+            }
+        }
+        System.out.print("]");
+    }
 }
