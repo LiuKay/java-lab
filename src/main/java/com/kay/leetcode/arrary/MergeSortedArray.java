@@ -31,7 +31,7 @@ public class MergeSortedArray {
     static class Solution {
 
         public int[] merge(int[] nums1, int m, int[] nums2, int n) {
-            int k = nums1.length - 1;
+            int k = m + n - 1; // all available length = m+n,  nums1.length >= m+n
             int i = m - 1;
             int j = n - 1;
             while (i >= 0 && j >= 0) {
@@ -41,14 +41,9 @@ public class MergeSortedArray {
                     nums1[k--] = nums2[j--];
                 }
             }
-            if (i == -1) {
-                while (j >= 0) {
-                    nums1[k--] = nums2[j--];
-                }
-            }else {
-                while (i >= 0) {
-                    nums1[k--] = nums1[i--];
-                }
+            // cause nums1 is sorted, so if j<0 means all the elements in nums2 have merged into nums1
+            while (j >= 0) {
+                nums1[k--] = nums2[j--];
             }
             return nums1;
         }
