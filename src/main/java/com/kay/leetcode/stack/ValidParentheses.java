@@ -9,13 +9,16 @@ import java.util.Stack;
  */
 public class ValidParentheses {
 
-    class Solution {
-        public boolean isValid(String s) {
-            Map<Character,Character> map=new HashMap<>();
-            map.put(')','(');
-            map.put(']','[');
-            map.put('}','{');
+    static class Solution {
 
+        private static Map<Character,Character> map=new HashMap<>();
+        static {
+            map.put(')', '(');
+            map.put(']', '[');
+            map.put('}', '{');
+        }
+
+        public boolean isValid(String s) {
             Stack<Character> stack=new Stack<>();
             char[] arr=s.toCharArray();
             for(char str : arr){
@@ -23,12 +26,17 @@ public class ValidParentheses {
                     char top= stack.isEmpty() ? '?' : stack.pop();
                     if(top !=map.get(str)){
                         return false;
-                    }else{
-                        stack.push(str);
                     }
+                }else{
+                    stack.push(str);
                 }
             }
             return stack.isEmpty();
         }
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        System.out.println(solution.isValid("{[]}"));
     }
 }
