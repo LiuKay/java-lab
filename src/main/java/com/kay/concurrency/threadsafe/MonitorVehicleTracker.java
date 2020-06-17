@@ -10,6 +10,13 @@ import java.util.Map;
  * Listing 4.4. Monitor-based Vehicle Tracker Implementation.
  *
  * Example from Java Concurrency Practice
+ *
+ * 1. unmodifiableMap 包装只会限定被包装的 Map 不能添加删除元素，但是其中的对象是可以改变的
+ * 2. 创建新的 map 添加新的构造的对象加入到 map 中，这样对 map 元素对象的修改就不会改变原有对象
+ *
+ * 缺点：
+ * 1. 如果 locations 集合比较大，会有性能问题，因为 DeepCopy 是在一个同步快中进行的
+ * 2. 对 locations 的更新并不会反映到返回的结果对象中去，返回的只是一个快照
  */
 @ThreadSafe
 public class MonitorVehicleTracker {
@@ -44,15 +51,6 @@ public class MonitorVehicleTracker {
         loc.y = y;
     }
 
-    /**
-     * 深度拷贝
-     * 1. unmodifiableMap 包装只会限定被包装的 Map 不能添加删除元素，但是其中的对象是可以改变的
-     * 2. 创建新的 map 添加新的构造的对象加入到 map 中，这样对 map 元素对象的修改就不会改变原有对象
-     *
-     * 这样做会有一定的性能损耗，具体视需求而定
-     * @param map
-     * @return
-     */
     private Map<String, MutablePoint> deepCopy(Map<String, MutablePoint> map) {
         Map<String, MutablePoint> result = new HashMap<>();
         for (String id : map.keySet()) {
@@ -73,6 +71,14 @@ public class MonitorVehicleTracker {
         MutablePoint(MutablePoint point) {
             this.x = point.x;
             this.y = point.y;
+        }
+
+        @Override
+        public String toString() {
+            return "MutablePoint{" +
+                    "x=" + x +
+                    ", y=" + y +
+                    '}';
         }
     }
 }
