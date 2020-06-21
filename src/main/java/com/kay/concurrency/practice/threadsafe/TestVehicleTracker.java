@@ -1,4 +1,4 @@
-package com.kay.concurrency.threadsafe;
+package com.kay.concurrency.practice.threadsafe;
 
 import java.util.HashMap;
 import java.util.Map;

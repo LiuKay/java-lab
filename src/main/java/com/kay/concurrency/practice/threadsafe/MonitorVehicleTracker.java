@@ -1,4 +1,4 @@
-package com.kay.concurrency.threadsafe;
+package com.kay.concurrency.practice.threadsafe;
 
 import com.kay.concurrency.annotations.NotThreadSafe;
 import com.kay.concurrency.annotations.ThreadSafe;
