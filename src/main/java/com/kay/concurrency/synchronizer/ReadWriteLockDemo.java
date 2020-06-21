@@ -1,13 +1,14 @@
-package com.kay.concurrency.aqs;
+package com.kay.concurrency.synchronizer;
 
-import java.util.Objects;
-import java.util.Random;
-import java.util.concurrent.*;
+import static com.kay.concurrency.utils.Utils.sleep;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import static com.kay.concurrency.utils.TestUtils.sleep;
 
 
 public class ReadWriteLockDemo {
@@ -161,7 +162,8 @@ public class ReadWriteLockDemo {
             }
 
             try {
-                //use(data);
+                System.out.println("do sth.");
+//                use(data);
             } finally {
                 rwl.readLock().unlock();
             }

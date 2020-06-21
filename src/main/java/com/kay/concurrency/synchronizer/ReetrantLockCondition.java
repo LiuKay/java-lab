@@ -1,4 +1,4 @@
-package com.kay.concurrency.aqs;
+package com.kay.concurrency.synchronizer;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;

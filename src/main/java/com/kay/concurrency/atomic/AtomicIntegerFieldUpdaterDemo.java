@@ -15,29 +15,31 @@ import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
 @ThreadSafe
 @NoArgsConstructor
-public class AtomicExample3 {
+public class AtomicIntegerFieldUpdaterDemo {
 
-    private static AtomicIntegerFieldUpdater updater = AtomicIntegerFieldUpdater.newUpdater(AtomicExample3.class, "count");
+    private static final AtomicIntegerFieldUpdater<AtomicIntegerFieldUpdaterDemo> updater = AtomicIntegerFieldUpdater
+            .newUpdater(
+                    AtomicIntegerFieldUpdaterDemo.class, "count");
 
     /**
      * 必须是 volatile 非 static 字段
      */
     @Setter
     @Getter
-    private  volatile int count = 10;
+    private volatile int count = 10;
 
-    public static void main(String[] args){
-        AtomicExample3 example = new AtomicExample3();
+    public static void main(String[] args) {
+        AtomicIntegerFieldUpdaterDemo example = new AtomicIntegerFieldUpdaterDemo();
 
         if (updater.compareAndSet(example, 10, 15)) {
             System.out.println(("1:更新成功，count:" + example.getCount()));
-        }else {
-            System.out.println("1:更新失败，count:"+ example.getCount());
+        } else {
+            System.out.println("1:更新失败，count:" + example.getCount());
         }
 
         if (updater.compareAndSet(example, 10, 15)) {
             System.out.println("2:更新成功，count:" + example.getCount());
-        }else {
+        } else {
             System.out.println("2:更新失败，count:" + example.getCount());
         }
 

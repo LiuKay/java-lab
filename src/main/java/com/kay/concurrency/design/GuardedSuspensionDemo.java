@@ -1,20 +1,27 @@
 package com.kay.concurrency.design;
 
-import com.kay.concurrency.utils.NamedThreadFactory;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
-import lombok.extern.log4j.Log4j2;
+import static com.kay.concurrency.utils.Utils.sleep;
 
+import com.kay.concurrency.utils.NamedThreadFactory;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Predicate;
-
-import static com.kay.concurrency.utils.TestUtils.sleep;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * How to turn async to sync 如何异步转同步案例

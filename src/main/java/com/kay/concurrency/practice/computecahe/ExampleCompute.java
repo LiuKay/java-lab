@@ -1,6 +1,6 @@
 package com.kay.concurrency.practice.computecahe;
 
-import static com.kay.concurrency.utils.TestUtils.sleep;
+import static com.kay.concurrency.utils.Utils.sleep;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -12,7 +12,7 @@ class ExampleCompute implements Computable<String, Integer> {
     private static Random random = new Random();
 
     @Override
-    public Integer compute(String arg) throws InterruptedException {
+    public Integer compute(String arg) {
         sleep(5, TimeUnit.SECONDS);
         int nextInt = random.nextInt(1000);
         log.info("execute a long time task for arg={},value={}", arg, nextInt);

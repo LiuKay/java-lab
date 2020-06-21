@@ -1,4 +1,4 @@
-package com.kay.concurrency.socket;
+package com.kay.concurrency.nio.normal;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

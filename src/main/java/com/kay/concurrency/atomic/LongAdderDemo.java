@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.LongAdder;
  */
 
 @ThreadSafe
-public class AtomicExample2 {
+public class LongAdderDemo {
 
     //最大并发数
     private final static int threadCount = 200;

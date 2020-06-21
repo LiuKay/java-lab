@@ -1,6 +1,6 @@
 package com.kay.concurrency.future.completable;
 
-import com.kay.concurrency.utils.TestUtils;
+import com.kay.concurrency.utils.Utils;
 
 import java.util.concurrent.*;
 
@@ -19,15 +19,15 @@ public class CompletionServiceTest {
      */
     static void takeByOrder() throws ExecutionException, InterruptedException {
         FutureTask<String> f1 = new FutureTask<>(() -> {
-            TestUtils.sleep(3, TimeUnit.SECONDS);
+            Utils.sleep(3, TimeUnit.SECONDS);
             return "A";
         });
         FutureTask<String> f2 = new FutureTask<>(() -> {
-            TestUtils.sleep(1, TimeUnit.SECONDS);
+            Utils.sleep(1, TimeUnit.SECONDS);
             return "B";
         });
         FutureTask<String> f3 = new FutureTask<>(() -> {
-            TestUtils.sleep(1, TimeUnit.SECONDS);
+            Utils.sleep(1, TimeUnit.SECONDS);
             return "C";
         });
 
@@ -47,15 +47,15 @@ public class CompletionServiceTest {
     static void takeByFirstEnds() throws InterruptedException, ExecutionException {
         CompletionService<String> service = new ExecutorCompletionService<>(executorService);
         service.submit(()->{
-            TestUtils.sleep(3, TimeUnit.SECONDS);
+            Utils.sleep(3, TimeUnit.SECONDS);
             return "A";
         });
         service.submit(()->{
-            TestUtils.sleep(1, TimeUnit.SECONDS);
+            Utils.sleep(1, TimeUnit.SECONDS);
             return "B";
         });
         service.submit(()->{
-            TestUtils.sleep(1, TimeUnit.SECONDS);
+            Utils.sleep(1, TimeUnit.SECONDS);
             return "C";
         });
 

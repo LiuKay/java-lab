@@ -1,4 +1,4 @@
-package com.kay.concurrency.condition;
+package com.kay.concurrency.synchronizer;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -51,8 +51,8 @@ public class ConditionTest {
                     System.out.print(content);
                     num++;
                     next.signal();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 } finally {
                     lock.unlock();
                 }

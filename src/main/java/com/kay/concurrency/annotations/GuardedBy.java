@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 /**
  * indicates a lock/monitor
  */
-@Target({ElementType.FIELD,ElementType.METHOD})
-@Retention(RetentionPolicy.CLASS)
+@Target({ElementType.FIELD, ElementType.METHOD})
+@Retention(RetentionPolicy.SOURCE)
 public @interface GuardedBy {
     String value() default "";
 }

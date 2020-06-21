@@ -1,10 +1,16 @@
-package com.kay.concurrency.aqs;
+package com.kay.concurrency.lockissues;
 
-public class ResolveDeadLockDemo {
+import com.kay.concurrency.annotations.ThreadSafe;
 
-    private class Account{
-        private long id; //unique
+public class AcquireLockByOrderDemo {
+
+    private class Account {
+        private final long id; //unique and immutable
         private int balance;
+
+        public Account(long id) {
+            this.id = id;
+        }
 
         public void transfer(Account target, int amount) {
             synchronized (this) {
@@ -16,9 +22,8 @@ public class ResolveDeadLockDemo {
 
         /**
          * synchronized by order
-         * @param target
-         * @param amount
          */
+        @ThreadSafe
         public void transferByOrder(Account target, int amount) {
             Account from;
             Account to;

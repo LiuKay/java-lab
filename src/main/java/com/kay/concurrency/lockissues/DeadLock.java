@@ -1,14 +1,14 @@
-package com.kay.concurrency.aqs;
+package com.kay.concurrency.lockissues;
 
 /**
  * Created by kay on 2017/9/1.
  */
-public class DeadLock implements Runnable{
+class DeadLock implements Runnable {
 
-    public static DeadLock d1=new DeadLock(1);
-    public static DeadLock d2=new DeadLock(2);
+    private final static DeadLock d1 = new DeadLock(1);
+    private final static DeadLock d2 = new DeadLock(2);
 
-    int i=0;
+    private final int i;
 
     public DeadLock(int i) {
         this.i = i;
@@ -43,7 +43,7 @@ public class DeadLock implements Runnable{
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         DeadLock r = new DeadLock(1);
         DeadLock r1 = new DeadLock(2);
         Thread t1 = new Thread(r, "t1");

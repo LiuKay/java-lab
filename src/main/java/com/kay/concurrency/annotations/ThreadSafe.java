@@ -8,10 +8,9 @@ import java.lang.annotation.Target;
 /**
  * Created by kay on 2018/5/27.
  *
- * 标记线程安全的类
  */
 
-@Target(ElementType.TYPE)
+@Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.SOURCE)
 public @interface ThreadSafe {
 

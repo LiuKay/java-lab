@@ -6,32 +6,31 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by kay on 2018/5/27.
- * AtomicBoolean
+ * AtomicInteger
  */
 
 @ThreadSafe
-public class AtomicExample4 {
+public class AtomicIntegerDemo {
 
     //最大并发数
     private final static int threadCount = 200;
 
     //请求次数
-    private final static int requsetCount = 5000;
+    private final static int REQUEST_COUNT = 5000;
 
-//    private static AtomicBoolean isExcuted = new AtomicBoolean(false);
-
-    private static boolean isExcuted = false;
+    private static final AtomicInteger count = new AtomicInteger(0);
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newCachedThreadPool();
         final Semaphore semaphore = new Semaphore(threadCount);
-        final CountDownLatch countDownLatch = new CountDownLatch(requsetCount);
+        final CountDownLatch countDownLatch = new CountDownLatch(REQUEST_COUNT);
 
-        for (int i=0;i<requsetCount;i++) {
-            executorService.execute(() ->{
+        for (int i = 0; i < REQUEST_COUNT; i++) {
+            executorService.execute(() -> {
                 try {
                     semaphore.acquire();
                     add();
@@ -45,15 +44,12 @@ public class AtomicExample4 {
 
         countDownLatch.await();
         executorService.shutdown();
-        System.out.println("请求完毕，isExcuted:" + isExcuted);
+        System.out.println("请求完毕，count:"+ count.get());
     }
 
     private static void add() {
-//        if (isExcuted.compareAndSet(false, true)) {
-//            log.info("执行一次");
-//        }
-        isExcuted = true;
-        System.out.println("执行一次");
+//        count.getAndIncrement();
+        count.incrementAndGet();
     }
 
 }

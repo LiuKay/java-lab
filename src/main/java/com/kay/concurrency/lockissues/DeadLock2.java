@@ -1,4 +1,4 @@
-package com.kay.concurrency.aqs;
+package com.kay.concurrency.lockissues;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by kay on 2018/8/8.
  */
-public class DeadLock2 extends Thread {
+class DeadLock2 extends Thread {
 
     private String first;
 

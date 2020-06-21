@@ -1,11 +1,14 @@
-package com.kay.concurrency.aqs;
+package com.kay.concurrency.synchronizer;
 
-import lombok.extern.log4j.Log4j2;
+import static com.kay.concurrency.utils.Utils.sleep;
 
 import java.util.Vector;
-import java.util.concurrent.*;
-
-import static com.kay.concurrency.utils.TestUtils.sleep;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class CyclicBarrierDemo {

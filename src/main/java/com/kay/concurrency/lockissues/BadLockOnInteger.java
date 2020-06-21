@@ -1,4 +1,4 @@
-package com.kay.concurrency.aqs;
+package com.kay.concurrency.lockissues;
 
 /**
  * Created by kay on 2017/9/1.
@@ -7,15 +7,15 @@ package com.kay.concurrency.aqs;
  * 故在counter上加的锁没有起到作用
  * 解决：synchronized(instance)或synchronized (BadLockOnInteger.class)
  */
-public class BadLockOnInteger implements Runnable{
-    public static Integer counter=0;
-    static BadLockOnInteger instance=new BadLockOnInteger();
+class BadLockOnInteger implements Runnable {
+    private static Integer counter = 0;
+    private static BadLockOnInteger instance = new BadLockOnInteger();
 
     @Override
     public void run() {
-        for (int j=0;j<10000;j++) {
+        for (int j = 0; j < 10000; j++) {
             // synchronization on a non-final field
-            synchronized (counter){
+            synchronized (counter) {
                 counter++;
             }
         }

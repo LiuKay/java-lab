@@ -1,6 +1,6 @@
 package com.kay.concurrency.practice.computecahe;
 
-import static com.kay.concurrency.utils.TestUtils.launderThrowable;
+import static com.kay.concurrency.utils.Utils.launderThrowable;
 
 import com.kay.concurrency.annotations.ThreadSafe;
 import java.util.Map;

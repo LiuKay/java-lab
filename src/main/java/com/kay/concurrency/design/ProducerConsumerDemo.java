@@ -1,7 +1,7 @@
 package com.kay.concurrency.design;
 
 import com.kay.concurrency.utils.NamedThreadFactory;
-import com.kay.concurrency.utils.TestUtils;
+import com.kay.concurrency.utils.Utils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -121,7 +121,7 @@ public class ProducerConsumerDemo {
 
             infoService.scheduleWithFixedDelay(() -> info("info msg"), 1, 1, TimeUnit.SECONDS);
 
-            TestUtils.sleep(15, TimeUnit.SECONDS);
+            Utils.sleep(15, TimeUnit.SECONDS);
             infoService.shutdown();
             errorService.shutdown();
             stop();

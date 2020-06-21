@@ -1,6 +1,6 @@
 package com.kay.concurrency.thread;
 
-import com.kay.concurrency.utils.TestUtils;
+import com.kay.concurrency.utils.Utils;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.log4j.Log4j2;
 
@@ -15,7 +15,7 @@ public class JoinDemo {
         log.info(Thread.currentThread().getName() + " 正在执行");
         Thread t1=new Thread(()->{
             log.info("aaa");
-            TestUtils.sleep(2, TimeUnit.SECONDS);
+            Utils.sleep(2, TimeUnit.SECONDS);
             log.info(Thread.currentThread().getName() + " 正在执行");
         },"t1");
 
@@ -27,7 +27,7 @@ public class JoinDemo {
             }
 
             log.info("bbb");
-            TestUtils.sleep(2, TimeUnit.SECONDS);
+            Utils.sleep(2, TimeUnit.SECONDS);
             log.info(Thread.currentThread().getName() + " 正在执行");
         },"t2");
 

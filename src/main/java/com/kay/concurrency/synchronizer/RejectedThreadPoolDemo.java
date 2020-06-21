@@ -1,4 +1,4 @@
-package com.kay.concurrency.aqs;
+package com.kay.concurrency.synchronizer;
 
 import java.util.concurrent.*;
 
@@ -25,16 +25,13 @@ public class RejectedThreadPoolDemo {
 
     public static void main(String[] args) throws InterruptedException {
         MyTask task = new MyTask();
-        ThreadPoolExecutor threadPool=new ThreadPoolExecutor(5, 6, 0L,
-                TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>(10), Executors.defaultThreadFactory(),
-                new RejectedExecutionHandler() {
-                    @Override
-                    public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-                        System.out.println(r.toString()+"  被拒绝..");
-                    }
-                });
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(5, 6, 0L,
+                                                               TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>(10),
+                                                               Executors.defaultThreadFactory(),
+                                                               (r, executor) -> System.out
+                                                                       .println(r.toString() + "  被拒绝.."));
 
-        for (int i=0;i<Integer.MAX_VALUE;i++) {
+        for (int i = 0; i < Integer.MAX_VALUE; i++) {
             threadPool.submit(task);
             Thread.sleep(10);
         }

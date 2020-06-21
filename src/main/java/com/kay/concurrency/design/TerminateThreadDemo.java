@@ -1,13 +1,12 @@
 package com.kay.concurrency.design;
 
-import com.kay.concurrency.utils.TestUtils;
+import com.kay.concurrency.utils.Utils;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.log4j.Log4j2;
 
 /**
  * Created on 5/4/2020
  * 两阶段终止线程
- * @author: LiuKay
  */
 @Log4j2
 public class TerminateThreadDemo {
@@ -15,7 +14,7 @@ public class TerminateThreadDemo {
     public static void main(String[] args) {
         Proxy proxy = new Proxy();
         proxy.start();
-        TestUtils.sleep(5, TimeUnit.SECONDS);
+        Utils.sleep(5, TimeUnit.SECONDS);
         proxy.stop();
     }
 

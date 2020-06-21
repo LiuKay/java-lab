@@ -1,9 +1,10 @@
 package com.kay.concurrency.design;
 
 import static com.kay.concurrency.utils.NamedThreadFactory.namedThreadFactory;
-import static com.kay.concurrency.utils.TestUtils.sleep;
+import static com.kay.concurrency.utils.Utils.sleep;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
@@ -19,8 +20,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created on 5/3/2020
  *
- * @author: LiuKay
- * <p>
  * 实际上线程池便是 Worker Thread 模式最好的例子
  */
 public class WorkerThreadDemo {
@@ -121,7 +120,7 @@ public class WorkerThreadDemo {
                         socketChannel.close();
 
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        throw new UncheckedIOException(e);
                     }
                 });
             }
