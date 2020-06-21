@@ -1,4 +1,4 @@
-package com.kay.concurrency.nio.timesocket;
+package com.kay.nio.timesocket;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

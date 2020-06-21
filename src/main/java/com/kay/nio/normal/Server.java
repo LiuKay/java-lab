@@ -1,4 +1,4 @@
-package com.kay.concurrency.nio.normal;
+package com.kay.nio.normal;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

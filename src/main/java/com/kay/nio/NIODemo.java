@@ -1,4 +1,4 @@
-package com.kay.concurrency.nio;
+package com.kay.nio;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -33,8 +33,8 @@ public class NIODemo {
         }
     }
 
-    public static void wirte(String content) {
-        FileChannel channel=null;
+    public static void write(String content) {
+        FileChannel channel = null;
         try {
             FileOutputStream fos = new FileOutputStream("D:\\test.txt", true);
            /* RandomAccessFile rf=new RandomAccessFile("D:\\test.txt", "rw");
@@ -42,7 +42,7 @@ public class NIODemo {
             rf.seek(fileLength);*/
             channel = fos.getChannel();
             ByteBuffer buffer = ByteBuffer.allocate(1024);
-            byte[] arr=content.getBytes(StandardCharsets.UTF_8);
+            byte[] arr = content.getBytes(StandardCharsets.UTF_8);
             buffer.put(arr);
             buffer.flip();
             while (buffer.hasRemaining()) {
@@ -58,6 +58,6 @@ public class NIODemo {
     }
 
     public static void main(String[] args) {
-        wirte(" Hello Java NIO!");
+        write(" Hello Java NIO!");
     }
 }
