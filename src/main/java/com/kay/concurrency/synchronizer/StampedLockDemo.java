@@ -9,7 +9,7 @@ import java.util.concurrent.locks.StampedLock;
  * OptimisticRead - no lock
  * Created by kay on 2018/5/29.
  */
-public class StampedLockExample {
+public class StampedLockDemo {
 
     class Point {
         private double x, y;

@@ -14,14 +14,14 @@ import java.util.concurrent.atomic.AtomicReference;
  * 1. 不变的边界在哪里,是否要求属性也不可修改，对象的所有属性都是 final 的，并不能保证不可变性. 例如属性是一个集合类，集合的引用无法修改，但是其中的元素却是可以改变的。
  * 2. 正确的发布对象
  */
-public class ImmutableTest {
+public class ImmutableDemo {
 
     public static void main(String[] args) {
         //jdk provide
-        Map<String,String> jdkMap = Collections.unmodifiableMap(new HashMap<>());
+        Map<String, String> jdkMap = Collections.unmodifiableMap(new HashMap<>());
 
-         //guava
-        ImmutableList<String> immutableList = ImmutableList.of("a","b","c");
+        //guava
+        ImmutableList<String> immutableList = ImmutableList.of("a", "b", "c");
         ImmutableMap<String, String> immutableMap = ImmutableMap.<String, String>builder().put("k1", "v1").build();
 //        immutableList.add("d"); //Deprecated
 //        jdkMap.put("a", "b"); //不提示
