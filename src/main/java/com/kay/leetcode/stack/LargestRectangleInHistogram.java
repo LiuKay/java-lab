@@ -5,6 +5,9 @@
  */
 package com.kay.leetcode.stack;
 
+import java.util.Arrays;
+import java.util.Stack;
+
 public class LargestRectangleInHistogram {
     static class Solution {
         // 1. 暴力法
@@ -23,7 +26,29 @@ public class LargestRectangleInHistogram {
         }
 
         //2. stack
+        public int largestRectangleAreaByStack(int[] heights) {
+            int n = heights.length;
+            int[] left = new int[n];
+            int[] right = new int[n];
+            Arrays.fill(right, n);
 
+            Stack<Integer> mono_stack = new Stack<>();
+            //遍历一遍将每个元素的左右边界都确定下来
+            for (int i = 0; i < n; ++i) {
+                while (!mono_stack.isEmpty() && heights[mono_stack.peek()] >= heights[i]) {
+                    right[mono_stack.peek()] = i;
+                    mono_stack.pop();
+                }
+                left[i] = (mono_stack.isEmpty() ? -1 : mono_stack.peek());
+                mono_stack.push(i);
+            }
+
+            int ans = 0;
+            for (int i = 0; i < n; ++i) {
+                ans = Math.max(ans, (right[i] - left[i] - 1) * heights[i]);
+            }
+            return ans;
+        }
     }
 
     public static void main(String[] args) {
