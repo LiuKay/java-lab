@@ -42,7 +42,7 @@ public class CompletionServiceTest {
     }
 
     /**
-     * first ends, first get
+     * 先完成的任务会先添加到 CompletionService 的阻塞队列中，所以 take 时 FIFO
      */
     static void takeByFirstEnds() throws InterruptedException, ExecutionException {
         CompletionService<String> service = new ExecutorCompletionService<>(executorService);
