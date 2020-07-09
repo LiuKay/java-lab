@@ -4,13 +4,14 @@ import com.kay.concurrency.design.TerminateThreadDemo;
 import lombok.extern.log4j.Log4j2;
 
 /**
- *  Catch an InterruptedException will make the interrupted status of the thread be cleared.
- *  The task A will keep running.
- *
- *  How to terminate thread properly see {@link TerminateThreadDemo )
+ * 阻塞方法对中断响应的表现为：清除中断状态，抛出 InterruptedException.
+ * <p>
+ * The task A will keep running.
+ * <p>
+ * How to terminate thread properly see {@link TerminateThreadDemo )
  */
 @Log4j2
-public class TestInterrupt {
+public class InterruptThreadDemo {
 
     public static void main(String[] args) {
         Thread threadA = new Thread(new TaskA(), "thread A");
@@ -43,9 +44,9 @@ public class TestInterrupt {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
-                    System.out.println(Thread.currentThread().getName()+" has a InterruptedException:");
-                    e.printStackTrace();
-//                    Thread.currentThread().interrupt(); //if this line is not invoke properly,the thread will keep running
+                    System.out.println(Thread.currentThread().getName() + " has a InterruptedException:");
+                    Thread.currentThread()
+                          .interrupt(); //if this line is not invoke properly,the thread will keep running
                 }
             }
         }
@@ -64,6 +65,7 @@ public class TestInterrupt {
             while (!stop) {
                 System.out.println(Thread.currentThread().getName() + " is running.");
 
+                // 如果 Task B 阻塞在一个操作上，并且这个操作不能响应中断，那设置 stop 没有啥意义，因为线程永远也没有机会去检查
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
