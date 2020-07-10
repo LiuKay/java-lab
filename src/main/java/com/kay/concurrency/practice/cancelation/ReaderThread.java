@@ -15,7 +15,7 @@ import java.net.Socket;
  * close the underlying socket; thus interrupting a ReaderThread makes it stop what
  * it is doing whether it is blocked in read or in an interruptible blocking method
  */
-public class ReaderThread extends Thread {
+class ReaderThread extends Thread {
 
     private final Socket socket;
     private final InputStream inputStream;
