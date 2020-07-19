@@ -1,5 +1,7 @@
 
 
+> Java learning demo code, include thread,concurrent, IO/NIO，JVM...
+
 ### References:
 
 Java 内存模型
