@@ -1,12 +1,12 @@
 package com.kay.io;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.CharStreams;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class ClassPathResourceTest {
 
@@ -15,10 +15,8 @@ public class ClassPathResourceTest {
         Resource resource = new ClassPathResource("test.json");
 
         InputStream inputStream = resource.getInputStream();
+        String string = CharStreams.toString(new InputStreamReader(inputStream));
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readValue(inputStream, JsonNode.class);
-
-        Assert.assertEquals("kay", jsonNode.get("name").asText());
+        Assert.assertEquals("{\"name\": \"kay\"}", string);
     }
 }
