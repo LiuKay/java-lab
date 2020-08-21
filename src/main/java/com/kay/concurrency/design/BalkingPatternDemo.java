@@ -7,6 +7,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * Balking 模式
+ * 以简单的自动保存为案例
+ */
 @Log4j2
 public class BalkingPatternDemo {
 
@@ -20,7 +24,7 @@ public class BalkingPatternDemo {
         saveClass.startAutoSave();
 
         ScheduledExecutorService service = Executors
-            .newSingleThreadScheduledExecutor(namedThreadFactory("Edit"));
+                .newSingleThreadScheduledExecutor(namedThreadFactory("Edit"));
 
         service.scheduleWithFixedDelay(saveClass::edit, 8, 8, TimeUnit.SECONDS);
 
@@ -30,7 +34,7 @@ public class BalkingPatternDemo {
         private volatile boolean changed = false;
 
         private ScheduledExecutorService schedule = Executors
-            .newSingleThreadScheduledExecutor(namedThreadFactory("AutoSave"));
+                .newSingleThreadScheduledExecutor(namedThreadFactory("AutoSave"));
 
         void startAutoSave() {
             schedule.scheduleWithFixedDelay(this::autoSave, 5, 5, TimeUnit.SECONDS);

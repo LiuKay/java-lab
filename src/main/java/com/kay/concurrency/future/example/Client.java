@@ -17,7 +17,6 @@ public class Client {
             }
         }.start();
 
-        //先返回一个"订单"
         return futureData;
     }
 }

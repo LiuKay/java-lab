@@ -15,23 +15,23 @@ import com.kay.concurrency.annotations.NotThreadSafe;
  */
 @NotThreadSafe
 @NotRecommend
-public class Escape {
+public class EscapeDemo {
 
     private int count = 0;
 
-    public Escape() {
+    public EscapeDemo() {
         new InnerClass();
         count = 555;
     }
 
-    private class InnerClass{
+    private class InnerClass {
 
         public InnerClass() {
-            System.out.println(Escape.this.count);
+            System.out.println(EscapeDemo.this.count);
         }
     }
 
     public static void main(String[] args) {
-        new Escape();
+        new EscapeDemo();
     }
 }

@@ -2,6 +2,8 @@
 
 > Java learning demo code, include thread,concurrent, IO/NIO，JVM...
 
+please use Oracle JDK because some cases need sun.misc.Unsafe method. 
+
 ### References:
 
 Java 内存模型

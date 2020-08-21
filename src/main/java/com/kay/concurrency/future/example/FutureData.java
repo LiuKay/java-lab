@@ -16,7 +16,7 @@ public class FutureData implements Data{
             try {
                 wait();   //没有准备好就一直等待
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
         //装配好了就返回真实的数据

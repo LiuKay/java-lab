@@ -8,15 +8,15 @@ import com.kay.concurrency.annotations.ThreadSafe;
  */
 
 @ThreadSafe
-public class Singleton2 {
+public class HyperSingleton {
 
-    public Singleton2() {
+    public HyperSingleton() {
         //过多处理的加载很慢，加载慢，使用少的话造成性能问题
     }
 
-    private static Singleton2 singleton2 = new Singleton2();
+    private static HyperSingleton hyperSingleton = new HyperSingleton();
 
-    public static Singleton2 getSingleton2() {
-        return singleton2;
+    public static HyperSingleton getSingleton() {
+        return hyperSingleton;
     }
 }
