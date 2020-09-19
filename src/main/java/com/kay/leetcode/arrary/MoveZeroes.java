@@ -23,17 +23,17 @@ public class MoveZeroes {
 // Minimize the total number of operations.
 // Related Topics Array Two Pointers
 
-    class Solution {
+  class Solution {
 
-        public void moveZeroes(int[] nums) {
-            int nextPos = 0; // next non-zero position
-            for (int i = 0; i < nums.length; i++) {
-                if (nums[i] != 0) {
-                    int t = nums[i];
-                    nums[i] = nums[nextPos];
-                    nums[nextPos++] = t;
-                }
-            }
+    public void moveZeroes(int[] nums) {
+      int nextPos = 0; // next non-zero position
+      for (int i = 0; i < nums.length; i++) {
+        if (nums[i] != 0) {
+          int t = nums[i];
+          nums[i] = nums[nextPos];
+          nums[nextPos++] = t;
         }
+      }
     }
+  }
 }

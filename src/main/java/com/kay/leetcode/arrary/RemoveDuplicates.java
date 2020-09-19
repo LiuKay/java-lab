@@ -53,22 +53,22 @@ package com.kay.leetcode.arrary;
  */
 public class RemoveDuplicates {
 
-    class Solution {
+  class Solution {
 
-        public int removeDuplicates(int[] nums) {
-            if (nums == null || nums.length ==0) {
-                return 0;
-            }
-            int i = 0; // 指向最后一个不重复元素的index
-            int j = i + 1;
-            while (j < nums.length) {
-                if (nums[i] != nums[j]) {
-                    nums[++i] = nums[j]; // 遇到不重复的元素直接往后面怼
-                }
-                // 重复的直接跳过
-                j++;
-            }
-            return i + 1;
+    public int removeDuplicates(int[] nums) {
+      if (nums == null || nums.length == 0) {
+        return 0;
+      }
+      int i = 0; // 指向最后一个不重复元素的index
+      int j = i + 1;
+      while (j < nums.length) {
+        if (nums[i] != nums[j]) {
+          nums[++i] = nums[j]; // 遇到不重复的元素直接往后面怼
         }
+        // 重复的直接跳过
+        j++;
+      }
+      return i + 1;
     }
+  }
 }

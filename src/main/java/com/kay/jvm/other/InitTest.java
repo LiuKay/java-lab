@@ -5,25 +5,25 @@ package com.kay.jvm.other;
  */
 public class InitTest {
 
-    private static String mm = new String("ds");
+  private static String mm = new String("ds");
 
-    private static int count = 1;
+  private static int count = 1;
 
-    static {
-        count++;
-        System.out.println(count);
-        System.out.println("static");
-    }
+  static {
+    count++;
+    System.out.println(count);
+    System.out.println("static");
+  }
 
-    public InitTest(){
-        count++;
-        System.out.println("construct");
-        System.out.println(count);
-    }
+  public InitTest() {
+    count++;
+    System.out.println("construct");
+    System.out.println(count);
+  }
 
-    public static void main(String[] args) {
-        new InitTest();
-    }
+  public static void main(String[] args) {
+    new InitTest();
+  }
 
 
 }

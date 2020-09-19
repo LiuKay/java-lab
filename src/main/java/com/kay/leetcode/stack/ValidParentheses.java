@@ -9,34 +9,35 @@ import java.util.Stack;
  */
 public class ValidParentheses {
 
-    static class Solution {
+  static class Solution {
 
-        private static Map<Character,Character> map=new HashMap<>();
-        static {
-            map.put(')', '(');
-            map.put(']', '[');
-            map.put('}', '{');
-        }
+    private static Map<Character, Character> map = new HashMap<>();
 
-        public boolean isValid(String s) {
-            Stack<Character> stack=new Stack<>();
-            char[] arr=s.toCharArray();
-            for(char str : arr){
-                if(map.containsKey(str)){
-                    char top= stack.isEmpty() ? '?' : stack.pop();
-                    if(top !=map.get(str)){
-                        return false;
-                    }
-                }else{
-                    stack.push(str);
-                }
-            }
-            return stack.isEmpty();
-        }
+    static {
+      map.put(')', '(');
+      map.put(']', '[');
+      map.put('}', '{');
     }
 
-    public static void main(String[] args) {
-        Solution solution = new Solution();
-        System.out.println(solution.isValid("{[]}"));
+    public boolean isValid(String s) {
+      Stack<Character> stack = new Stack<>();
+      char[] arr = s.toCharArray();
+      for (char str : arr) {
+        if (map.containsKey(str)) {
+          char top = stack.isEmpty() ? '?' : stack.pop();
+          if (top != map.get(str)) {
+            return false;
+          }
+        } else {
+          stack.push(str);
+        }
+      }
+      return stack.isEmpty();
     }
+  }
+
+  public static void main(String[] args) {
+    Solution solution = new Solution();
+    System.out.println(solution.isValid("{[]}"));
+  }
 }

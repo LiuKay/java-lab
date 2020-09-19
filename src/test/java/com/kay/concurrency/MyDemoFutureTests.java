@@ -6,13 +6,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class MyDemoFutureTests {
-    @Test
-    public void testFutureDemo() throws InterruptedException {
-        Client client = new Client();
-        Data data = client.handle("request");
 
-        Thread.sleep(1000);
+		@Test
+		public void testFutureDemo() throws InterruptedException {
+				Client client = new Client();
+				Data data = client.handle("request");
 
-        Assert.assertEquals("request", data.getResult());
-    }
+				Thread.sleep(1000);
+
+				Assert.assertEquals("request", data.getResult());
+		}
 }

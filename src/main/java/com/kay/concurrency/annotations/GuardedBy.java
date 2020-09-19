@@ -11,5 +11,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.SOURCE)
 public @interface GuardedBy {
-    String value() default "";
+
+		String value() default "";
 }

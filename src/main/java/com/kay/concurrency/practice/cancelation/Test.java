@@ -8,20 +8,21 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 class Test {
-    public static void main(String[] args) throws IOException {
-        CancellingExecutor executor = new CancellingExecutor(2, 2, 60, TimeUnit.SECONDS,
-                                                             new ArrayBlockingQueue<>(10));
-        Socket socket = new Socket("localhost", 80);
-        SocketUsingTask<String> task = new SocketUsingTask<>();
-        task.setSocket(socket);
 
-        Future<String> future = executor.submit(task);
+  public static void main(String[] args) throws IOException {
+    CancellingExecutor executor = new CancellingExecutor(2, 2, 60, TimeUnit.SECONDS,
+        new ArrayBlockingQueue<>(10));
+    Socket socket = new Socket("localhost", 80);
+    SocketUsingTask<String> task = new SocketUsingTask<>();
+    task.setSocket(socket);
 
-        Utils.sleep(2, TimeUnit.SECONDS);
+    Future<String> future = executor.submit(task);
 
-        future.cancel(true);
+    Utils.sleep(2, TimeUnit.SECONDS);
 
-        executor.shutdown();
-    }
+    future.cancel(true);
+
+    executor.shutdown();
+  }
 
 }

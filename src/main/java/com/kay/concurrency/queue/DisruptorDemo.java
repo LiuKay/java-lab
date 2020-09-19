@@ -16,53 +16,53 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class DisruptorDemo {
 
-    public static void main(String[] args) throws InterruptedException {
+  public static void main(String[] args) throws InterruptedException {
 
-        // Specify the size of the ring buffer, must be power of 2.
-        int bufferSize = 1024;
+    // Specify the size of the ring buffer, must be power of 2.
+    int bufferSize = 1024;
 
-        // Construct the Disruptor
-        Disruptor<LongEvent> disruptor = new Disruptor<>(LongEvent::new, bufferSize,
-            NamedThreadFactory.namedThreadFactory("Disruptor"));
+    // Construct the Disruptor
+    Disruptor<LongEvent> disruptor = new Disruptor<>(LongEvent::new, bufferSize,
+        NamedThreadFactory.namedThreadFactory("Disruptor"));
 
-        // Connect the handler
-        disruptor.handleEventsWith((event, sequence, endOfBatch) -> log.info("Event: " + event));
+    // Connect the handler
+    disruptor.handleEventsWith((event, sequence, endOfBatch) -> log.info("Event: " + event));
 
-        // Start the Disruptor, starts all threads running
-        disruptor.start();
+    // Start the Disruptor, starts all threads running
+    disruptor.start();
 
-        // Get the ring buffer from the Disruptor to be used for publishing.
-        RingBuffer<LongEvent> ringBuffer = disruptor.getRingBuffer();
+    // Get the ring buffer from the Disruptor to be used for publishing.
+    RingBuffer<LongEvent> ringBuffer = disruptor.getRingBuffer();
 
-        ByteBuffer bb = ByteBuffer.allocate(8);
-        for (long l = 0; true; l++){
-            bb.putLong(0, l);
-            ringBuffer.publishEvent((event, sequence, buffer) -> event.set(buffer.getLong(0)), bb);
-            Thread.sleep(1000);
-        }
+    ByteBuffer bb = ByteBuffer.allocate(8);
+    for (long l = 0; true; l++) {
+      bb.putLong(0, l);
+      ringBuffer.publishEvent((event, sequence, buffer) -> event.set(buffer.getLong(0)), bb);
+      Thread.sleep(1000);
     }
+  }
 
-    static class LongEvent {
+  static class LongEvent {
 
-        private long value;
+    private long value;
 
-        public void set(long value) {
-            this.value = value;
-        }
+    public void set(long value) {
+      this.value = value;
     }
+  }
 
-    static class LongEventFactory implements EventFactory<LongEvent> {
+  static class LongEventFactory implements EventFactory<LongEvent> {
 
-        public LongEvent newInstance() {
-            return new LongEvent();
-        }
+    public LongEvent newInstance() {
+      return new LongEvent();
     }
+  }
 
-    static class LongEventHandler implements EventHandler<LongEvent> {
+  static class LongEventHandler implements EventHandler<LongEvent> {
 
-        public void onEvent(LongEvent event, long sequence, boolean endOfBatch) {
-            System.out.println("Event: " + event);
-        }
+    public void onEvent(LongEvent event, long sequence, boolean endOfBatch) {
+      System.out.println("Event: " + event);
     }
+  }
 
 }

@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Created by kay on 2018/5/27.
- *
+ * <p>
  * 标记推荐写法
  */
 
@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface Recommend {
 
-    String value() default "";
+		String value() default "";
 }

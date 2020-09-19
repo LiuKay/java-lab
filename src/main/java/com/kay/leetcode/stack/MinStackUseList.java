@@ -2,44 +2,45 @@ package com.kay.leetcode.stack;
 
 class MinStackUseList {
 
-    private static class Node{
-        int val;
-        int min;
-        Node next;
+  private static class Node {
 
-        public Node(int val, int min) {
-            this(val, min, null);
-        }
+    int val;
+    int min;
+    Node next;
 
-        public Node(int val, int min, Node next) {
-            this.val = val;
-            this.min = min;
-            this.next = next;
-        }
+    public Node(int val, int min) {
+      this(val, min, null);
     }
 
-    private Node head;
-
-    public MinStackUseList() {
+    public Node(int val, int min, Node next) {
+      this.val = val;
+      this.min = min;
+      this.next = next;
     }
+  }
 
-    void push(int x){
-        if (head == null) {
-            head = new Node(x, x);
-        }else {
-            head = new Node(x, Math.min(x, head.min), head);
-        }
-    }
+  private Node head;
 
-    void pop(){
-        head = head.next;
-    }
+  public MinStackUseList() {
+  }
 
-    int top(){
-       return head.val;
+  void push(int x) {
+    if (head == null) {
+      head = new Node(x, x);
+    } else {
+      head = new Node(x, Math.min(x, head.min), head);
     }
+  }
 
-    int getMin(){
-        return head.min;
-    }
+  void pop() {
+    head = head.next;
+  }
+
+  int top() {
+    return head.val;
+  }
+
+  int getMin() {
+    return head.min;
+  }
 }

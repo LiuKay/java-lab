@@ -2,11 +2,11 @@ package com.kay.io;
 
 import java.io.File;
 
-public interface Resource extends InputStreamResource{
+public interface Resource extends InputStreamResource {
 
-    boolean exist();
+		boolean exist();
 
-    File getFile();
+		File getFile();
 
-    String getPath();
+		String getPath();
 }

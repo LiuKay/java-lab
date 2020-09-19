@@ -29,30 +29,30 @@ package com.kay.leetcode.arrary;
  */
 public class ContainerWithMostWater {
 
-    class Solution {
+  class Solution {
 
-        //1. 暴力解法
-        public int maxArea(int[] height) {
-            int max=0;
-            for (int i = 0; i < height.length - 1; i++) {
-                for (int j = i+1; j < height.length; j++) {
-                    int h = Math.min(height[i], height[j]);
-                    int area = (j - i) * h;
-                    max = Math.max(area, max);
-                }
-            }
-            return max;
+    //1. 暴力解法
+    public int maxArea(int[] height) {
+      int max = 0;
+      for (int i = 0; i < height.length - 1; i++) {
+        for (int j = i + 1; j < height.length; j++) {
+          int h = Math.min(height[i], height[j]);
+          int area = (j - i) * h;
+          max = Math.max(area, max);
         }
-
-        //2.左右边界，向中间收敛
-        public int maxArea2(int[] height) {
-            int max=0;
-            for (int i = 0, j = height.length - 1; i < j; ) {
-                int minHeight = height[i] > height[j] ? height[j--] : height[i++];
-                int area = minHeight * (j - i + 1);
-                max = Math.max(area, max);
-            }
-            return max;
-        }
+      }
+      return max;
     }
+
+    //2.左右边界，向中间收敛
+    public int maxArea2(int[] height) {
+      int max = 0;
+      for (int i = 0, j = height.length - 1; i < j; ) {
+        int minHeight = height[i] > height[j] ? height[j--] : height[i++];
+        int area = minHeight * (j - i + 1);
+        max = Math.max(area, max);
+      }
+      return max;
+    }
+  }
 }
