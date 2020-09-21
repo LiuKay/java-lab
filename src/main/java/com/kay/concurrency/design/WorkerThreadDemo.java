@@ -24,34 +24,34 @@ import java.util.concurrent.TimeUnit;
  */
 public class WorkerThreadDemo {
 
-  public static void main(String[] args) throws InterruptedException {
-    WorkerThreadDemo demo = new WorkerThreadDemo();
-    demo.testDeadLockInThreadPool();
-  }
+		public static void main(String[] args) throws InterruptedException {
+				WorkerThreadDemo demo = new WorkerThreadDemo();
+				demo.testDeadLockInThreadPool();
+		}
 
 
-  void testDeadLockInThreadPool() throws InterruptedException {
-    //L1、L2 阶段共用的线程池
-    ExecutorService es = Executors.
-        newFixedThreadPool(2, namedThreadFactory("DeadLockThread"));
-    //L1 阶段的闭锁
-    CountDownLatch l1 = new CountDownLatch(2);
-    for (int i = 0; i < 2; i++) {
-      System.out.println("L1");
-      // 执行 L1 阶段任务
-      es.execute(() -> {
-        //L2 阶段的闭锁
-        CountDownLatch l2 = new CountDownLatch(2);
-        // 执行 L2 阶段子任务
-        for (int j = 0; j < 2; j++) {
-          es.execute(() -> {
-            System.out.println("L2");
-            l2.countDown();
-          });
-        }
-        // 等待 L2 阶段任务执行完
-        try {
-          l2.await(); //All the threads are waiting at
+		void testDeadLockInThreadPool() throws InterruptedException {
+				//L1、L2 阶段共用的线程池
+				ExecutorService es = Executors.
+						newFixedThreadPool(2, namedThreadFactory("DeadLockThread"));
+				//L1 阶段的闭锁
+				CountDownLatch l1 = new CountDownLatch(2);
+				for (int i = 0; i < 2; i++) {
+						System.out.println("L1");
+						// 执行 L1 阶段任务
+						es.execute(() -> {
+								//L2 阶段的闭锁
+								CountDownLatch l2 = new CountDownLatch(2);
+								// 执行 L2 阶段子任务
+								for (int j = 0; j < 2; j++) {
+										es.execute(() -> {
+												System.out.println("L2");
+												l2.countDown();
+										});
+								}
+								// 等待 L2 阶段任务执行完
+								try {
+										l2.await(); //All the threads are waiting at
 /**
  * "DeadLockThread-1-thread-2" #13 prio=5 os_prio=0 tid=0x000000001f911800 nid=0x5954 waiting on condition [0x000000002021e000]
  *    java.lang.Thread.State: WAITING (parking)
@@ -83,51 +83,51 @@ public class WorkerThreadDemo {
  *         at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
  *         at java.lang.Thread.run(Thread.java:748)
  */
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-        l1.countDown();
-      });
-    }
-    // 等着 L1 阶段任务执行完
-    l1.await();
-    System.out.println("end");
-  }
+								} catch (InterruptedException e) {
+										e.printStackTrace();
+								}
+								l1.countDown();
+						});
+				}
+				// 等着 L1 阶段任务执行完
+				l1.await();
+				System.out.println("end");
+		}
 
 
-  void testService() throws IOException {
-    ExecutorService service = new ThreadPoolExecutor(10, 10, 60, TimeUnit.SECONDS,
-        new LinkedBlockingQueue<>(10),
-        namedThreadFactory("WorkerThread"),
-        new CallerRunsPolicy());
+		void testService() throws IOException {
+				ExecutorService service = new ThreadPoolExecutor(10, 10, 60, TimeUnit.SECONDS,
+						new LinkedBlockingQueue<>(10),
+						namedThreadFactory("WorkerThread"),
+						new CallerRunsPolicy());
 
-    ServerSocketChannel ssc = ServerSocketChannel.open().bind(new InetSocketAddress(8080));
+				ServerSocketChannel ssc = ServerSocketChannel.open().bind(new InetSocketAddress(8080));
 
-    try {
-      while (true) {
-        SocketChannel socketChannel = ssc.accept();
+				try {
+						while (true) {
+								SocketChannel socketChannel = ssc.accept();
 
-        service.execute(() -> {
-          try {
-            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
-            socketChannel.read(byteBuffer);
+								service.execute(() -> {
+										try {
+												ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+												socketChannel.read(byteBuffer);
 
-            //do sth.
-            sleep(3, TimeUnit.SECONDS);
+												//do sth.
+												sleep(3, TimeUnit.SECONDS);
 
-            byteBuffer.flip();
-            socketChannel.write(byteBuffer);
-            socketChannel.close();
+												byteBuffer.flip();
+												socketChannel.write(byteBuffer);
+												socketChannel.close();
 
-          } catch (IOException e) {
-            throw new UncheckedIOException(e);
-          }
-        });
-      }
-    } finally {
-      ssc.close();
-      service.shutdown();
-    }
-  }
+										} catch (IOException e) {
+												throw new UncheckedIOException(e);
+										}
+								});
+						}
+				} finally {
+						ssc.close();
+						service.shutdown();
+				}
+		}
 
 }

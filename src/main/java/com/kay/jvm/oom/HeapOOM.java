@@ -8,10 +8,10 @@ import java.util.List;
  */
 public class HeapOOM {
 
-  public static void main(String[] args) {
-    List<HeapOOM> objList = new ArrayList<>();
-    while (true) {
-      objList.add(new HeapOOM());
-    }
-  }
+		public static void main(String[] args) {
+				List<HeapOOM> objList = new ArrayList<>();
+				while (true) {
+						objList.add(new HeapOOM());
+				}
+		}
 }

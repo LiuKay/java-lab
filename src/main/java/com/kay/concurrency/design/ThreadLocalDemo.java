@@ -11,40 +11,40 @@ import java.util.concurrent.Executors;
  */
 public class ThreadLocalDemo {
 
-  //public static  SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		//public static  SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-  public static ThreadLocal<SimpleDateFormat> simpleDateFormat = new ThreadLocal<>();
+		public static ThreadLocal<SimpleDateFormat> simpleDateFormat = new ThreadLocal<>();
 
-  public static class DateParse implements Runnable {
+		public static class DateParse implements Runnable {
 
-    private int i;
+				private int i;
 
-    public DateParse(int i) {
-      this.i = i;
-    }
+				public DateParse(int i) {
+						this.i = i;
+				}
 
-    @Override
-    public void run() {
-      try {
-        if (simpleDateFormat.get() == null) {
-          simpleDateFormat.set(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-        }
-        SimpleDateFormat format = simpleDateFormat.get();
-        Date d = format.parse("2017-9-5 11:07:" + i % 60);
-        System.out.println(d);
+				@Override
+				public void run() {
+						try {
+								if (simpleDateFormat.get() == null) {
+										simpleDateFormat.set(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+								}
+								SimpleDateFormat format = simpleDateFormat.get();
+								Date d = format.parse("2017-9-5 11:07:" + i % 60);
+								System.out.println(d);
 
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
-    }
-  }
+						} catch (ParseException e) {
+								e.printStackTrace();
+						}
+				}
+		}
 
-  public static void main(String[] args) {
+		public static void main(String[] args) {
 
-    ExecutorService pool = Executors.newFixedThreadPool(10);
-    for (int i = 0; i < 60; i++) {
-      pool.execute(new DateParse(i));
-    }
-    pool.shutdown();
-  }
+				ExecutorService pool = Executors.newFixedThreadPool(10);
+				for (int i = 0; i < 60; i++) {
+						pool.execute(new DateParse(i));
+				}
+				pool.shutdown();
+		}
 }
