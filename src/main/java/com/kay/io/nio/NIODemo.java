@@ -1,4 +1,4 @@
-package com.kay.nio;
+package com.kay.io.nio;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

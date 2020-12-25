@@ -1,4 +1,4 @@
-package com.kay.nio;
+package com.kay.io.file;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

@@ -1,4 +1,4 @@
-package com.kay.nio.normal;
+package com.kay.io.nio.normal;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
