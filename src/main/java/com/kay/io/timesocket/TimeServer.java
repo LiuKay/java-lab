@@ -7,14 +7,25 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Created by kay on 2017/9/8.
+ * 1 把 Channel 的就绪选择放在了主线程(Acceptor线程)中来处理(等待数据准备阶段)
+ * <p>
+ * 2 而真正的读取请求并返回响应放在了线程池中提交一个任务来执行(处理数据阶段)
+ * <p>
+ * 真正意义上实现了一个线程服务于多个client
  */
 public class TimeServer {
+
+		private static ExecutorService executor = new ThreadPoolExecutor(5, 10, 10, TimeUnit.SECONDS,
+				new ArrayBlockingQueue<>(1000));
 
 		public static void main(String[] args) {
 				int port = 8888;
@@ -55,26 +66,20 @@ public class TimeServer {
 				public void run() {
 						while (!stop) {
 								try {
-										//每隔一秒 轮询一次
-										selector.select(1000);
+										int readyCount = selector.select(1000);
+										if (readyCount == 0) {
+												continue;
+										}
 										Set<SelectionKey> selectionKeys = selector.selectedKeys();
 										Iterator<SelectionKey> it = selectionKeys.iterator();
 										while (it.hasNext()) {
 												SelectionKey key = it.next();
+												//处理准备好的事件
+												handleInput(key);
 												it.remove();
-												try {
-														//处理准备好的事件
-														handleInput(key);
-												} catch (Exception e) {
-														if (key != null) {
-																key.cancel();
-																if (key.channel() != null) {
-																		key.channel().close();
-																}
-														}
-												}
+
 										}
-								} catch (Throwable t) {
+								} catch (Exception t) {
 										t.printStackTrace();
 								}
 						}
@@ -98,56 +103,63 @@ public class TimeServer {
 				private void handleInput(SelectionKey key) throws IOException {
 						//判断是否可用
 						if (key.isValid()) {
-								//判断是否是accept事件
-								if (key.isAcceptable()) {
-										//拿到这个key上面绑定的Channel，然后获取对面来的SocketChannel
-										//将这个channel注册 监听它的读事件（因为它已经连接了，所以就等着它发消息了）
-										ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
-										SocketChannel sc = ssc.accept();
-										sc.configureBlocking(false);
-										System.out.println("--新请求接入,开始监听它发来的消息...");
-										sc.register(selector, SelectionKey.OP_READ);
-								}
+								try {
+										//判断是否是accept事件
+										if (key.isAcceptable()) {
+												//拿到这个key上面绑定的Channel，然后获取对面来的SocketChannel
+												//将这个channel注册 监听它的读事件（因为它已经连接了，所以就等着它发消息了）
+												ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
+												SocketChannel sc = ssc.accept();
+												sc.configureBlocking(false);
+												System.out.println("--新请求接入,开始监听它发来的消息...");
+												sc.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+										}
 
-								//判断对方是否放消息来了，是就读取消息/作出响应
-								if (key.isReadable()) {
-										SocketChannel socketChannel = (SocketChannel) key.channel();
-										ByteBuffer readBuffer = ByteBuffer.allocate(1024);
-										int readBytes = socketChannel.read(readBuffer);
-										if (readBytes > 0) {
-												readBuffer.flip();
-												byte[] bytes = new byte[readBuffer.remaining()];
-												readBuffer.get(bytes);
-												String body = new String(bytes, "UTF-8");
-												System.out.println("Time Server 接收到消息：" + body);
-												String currentTime = "";
-												if ("QUERY_TIME".equals(body)) {
-														currentTime =
-																"现在时间是：" + new Date(System.currentTimeMillis()).toString();
-												} else {
-														currentTime = "指令错误！";
-												}
-												//作出响应
-												doWrite(socketChannel, currentTime);
-										} else if (readBytes < 0) {
-												key.cancel();
-												socketChannel.close();
-										} else {
-												;//读到0字节忽略
+										//判断对方是否放消息来了，是就读取消息/作出响应
+										if (key.isReadable()) {
+												executor.submit(new TimeServerTask(key));
+										}
+								} catch (Exception e) {
+										key.cancel();
+										if (key.channel() != null) {
+												key.channel().close();
 										}
 								}
 						}
 				}
 
-				//响应消息
-				private void doWrite(SocketChannel socketChannel, String response) throws IOException {
-						if (response != null && response.trim().length() > 0) {
-								byte[] bytes = response.getBytes();
-								ByteBuffer writeBuffer = ByteBuffer.allocate(bytes.length);
-								writeBuffer.put(bytes);
-								writeBuffer.flip();
-								socketChannel.write(writeBuffer);
-								System.out.println("--已发送响应");
+				static class TimeServerTask implements Runnable {
+
+						private SelectionKey selectionKey;
+
+						public TimeServerTask(SelectionKey selectionKey) {
+								this.selectionKey = selectionKey;
+						}
+
+						@Override
+						public void run() {
+								SocketChannel channel = (SocketChannel) selectionKey.channel();
+								ByteBuffer byteBuffer = ByteBuffer.allocateDirect(1024);
+								try {
+										while (channel.read(byteBuffer) > 0) {
+												byteBuffer.flip();
+												byte[] request = new byte[byteBuffer.remaining()];
+												byteBuffer.get(request);
+												String requestStr = new String(request);
+												byteBuffer.clear();
+												if (!"GET CURRENT TIME".equals(requestStr)) {
+														channel.write(byteBuffer.put("BAD_REQUEST".getBytes()));
+												} else {
+														byteBuffer.put(LocalDateTime.now().toString().getBytes());
+														byteBuffer.flip();
+														channel.write(byteBuffer);
+												}
+										}
+
+								} catch (IOException e) {
+										e.printStackTrace();
+										selectionKey.cancel();
+								}
 						}
 				}
 		}
