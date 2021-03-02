@@ -8,17 +8,19 @@ import java.net.Socket;
 /**
  * Created by kay on 2017/10/9.
  */
-public class Client {
+public class BlockingClient {
 
 		public static void main(String[] args) throws IOException {
 				Socket socket = new Socket("localhost", 8888);
 				DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-				outputStream.writeUTF("kay is on the Socket...");
+				//blocking
+				outputStream.writeUTF("Hello");
 
 				DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+				//blocking
 				String s = inputStream.readUTF();
 
-				System.out.println("client accept:" + s);
+				System.out.println("Client Accept:" + s);
 
 				outputStream.close();
 				inputStream.close();

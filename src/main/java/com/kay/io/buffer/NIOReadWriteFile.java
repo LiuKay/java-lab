@@ -22,8 +22,7 @@ public class NIOReadWriteFile {
 
 		public static void read() {
 				String file = getClassPathFilePath("nio/test.txt");
-				try {
-						FileChannel channel = new RandomAccessFile(file, "rw").getChannel();
+				try (FileChannel channel = new RandomAccessFile(file, "rw").getChannel()) {
 						ByteBuffer buffer = ByteBuffer.allocate(1024);
 						int byteRead = channel.read(buffer);
 						System.out.println(byteRead);
@@ -42,9 +41,8 @@ public class NIOReadWriteFile {
 
 		public static void write(String content) {
 				String file = getClassPathFilePath("nio/test.txt");
-				FileChannel channel = null;
-				try {
-						FileOutputStream fos = new FileOutputStream(file, true);
+				FileChannel channel;
+				try (FileOutputStream fos = new FileOutputStream(file, true)) {
 						channel = fos.getChannel();
 						ByteBuffer buffer = ByteBuffer.allocate(1024);
 						byte[] arr = content.getBytes(StandardCharsets.UTF_8);
@@ -52,11 +50,10 @@ public class NIOReadWriteFile {
 						buffer.flip();
 						while (buffer.hasRemaining()) {
 								System.out.println(buffer);
-								int b = channel.write(buffer);
+								channel.write(buffer);
 						}
 						buffer.clear();
 						channel.close();
-
 				} catch (IOException e) {
 						e.printStackTrace();
 				}
