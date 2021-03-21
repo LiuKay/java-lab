@@ -1,4 +1,4 @@
-package com.kay.io.nio.normal;
+package com.kay.io.bio;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -7,19 +7,25 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * 基于 Java Socket 的基本通信： Server接收Client 消息打印在控制台，并回发给Client端 Created by kay on 2017/10/9.
+ * Blocking Socket I/O Demo Start server first, run Client later
  */
-public class Server {
+public class BlockingServer {
 
 		public static void main(String[] args) throws IOException {
 				ServerSocket serverSocket = new ServerSocket(8888);
-				Socket socket = serverSocket.accept();
 				System.out.println("Server is on accept...");
+				// server is blocking on accept()
+				Socket socket = serverSocket.accept();
+
+				//connected
 				DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+
+				//block reading
 				String s = inputStream.readUTF();
-				System.out.println("Server accept:" + s);
+				System.out.println("Server Read:" + s);
 
 				DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+				//block writing
 				outputStream.writeUTF(s);
 
 				inputStream.close();
