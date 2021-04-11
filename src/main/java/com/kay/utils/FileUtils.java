@@ -1,9 +1,23 @@
 package com.kay.utils;
 
-public class FileUtils {
+import java.io.InputStream;
+import java.util.Optional;
+
+public final class FileUtils {
+
+		private FileUtils() {
+				throw new UnsupportedOperationException();
+		}
 
 		public static String getClassPathFilePath(String path) {
-				return Thread.currentThread().getContextClassLoader().getResource(path).getFile();
+				return Optional.ofNullable(Thread.currentThread().getContextClassLoader().getResource(path))
+						.orElseThrow()
+						.getFile();
+		}
+
+
+		public static InputStream getClassPathInputStream(String fileName) {
+				return Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
 		}
 
 }
