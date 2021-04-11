@@ -20,7 +20,7 @@
 				<log4j-api.version>2.13.2</log4j-api.version>
 				<log4j-core.version>2.13.2</log4j-core.version>
 				<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-				<target-source.version>8</target-source.version>
+				<target-source.version>11</target-source.version>
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		</properties>
 
