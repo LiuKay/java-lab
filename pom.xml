@@ -5,10 +5,10 @@
 		<modelVersion>4.0.0</modelVersion>
 
 		<groupId>com.kay</groupId>
-		<artifactId>java-professional</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<name>java-professional</name>
-		<description>java-professional</description>
+		<artifactId>java-lab</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<name>java-lab</name>
+		<description>java-lab</description>
 		<packaging>jar</packaging>
 
 		<properties>
