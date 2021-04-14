@@ -100,6 +100,10 @@ public void doThis()throws NumberFormatException{
 
 ### 4 使用`@throws`为你抛出的异常写下注释
 
+请记住，你所抛出的异常也是你暴露出的接口的一部分，应该在你的文档中尽量说明在什么情况下会抛出什么异常。
+
+> `异常也是接口的一部分`
+
 ```java
 /**
  * This method does something extremely useful ...
@@ -107,9 +111,9 @@ public void doThis()throws NumberFormatException{
  * @param input
  * @throws MyBusinessException if ... happens
  */
-public void doSomething(String input) throws MyBusinessException {
-    ...
-}
+public void doSomething(String input)throws MyBusinessException{
+		...
+		}
 ```
 
 ### 5 为异常添加描述性的消息
@@ -175,10 +179,10 @@ public void wrapException()throws MyBusinessException{
 		}
 ```
 
-### 9 谨记 `Throw early,catch late` 原则
+### 9 谨记 `Throw early，Catch late` 原则
 
-这条原则是说，尽早将异常 `throw`出去，在得到足够多的信息能够处理异常的时候才处理它。一般情况下，异常的处理是在更高层的模块中进行的，比如我们通常的 web 服务中，在
-ControllerAdvice 这种最高层处理，然后转换成 Http 状态码返回给客户端。
+这条原则是说，尽早将异常 `throw`出去，在得到足够多的信息能够处理异常的时候才处理它。有人可能会疑惑，到底什么时候处理异常呢？一般情况下，`异常的处理是在更高层的模块中进行的`。比如我们通常的
+web 服务中，在 ControllerAdvice 这种最高层处理，然后转换成 Http 状态码返回给客户端，因为在高层模块才能够有足够的信息处理，转换成客户端理解的信息。
 
 还有一点值得说的是，在我们编程的时候，很多时候要检查用户的输入，或是方法的入参，然后抛出异常，这里也是对应`throw early`
 原则，尽早的发现问题然后抛出，以免执行了其他逻辑，一是无效的调用，而且还会增加开销。
