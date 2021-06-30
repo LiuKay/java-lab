@@ -1,10 +1,11 @@
 package com.kay.exception;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * https://github.com/LiuKay/java-lab/blob/master/docs/Java%20%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5.md
@@ -19,135 +20,135 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ExceptionHandlingExample {
 
-		//1. Clean Up Resources in a Finally Block or Use a Try-With-Resource Statement
-		public void doNotCloseResourceInTry() {
-				FileInputStream inputStream;
-				try {
-						File file = new File("./tmp.txt");
-						inputStream = new FileInputStream(file);
+    //1. Clean Up Resources in a Finally Block or Use a Try-With-Resource Statement
+    public void doNotCloseResourceInTry() {
+        FileInputStream inputStream;
+        try {
+            File file = new File("./tmp.txt");
+            inputStream = new FileInputStream(file);
 
-						// use the inputStream to read a file
+            // use the inputStream to read a file
 
-						// do NOT do this
-						inputStream.close();
-				} catch (IOException e) {
-						log.error(e);
-				}
-		}
+            // do NOT do this
+            inputStream.close();
+        } catch (IOException e) {
+            log.error(e);
+        }
+    }
 
-		public void closeResourceInFinally() {
-				FileInputStream inputStream = null;
-				try {
-						File file = new File("./tmp.txt");
-						inputStream = new FileInputStream(file);
+    public void closeResourceInFinally() {
+        FileInputStream inputStream = null;
+        try {
+            File file = new File("./tmp.txt");
+            inputStream = new FileInputStream(file);
 
-						// use the inputStream to read a file
+            // use the inputStream to read a file
 
-				} catch (FileNotFoundException e) {
-						log.error(e);
-				} finally {
-						if (inputStream != null) {
-								try {
-										inputStream.close();
-								} catch (IOException e) {
-										log.error(e);
-								}
-						}
-				}
-		}
+        } catch (FileNotFoundException e) {
+            log.error(e);
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    log.error(e);
+                }
+            }
+        }
+    }
 
-		public void automaticallyCloseResource() {
-				File file = new File("./tmp.txt");
-				try (FileInputStream inputStream = new FileInputStream(file)) {
-						// use the inputStream to read a file
+    public void automaticallyCloseResource() {
+        File file = new File("./tmp.txt");
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            // use the inputStream to read a file
 
-				} catch (IOException e) {
-						log.error(e);
-				}
-		}
+        } catch (IOException e) {
+            log.error(e);
+        }
+    }
 
-		//2. Prefer Specific Exceptions
-		public void doNotDoThis() throws Exception {
+    //2. Prefer Specific Exceptions
+    public void doNotDoThis() throws Exception {
 //    ...
-		}
+    }
 
-		public void doThis() throws NumberFormatException {
+    public void doThis() throws NumberFormatException {
 //    ...
-		}
+    }
 
-		//3. Document the Exceptions You Specify
+    //3. Document the Exceptions You Specify
 
-		/**
-		 * This method does something extremely useful ...
-		 *
-		 * @param input
-		 * @throws MyBusinessException if ... happens
-		 */
-		public void doSomething(String input) throws MyBusinessException {
+    /**
+     * This method does something extremely useful ...
+     *
+     * @param input
+     * @throws MyBusinessException if ... happens
+     */
+    public void doSomething(String input) throws MyBusinessException {
 //    ...
-		}
+    }
 
-		//4. Throw Exceptions With Descriptive Messages
+    //4. Throw Exceptions With Descriptive Messages
 
-		//5. Catch the Most Specific Exception First
-		public void catchMostSpecificExceptionFirst() {
-				try {
-						doSomething("A message");
-				} catch (NumberFormatException e) {
-						log.error(e);
-				} catch (IllegalArgumentException e) {
-						log.error(e);
-				}
-		}
+    //5. Catch the Most Specific Exception First
+    public void catchMostSpecificExceptionFirst() {
+        try {
+            doSomething("A message");
+        } catch (NumberFormatException e) {
+            log.error(e);
+        } catch (IllegalArgumentException e) {
+            log.error(e);
+        }
+    }
 
-		//6. Don’t Catch Throwable
-		public void doNotCatchThrowable() {
-				try {
-						// do something
-				} catch (Throwable t) {
-						// FIXME: don't do this!
-				}
-		}
+    //6. Don’t Catch Throwable
+    public void doNotCatchThrowable() {
+        try {
+            // do something
+        } catch (Throwable t) {
+            // FIXME: don't do this!
+        }
+    }
 
-		//7. Don’t Ignore Exceptions
-		public void doNotIgnoreExceptions() {
-				try {
-						// do something
-				} catch (NumberFormatException e) {
-						// this will never happen
-				}
-		}
+    //7. Don’t Ignore Exceptions
+    public void doNotIgnoreExceptions() {
+        try {
+            // do something
+        } catch (NumberFormatException e) {
+            // this will never happen
+        }
+    }
 
-		public void logAnException() {
-				try {
-						// do something
-				} catch (NumberFormatException e) {
-						log.error("This should never happen.", e);
-				}
-		}
+    public void logAnException() {
+        try {
+            // do something
+        } catch (NumberFormatException e) {
+            log.error("This should never happen.", e);
+        }
+    }
 
-		//8. Don’t Log and Throw
+    //8. Don’t Log and Throw
 
-		//9. Wrap the Exception Without Consuming it
-		public void wrapException() throws MyBusinessException {
-				try {
-						// do something
-				} catch (NumberFormatException e) {
-						throw new MyBusinessException("A message that describes the error.", e);
-				}
-		}
+    //9. Wrap the Exception Without Consuming it
+    public void wrapException() throws MyBusinessException {
+        try {
+            // do something
+        } catch (NumberFormatException e) {
+            throw new MyBusinessException("A message that describes the error.", e);
+        }
+    }
 
-		static class MyBusinessException extends RuntimeException {
+    static class MyBusinessException extends RuntimeException {
 
-				public MyBusinessException() {
-				}
+        public MyBusinessException() {
+        }
 
-				public MyBusinessException(String message) {
-						super(message);
-				}
+        public MyBusinessException(String message) {
+            super(message);
+        }
 
-				public MyBusinessException(String message, Throwable cause) {
-						super(message, cause);
-				}
-		}
+        public MyBusinessException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
 }

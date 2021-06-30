@@ -2,6 +2,7 @@ package com.kay.concurrency.practice.computecahe;
 
 import com.kay.concurrency.annotations.GuardedBy;
 import com.kay.concurrency.annotations.ThreadSafe;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,22 +12,22 @@ import java.util.Map;
 @ThreadSafe
 class SerialMemorizer<A, V> implements Computable<A, V> {
 
-		@GuardedBy("this")
-		private final Map<A, V> cache = new HashMap<>();
+    @GuardedBy("this")
+    private final Map<A, V> cache = new HashMap<>();
 
-		private final Computable<A, V> computable;
+    private final Computable<A, V> computable;
 
-		public SerialMemorizer(Computable<A, V> computable) {
-				this.computable = computable;
-		}
+    public SerialMemorizer(Computable<A, V> computable) {
+        this.computable = computable;
+    }
 
-		@Override
-		public synchronized V compute(A arg) throws InterruptedException {
-				V result = cache.get(arg);
-				if (result == null) {
-						result = computable.compute(arg);
-						cache.put(arg, result);
-				}
-				return result;
-		}
+    @Override
+    public synchronized V compute(A arg) throws InterruptedException {
+        V result = cache.get(arg);
+        if (result == null) {
+            result = computable.compute(arg);
+            cache.put(arg, result);
+        }
+        return result;
+    }
 }

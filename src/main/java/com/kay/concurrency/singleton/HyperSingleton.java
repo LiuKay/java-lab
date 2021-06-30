@@ -9,13 +9,13 @@ import com.kay.concurrency.annotations.ThreadSafe;
 @ThreadSafe
 public class HyperSingleton {
 
-		public HyperSingleton() {
-				//过多处理的加载很慢，加载慢，使用少的话造成性能问题
-		}
+    private static final HyperSingleton hyperSingleton = new HyperSingleton();
 
-		private static HyperSingleton hyperSingleton = new HyperSingleton();
+    public HyperSingleton() {
+        //过多处理的加载很慢，加载慢，使用少的话造成性能问题
+    }
 
-		public static HyperSingleton getSingleton() {
-				return hyperSingleton;
-		}
+    public static HyperSingleton getSingleton() {
+        return hyperSingleton;
+    }
 }

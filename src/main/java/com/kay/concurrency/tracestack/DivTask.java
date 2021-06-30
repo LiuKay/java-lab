@@ -11,25 +11,25 @@ import java.util.concurrent.TimeUnit;
  */
 public class DivTask implements Runnable {
 
-		int a, b;
+    int a, b;
 
-		public DivTask(int a, int b) {
-				this.a = a;
-				this.b = b;
-		}
+    public DivTask(int a, int b) {
+        this.a = a;
+        this.b = b;
+    }
 
-		@Override
-		public void run() {
-				double r = a / b;
-				System.out.println(r);
-		}
+    public static void main(String[] args) {
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 0L,
+                TimeUnit.MILLISECONDS, new SynchronousQueue());
 
-		public static void main(String[] args) {
-				ThreadPoolExecutor pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 0L,
-						TimeUnit.MILLISECONDS, new SynchronousQueue());
+        for (int i = 0; i < 5; i++) {
+            pool.submit(new DivTask(100, i));
+        }
+    }
 
-				for (int i = 0; i < 5; i++) {
-						pool.submit(new DivTask(100, i));
-				}
-		}
+    @Override
+    public void run() {
+        double r = a / b;
+        System.out.println(r);
+    }
 }

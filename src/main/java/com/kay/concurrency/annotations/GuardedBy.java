@@ -12,5 +12,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface GuardedBy {
 
-		String value() default "";
+    String value() default "";
 }

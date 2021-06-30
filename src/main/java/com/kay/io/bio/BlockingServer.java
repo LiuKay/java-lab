@@ -11,26 +11,26 @@ import java.net.Socket;
  */
 public class BlockingServer {
 
-		public static void main(String[] args) throws IOException {
-				ServerSocket serverSocket = new ServerSocket(8888);
-				System.out.println("Server is on accept...");
-				// server is blocking on accept()
-				Socket socket = serverSocket.accept();
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(8888);
+        System.out.println("Server is on accept...");
+        // server is blocking on accept()
+        Socket socket = serverSocket.accept();
 
-				//connected
-				DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+        //connected
+        DataInputStream inputStream = new DataInputStream(socket.getInputStream());
 
-				//block reading
-				String s = inputStream.readUTF();
-				System.out.println("Server Read:" + s);
+        //block reading
+        String s = inputStream.readUTF();
+        System.out.println("Server Read:" + s);
 
-				DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-				//block writing
-				outputStream.writeUTF(s);
+        DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+        //block writing
+        outputStream.writeUTF(s);
 
-				inputStream.close();
-				outputStream.close();
-				socket.close();
-				serverSocket.close();
-		}
+        inputStream.close();
+        outputStream.close();
+        socket.close();
+        serverSocket.close();
+    }
 }

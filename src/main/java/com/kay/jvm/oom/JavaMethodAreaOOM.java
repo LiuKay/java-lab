@@ -11,19 +11,19 @@ import net.sf.cglib.proxy.MethodInterceptor;
  */
 public class JavaMethodAreaOOM {
 
-		static class ObjectOOM {
+    public static void main(String[] args) {
+        while (true) {
+            Enhancer enhancer = new Enhancer();
+            enhancer.setSuperclass(ObjectOOM.class);
+            enhancer.setUseCache(false);
+            enhancer
+                    .setCallback((MethodInterceptor) (o, method, objects, methodProxy) -> methodProxy
+                            .invokeSuper(o, objects));
+            enhancer.create();
+        }
+    }
 
-		}
+    static class ObjectOOM {
 
-		public static void main(String[] args) {
-				while (true) {
-						Enhancer enhancer = new Enhancer();
-						enhancer.setSuperclass(ObjectOOM.class);
-						enhancer.setUseCache(false);
-						enhancer
-								.setCallback((MethodInterceptor) (o, method, objects, methodProxy) -> methodProxy
-										.invokeSuper(o, objects));
-						enhancer.create();
-				}
-		}
+    }
 }

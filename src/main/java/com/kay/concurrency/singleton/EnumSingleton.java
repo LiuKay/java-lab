@@ -12,32 +12,32 @@ import com.kay.concurrency.annotations.ThreadSafe;
 @Recommend
 public class EnumSingleton {
 
-		private EnumSingleton() {
+    private EnumSingleton() {
 
-		}
+    }
 
-		private enum SingletonHolder {
-				INSTANCE;
+    public static EnumSingleton getSingleton() {
+        return SingletonHolder.INSTANCE.getInstance();
+    }
 
-				private EnumSingleton singleton = null;
+    public static void main(String[] args) {
+        System.out.println(EnumSingleton.getSingleton());
+        System.out.println(EnumSingleton.getSingleton());
 
-				//JVM保证该方法只被执行一次
-				SingletonHolder() {
-						singleton = new EnumSingleton();
-				}
+    }
 
-				public EnumSingleton getInstance() {
-						return singleton;
-				}
-		}
+    private enum SingletonHolder {
+        INSTANCE;
 
-		public static EnumSingleton getSingleton() {
-				return SingletonHolder.INSTANCE.getInstance();
-		}
+        private EnumSingleton singleton = null;
 
-		public static void main(String[] args) {
-				System.out.println(EnumSingleton.getSingleton());
-				System.out.println(EnumSingleton.getSingleton());
+        //JVM保证该方法只被执行一次
+        SingletonHolder() {
+            singleton = new EnumSingleton();
+        }
 
-		}
+        public EnumSingleton getInstance() {
+            return singleton;
+        }
+    }
 }

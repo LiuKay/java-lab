@@ -11,31 +11,31 @@ import java.util.concurrent.TimeUnit;
  */
 public class RejectedThreadPoolDemo {
 
-  public static class MyTask implements Runnable {
+    public static void main(String[] args) throws InterruptedException {
+        MyTask task = new MyTask();
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(5, 6, 0L,
+                TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>(10),
+                Executors.defaultThreadFactory(),
+                (r, executor) -> System.out
+                        .println(r.toString() + "  被拒绝.."));
 
-    @Override
-    public void run() {
-      System.out.println("Thread ID: " + Thread.currentThread().getId());
-      try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
+        for (int i = 0; i < Integer.MAX_VALUE; i++) {
+            threadPool.submit(task);
+            Thread.sleep(10);
+        }
     }
-  }
 
-  public static void main(String[] args) throws InterruptedException {
-    MyTask task = new MyTask();
-    ThreadPoolExecutor threadPool = new ThreadPoolExecutor(5, 6, 0L,
-        TimeUnit.MILLISECONDS, new LinkedBlockingDeque<>(10),
-        Executors.defaultThreadFactory(),
-        (r, executor) -> System.out
-            .println(r.toString() + "  被拒绝.."));
+    public static class MyTask implements Runnable {
 
-    for (int i = 0; i < Integer.MAX_VALUE; i++) {
-      threadPool.submit(task);
-      Thread.sleep(10);
+        @Override
+        public void run() {
+            System.out.println("Thread ID: " + Thread.currentThread().getId());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
-  }
 
 }

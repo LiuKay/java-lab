@@ -5,9 +5,9 @@ package com.kay.concurrency.singleton;
  */
 public class ExtentSingle extends SingletonReg {
 
-		public static void main(String[] args) {
-				System.out.println(getInstance(null));
-				System.out.println(getInstance(null));
-		}
+    public static void main(String[] args) {
+        System.out.println(getInstance(null));
+        System.out.println(getInstance(null));
+    }
 
 }

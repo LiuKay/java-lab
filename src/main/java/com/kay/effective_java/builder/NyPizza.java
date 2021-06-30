@@ -4,45 +4,44 @@ import java.util.Objects;
 
 public class NyPizza extends Pizza {
 
-		public enum Size {SMALL, MEDIUM, LARGE}
+    private final Size size;
 
-		private final Size size;
+    private NyPizza(Builder builder) {
+        super(builder);
+        size = builder.size;
+    }
 
-		private NyPizza(Builder builder) {
-				super(builder);
-				size = builder.size;
-		}
+    public static void main(String[] args) {
+        NyPizza nyPizza = new Builder(Size.LARGE)
+                .addToppings(Topping.HAM)
+                .addToppings(Topping.ONION)
+                .build();
 
-		public static class Builder extends AbstractBuilder<Builder> {
+        Calzone calzone = new Calzone.Builder()
+                .addToppings(Topping.MUSHROOM)
+                .addToppings(Topping.PEPPER)
+                .sauceInside().build();
 
-				private final Size size;
+    }
 
-				public Builder(Size size) {
-						this.size = Objects.requireNonNull(size);
-				}
+    public enum Size {SMALL, MEDIUM, LARGE}
 
-				@Override
-				public NyPizza build() {
-						return new NyPizza(this);
-				}
+    public static class Builder extends AbstractBuilder<Builder> {
 
-				@Override
-				protected Builder self() {
-						return this;
-				}
-		}
+        private final Size size;
 
+        public Builder(Size size) {
+            this.size = Objects.requireNonNull(size);
+        }
 
-		public static void main(String[] args) {
-				NyPizza nyPizza = new Builder(Size.LARGE)
-						.addToppings(Topping.HAM)
-						.addToppings(Topping.ONION)
-						.build();
+        @Override
+        public NyPizza build() {
+            return new NyPizza(this);
+        }
 
-				Calzone calzone = new Calzone.Builder()
-						.addToppings(Topping.MUSHROOM)
-						.addToppings(Topping.PEPPER)
-						.sauceInside().build();
-
-		}
+        @Override
+        protected Builder self() {
+            return this;
+        }
+    }
 }

@@ -12,51 +12,51 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConditionTest {
 
 
-		public static void main(String[] args) {
-				ReentrantLock lock = new ReentrantLock();
-				Condition conditionA = lock.newCondition();
-				Condition conditionB = lock.newCondition();
-				Condition conditionC = lock.newCondition();
+    public static void main(String[] args) {
+        ReentrantLock lock = new ReentrantLock();
+        Condition conditionA = lock.newCondition();
+        Condition conditionB = lock.newCondition();
+        Condition conditionC = lock.newCondition();
 
-				PrintTask printTaskA = new PrintTask(1, "a");
-				PrintTask printTaskB = new PrintTask(2, "b");
-				PrintTask printTaskC = new PrintTask(0, "c");
+        PrintTask printTaskA = new PrintTask(1, "a");
+        PrintTask printTaskB = new PrintTask(2, "b");
+        PrintTask printTaskC = new PrintTask(0, "c");
 
-				new Thread(() -> printTaskA.run(lock, conditionA, conditionB)).start();
-				new Thread(() -> printTaskB.run(lock, conditionB, conditionC)).start();
-				new Thread(() -> printTaskC.run(lock, conditionC, conditionA)).start();
+        new Thread(() -> printTaskA.run(lock, conditionA, conditionB)).start();
+        new Thread(() -> printTaskB.run(lock, conditionB, conditionC)).start();
+        new Thread(() -> printTaskC.run(lock, conditionC, conditionA)).start();
 
-		}
+    }
 
 
-		static class PrintTask {
+    static class PrintTask {
 
-				private static int num = 1;
-				private int code;
-				private String content;
+        private static int num = 1;
+        private final int code;
+        private final String content;
 
-				PrintTask(int code, String content) {
-						this.code = code;
-						this.content = content;
-				}
+        PrintTask(int code, String content) {
+            this.code = code;
+            this.content = content;
+        }
 
-				public void run(ReentrantLock lock, Condition curCondition, Condition next) {
-						for (; ; ) {
-								lock.lock();
-								try {
-										while (num % 3 != code) {
-												curCondition.await();
-										}
-										System.out.print(content);
-										num++;
-										next.signal();
-								} catch (InterruptedException e) {
-										Thread.currentThread().interrupt();
-								} finally {
-										lock.unlock();
-								}
-						}
-				}
-		}
+        public void run(ReentrantLock lock, Condition curCondition, Condition next) {
+            for (; ; ) {
+                lock.lock();
+                try {
+                    while (num % 3 != code) {
+                        curCondition.await();
+                    }
+                    System.out.print(content);
+                    num++;
+                    next.signal();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } finally {
+                    lock.unlock();
+                }
+            }
+        }
+    }
 
 }

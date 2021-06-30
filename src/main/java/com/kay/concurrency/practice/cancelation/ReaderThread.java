@@ -16,43 +16,43 @@ import java.net.Socket;
  */
 class ReaderThread extends Thread {
 
-		private final Socket socket;
-		private final InputStream inputStream;
-		private static final int BUFFER_SIZE = 2048;
+    private static final int BUFFER_SIZE = 2048;
+    private final Socket socket;
+    private final InputStream inputStream;
 
-		public ReaderThread(Socket socket) throws IOException {
-				this.socket = socket;
-				this.inputStream = socket.getInputStream();
-		}
+    public ReaderThread(Socket socket) throws IOException {
+        this.socket = socket;
+        this.inputStream = socket.getInputStream();
+    }
 
-		@Override
-		public void interrupt() {
-				try {
-						socket.close();
-				} catch (IOException ignored) {
-				} finally {
-						super.interrupt();
-				}
-		}
+    @Override
+    public void interrupt() {
+        try {
+            socket.close();
+        } catch (IOException ignored) {
+        } finally {
+            super.interrupt();
+        }
+    }
 
-		@Override
-		public void run() {
-				try {
-						byte[] buf = new byte[BUFFER_SIZE];
-						while (true) {
-								int count = inputStream.read(buf);
-								if (count < 0) {
-										break;
-								} else if (count > 0) {
-										processBuff(buf, count);
-								}
-						}
-				} catch (IOException e) {
-						/* Allow the thread to exit */
-				}
-		}
+    @Override
+    public void run() {
+        try {
+            byte[] buf = new byte[BUFFER_SIZE];
+            while (true) {
+                int count = inputStream.read(buf);
+                if (count < 0) {
+                    break;
+                } else if (count > 0) {
+                    processBuff(buf, count);
+                }
+            }
+        } catch (IOException e) {
+            /* Allow the thread to exit */
+        }
+    }
 
-		private void processBuff(byte[] buf, int count) {
-				System.out.println("process the buf.");
-		}
+    private void processBuff(byte[] buf, int count) {
+        System.out.println("process the buf.");
+    }
 }

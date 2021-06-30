@@ -6,25 +6,25 @@ import java.nio.channels.SocketChannel;
 
 public class SocketChannelDemo {
 
-		public static void main(String[] args) throws IOException {
-				new Client().connect();
-		}
+    public static void main(String[] args) throws IOException {
+        new Client().connect();
+    }
 
-		static class Client {
+    static class Client {
 
-				void connect() throws IOException {
-						SocketChannel socketChannel = SocketChannel.open();
+        void connect() throws IOException {
+            SocketChannel socketChannel = SocketChannel.open();
 //						socketChannel.socket().connect(new InetSocketAddress(8888)); //blocking socket
-						socketChannel.configureBlocking(false);
-						socketChannel.connect(new InetSocketAddress("cn.bing.com", 80));
+            socketChannel.configureBlocking(false);
+            socketChannel.connect(new InetSocketAddress("cn.bing.com", 80));
 
-						while (!socketChannel.finishConnect()) {
-								//do sth. else
-								System.out.println("Do sth. else.");
-						}
+            while (!socketChannel.finishConnect()) {
+                //do sth. else
+                System.out.println("Do sth. else.");
+            }
 
-						//connection is ready, do sth. with socketChannel
-						System.out.println("Connection is ready.");
-				}
-		}
+            //connection is ready, do sth. with socketChannel
+            System.out.println("Connection is ready.");
+        }
+    }
 }

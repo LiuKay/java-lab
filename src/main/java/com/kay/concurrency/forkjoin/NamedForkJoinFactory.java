@@ -11,21 +11,21 @@ import java.util.concurrent.ForkJoinWorkerThread;
  */
 public class NamedForkJoinFactory implements ForkJoinWorkerThreadFactory {
 
-		private final String prefix;
+    private final String prefix;
 
-		public NamedForkJoinFactory(String prefix) {
-				this.prefix = prefix;
-		}
+    public NamedForkJoinFactory(String prefix) {
+        this.prefix = prefix;
+    }
 
-		public static NamedForkJoinFactory create(String prefix) {
-				return new NamedForkJoinFactory(prefix);
-		}
+    public static NamedForkJoinFactory create(String prefix) {
+        return new NamedForkJoinFactory(prefix);
+    }
 
-		@Override
-		public ForkJoinWorkerThread newThread(ForkJoinPool pool) {
-				final ForkJoinWorkerThread worker = ForkJoinPool.defaultForkJoinWorkerThreadFactory
-						.newThread(pool);
-				worker.setName(prefix + "-" + worker.getPoolIndex());
-				return worker;
-		}
+    @Override
+    public ForkJoinWorkerThread newThread(ForkJoinPool pool) {
+        final ForkJoinWorkerThread worker = ForkJoinPool.defaultForkJoinWorkerThreadFactory
+                .newThread(pool);
+        worker.setName(prefix + "-" + worker.getPoolIndex());
+        return worker;
+    }
 }

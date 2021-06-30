@@ -14,25 +14,25 @@ import java.util.concurrent.TimeUnit;
  */
 public class DivTaskWithTraceStack implements Runnable {
 
-  int a, b;
+    int a, b;
 
-  public DivTaskWithTraceStack(int a, int b) {
-    this.a = a;
-    this.b = b;
-  }
-
-  @Override
-  public void run() {
-    double r = a / b;
-    System.out.println(r);
-  }
-
-  public static void main(String[] args) {
-    ThreadPoolExecutor pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 0L,
-        TimeUnit.MILLISECONDS, new SynchronousQueue());
-
-    for (int i = 0; i < 5; i++) {
-      pool.execute(new DivTaskWithTraceStack(100, i));
+    public DivTaskWithTraceStack(int a, int b) {
+        this.a = a;
+        this.b = b;
     }
-  }
+
+    public static void main(String[] args) {
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 0L,
+                TimeUnit.MILLISECONDS, new SynchronousQueue());
+
+        for (int i = 0; i < 5; i++) {
+            pool.execute(new DivTaskWithTraceStack(100, i));
+        }
+    }
+
+    @Override
+    public void run() {
+        double r = a / b;
+        System.out.println(r);
+    }
 }

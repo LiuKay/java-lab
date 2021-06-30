@@ -10,28 +10,28 @@ import java.util.concurrent.Semaphore;
  */
 public class SemaphoreDemo implements Runnable {
 
-  final Semaphore semaphore = new Semaphore(5); //同时可以有5个许可进入
+    final Semaphore semaphore = new Semaphore(5); //同时可以有5个许可进入
 
-  @Override
-  public void run() {
-    try {
-      //获取许可
-      semaphore.acquire();
-      Thread.sleep(2000);
-      System.out.println(Thread.currentThread().getName() + " run...");
-      //释放许可
-      semaphore.release();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+    public static void main(String[] args) {
+        ExecutorService service = Executors.newFixedThreadPool(20);
+        final SemaphoreDemo demo = new SemaphoreDemo();
+        for (int i = 0; i < 20; i++) {
+            service.execute(demo);
+        }
+        service.shutdown();
     }
-  }
 
-  public static void main(String[] args) {
-    ExecutorService service = Executors.newFixedThreadPool(20);
-    final SemaphoreDemo demo = new SemaphoreDemo();
-    for (int i = 0; i < 20; i++) {
-      service.execute(demo);
+    @Override
+    public void run() {
+        try {
+            //获取许可
+            semaphore.acquire();
+            Thread.sleep(2000);
+            System.out.println(Thread.currentThread().getName() + " run...");
+            //释放许可
+            semaphore.release();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
-    service.shutdown();
-  }
 }

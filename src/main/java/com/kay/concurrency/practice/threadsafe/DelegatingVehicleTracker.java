@@ -3,6 +3,7 @@ package com.kay.concurrency.practice.threadsafe;
 
 import com.kay.concurrency.annotations.Immutable;
 import com.kay.concurrency.annotations.ThreadSafe;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,50 +16,50 @@ import java.util.concurrent.ConcurrentHashMap;
 @ThreadSafe
 public class DelegatingVehicleTracker {
 
-		private final ConcurrentHashMap<String, Point> locations;
-		private final Map<String, Point> unmodifiableMap;
+    private final ConcurrentHashMap<String, Point> locations;
+    private final Map<String, Point> unmodifiableMap;
 
-		public DelegatingVehicleTracker(Map<String, Point> points) {
-				locations = new ConcurrentHashMap<>(points);
-				unmodifiableMap = Collections.unmodifiableMap(locations);
-		}
+    public DelegatingVehicleTracker(Map<String, Point> points) {
+        locations = new ConcurrentHashMap<>(points);
+        unmodifiableMap = Collections.unmodifiableMap(locations);
+    }
 
-		/**
-		 * 注意两种方式的区别
-		 *
-		 * @return
-		 */
-		public Map<String, Point> getLocations() {
-				return unmodifiableMap; // 返回 "live"数据
+    /**
+     * 注意两种方式的区别
+     *
+     * @return
+     */
+    public Map<String, Point> getLocations() {
+        return unmodifiableMap; // 返回 "live"数据
 //        return Collections.unmodifiableMap(new HashMap<>(locations)); // 只返回当前“快照”
-		}
+    }
 
-		public Point getLocation(String id) {
-				return locations.get(id);
-		}
+    public Point getLocation(String id) {
+        return locations.get(id);
+    }
 
-		public void setLocation(String id, int x, int y) {
-				if (locations.replace(id, new Point(x, y)) == null) {
-						throw new IllegalArgumentException("invalid vehicle id:" + id);
-				}
-		}
+    public void setLocation(String id, int x, int y) {
+        if (locations.replace(id, new Point(x, y)) == null) {
+            throw new IllegalArgumentException("invalid vehicle id:" + id);
+        }
+    }
 
-		@Immutable
-		static class Point {
+    @Immutable
+    static class Point {
 
-				public final int x, y;
+        public final int x, y;
 
-				Point(int x, int y) {
-						this.x = x;
-						this.y = y;
-				}
+        Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
 
-				@Override
-				public String toString() {
-						return "Point{" +
-								"x=" + x +
-								", y=" + y +
-								'}';
-				}
-		}
+        @Override
+        public String toString() {
+            return "Point{" +
+                    "x=" + x +
+                    ", y=" + y +
+                    '}';
+        }
+    }
 }

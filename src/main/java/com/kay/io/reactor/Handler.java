@@ -8,63 +8,62 @@ import java.nio.channels.SocketChannel;
 
 public class Handler implements Runnable {
 
-		final SocketChannel socketChannel;
-		final SelectionKey sk;
-		ByteBuffer input = ByteBuffer.allocate(1024);
-		ByteBuffer output = ByteBuffer.allocate(1024);
+    static final int READING = 0, SENDING = 1;
+    final SocketChannel socketChannel;
+    final SelectionKey sk;
+    ByteBuffer input = ByteBuffer.allocate(1024);
+    ByteBuffer output = ByteBuffer.allocate(1024);
+    int state = READING;
 
-		static final int READING = 0, SENDING = 1;
-		int state = READING;
+    Handler(Selector selector, SocketChannel socketChannel) throws IOException {
+        this.socketChannel = socketChannel;
+        this.socketChannel.configureBlocking(false);
 
-		Handler(Selector selector, SocketChannel socketChannel) throws IOException {
-				this.socketChannel = socketChannel;
-				this.socketChannel.configureBlocking(false);
+        this.sk = this.socketChannel.register(selector, 0);
+        this.sk.attach(this);
+        this.sk.interestOps(SelectionKey.OP_READ);
+        selector.wakeup();
+    }
 
-				this.sk = this.socketChannel.register(selector, 0);
-				this.sk.attach(this);
-				this.sk.interestOps(SelectionKey.OP_READ);
-				selector.wakeup();
-		}
+    @Override
+    public void run() {
+        try {
+            if (state == READING) {
+                read();
+            } else if (state == SENDING) {
+                send();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-		@Override
-		public void run() {
-				try {
-						if (state == READING) {
-								read();
-						} else if (state == SENDING) {
-								send();
-						}
-				} catch (IOException e) {
-						e.printStackTrace();
-				}
-		}
+    private void send() throws IOException {
+        socketChannel.write(output);
+        if (outputIsComplete()) {
+            sk.cancel();
+        }
+    }
 
-		private void send() throws IOException {
-				socketChannel.write(output);
-				if (outputIsComplete()) {
-						sk.cancel();
-				}
-		}
+    void read() throws IOException {
+        socketChannel.read(input);
+        if (inputIsComplete()) {
+            process();
+            state = SENDING;
 
-		void read() throws IOException {
-				socketChannel.read(input);
-				if (inputIsComplete()) {
-						process();
-						state = SENDING;
+            sk.interestOps(SelectionKey.OP_WRITE);
+        }
+    }
 
-						sk.interestOps(SelectionKey.OP_WRITE);
-				}
-		}
+    private void process() {
+        System.out.println("process...");
+    }
 
-		private void process() {
-				System.out.println("process...");
-		}
+    boolean inputIsComplete() {
+        return !input.hasRemaining();
+    }
 
-		boolean inputIsComplete() {
-				return !input.hasRemaining();
-		}
-
-		boolean outputIsComplete() {
-				return !output.hasRemaining();
-		}
+    boolean outputIsComplete() {
+        return !output.hasRemaining();
+    }
 }

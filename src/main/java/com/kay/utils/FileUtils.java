@@ -5,19 +5,19 @@ import java.util.Optional;
 
 public final class FileUtils {
 
-		private FileUtils() {
-				throw new UnsupportedOperationException();
-		}
+    private FileUtils() {
+        throw new UnsupportedOperationException();
+    }
 
-		public static String getClassPathFilePath(String path) {
-				return Optional.ofNullable(Thread.currentThread().getContextClassLoader().getResource(path))
-						.orElseThrow()
-						.getFile();
-		}
+    public static String getClassPathFilePath(String path) {
+        return Optional.ofNullable(Thread.currentThread().getContextClassLoader().getResource(path))
+                .orElseThrow()
+                .getFile();
+    }
 
 
-		public static InputStream getClassPathInputStream(String fileName) {
-				return Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
-		}
+    public static InputStream getClassPathInputStream(String fileName) {
+        return Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+    }
 
 }

@@ -7,26 +7,26 @@ package com.kay.concurrency.lockissues;
  */
 class BadLockOnInteger implements Runnable {
 
-  private static Integer counter = 0;
-  private static BadLockOnInteger instance = new BadLockOnInteger();
+    private static Integer counter = 0;
+    private static final BadLockOnInteger instance = new BadLockOnInteger();
 
-  @Override
-  public void run() {
-    for (int j = 0; j < 10000; j++) {
-      // synchronization on a non-final field
-      synchronized (counter) {
-        counter++;
-      }
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread(instance);
+        Thread t2 = new Thread(instance);
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
+        System.out.println(counter);
     }
-  }
 
-  public static void main(String[] args) throws InterruptedException {
-    Thread t1 = new Thread(instance);
-    Thread t2 = new Thread(instance);
-    t1.start();
-    t2.start();
-    t1.join();
-    t2.join();
-    System.out.println(counter);
-  }
+    @Override
+    public void run() {
+        for (int j = 0; j < 10000; j++) {
+            // synchronization on a non-final field
+            synchronized (counter) {
+                counter++;
+            }
+        }
+    }
 }

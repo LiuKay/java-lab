@@ -7,25 +7,25 @@ package com.kay.concurrency.singleton;
  */
 public class StaticSingleton {
 
-		public static int status = 0;
+    public static int status = 0;
 
-		public StaticSingleton() {
-				System.out.println(" init..");
-		}
+    public StaticSingleton() {
+        System.out.println(" init..");
+    }
 
-		private static class StaticSingleHolder {
+    public static StaticSingleton getInstance() {
+        return StaticSingleHolder.instance;
+    }
 
-				private static StaticSingleton instance = new StaticSingleton();
-		}
-
-		public static StaticSingleton getInstance() {
-				return StaticSingleHolder.instance;
-		}
-
-		public static void main(String[] args) {
-				StaticSingleton s = getInstance();
+    public static void main(String[] args) {
+        StaticSingleton s = getInstance();
 //        System.out.println(StaticSingleton.status);
-		}
+    }
+
+    private static class StaticSingleHolder {
+
+        private static final StaticSingleton instance = new StaticSingleton();
+    }
 
 }
 

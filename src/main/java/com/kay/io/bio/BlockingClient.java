@@ -10,20 +10,20 @@ import java.net.Socket;
  */
 public class BlockingClient {
 
-		public static void main(String[] args) throws IOException {
-				Socket socket = new Socket("localhost", 8888);
-				DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-				//blocking
-				outputStream.writeUTF("Hello");
+    public static void main(String[] args) throws IOException {
+        Socket socket = new Socket("localhost", 8888);
+        DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
+        //blocking
+        outputStream.writeUTF("Hello");
 
-				DataInputStream inputStream = new DataInputStream(socket.getInputStream());
-				//blocking
-				String s = inputStream.readUTF();
+        DataInputStream inputStream = new DataInputStream(socket.getInputStream());
+        //blocking
+        String s = inputStream.readUTF();
 
-				System.out.println("Client Accept:" + s);
+        System.out.println("Client Accept:" + s);
 
-				outputStream.close();
-				inputStream.close();
-				socket.close();
-		}
+        outputStream.close();
+        inputStream.close();
+        socket.close();
+    }
 }

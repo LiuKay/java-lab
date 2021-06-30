@@ -7,13 +7,13 @@ import org.openjdk.jol.info.ClassLayout;
  */
 public class ObjectHeaderTest {
 
-		public static void main(String[] args) {
-				TestObject testObject = new TestObject();
-				System.out.println(ClassLayout.parseInstance(testObject).toPrintable());
-		}
+    public static void main(String[] args) {
+        TestObject testObject = new TestObject();
+        System.out.println(ClassLayout.parseInstance(testObject).toPrintable());
+    }
 
-		static class TestObject {
+    static class TestObject {
 
-				private int flag;
-		}
+        private int flag;
+    }
 }

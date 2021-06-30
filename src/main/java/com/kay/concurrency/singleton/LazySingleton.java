@@ -11,21 +11,21 @@ import com.kay.concurrency.annotations.NotThreadSafe;
 @NotThreadSafe
 public class LazySingleton {
 
-		private LazySingleton() {
-		}
+    private static LazySingleton lazySingleton = null;
 
-		private static LazySingleton lazySingleton = null;
+    private LazySingleton() {
+    }
 
-		/**
-		 * 多线程竞争下拿到的实例对象不同 如果在对象初始化时，有大量的系统开销，比如数据库连接？
-		 *
-		 * @return
-		 */
-		public static LazySingleton getSingleton() {
-				if (lazySingleton == null) {
-						lazySingleton = new LazySingleton();
-				}
-				return lazySingleton;
-		}
+    /**
+     * 多线程竞争下拿到的实例对象不同 如果在对象初始化时，有大量的系统开销，比如数据库连接？
+     *
+     * @return
+     */
+    public static LazySingleton getSingleton() {
+        if (lazySingleton == null) {
+            lazySingleton = new LazySingleton();
+        }
+        return lazySingleton;
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.kay.concurrency.publish;
 
 import com.kay.concurrency.annotations.NotThreadSafe;
+
 import java.util.Arrays;
 
 /**
@@ -11,19 +12,19 @@ import java.util.Arrays;
 @NotThreadSafe
 public class UnsafePublishDemo {
 
-		private String[] arr = {"aa", "bb", "cc"};
+    private final String[] arr = {"aa", "bb", "cc"};
 
-		public String[] getArr() {
-				return arr;
-		}
+    public static void main(String[] args) {
+        UnsafePublishDemo unsafePublishDemo = new UnsafePublishDemo();
 
-		public static void main(String[] args) {
-				UnsafePublishDemo unsafePublishDemo = new UnsafePublishDemo();
+        System.out.println("arr=" + Arrays.toString(unsafePublishDemo.getArr()));
 
-				System.out.println("arr=" + Arrays.toString(unsafePublishDemo.getArr()));
+        unsafePublishDemo.getArr()[1] = "change";
 
-				unsafePublishDemo.getArr()[1] = "change";
+        System.out.println("arr=" + Arrays.toString(unsafePublishDemo.getArr()));
+    }
 
-				System.out.println("arr=" + Arrays.toString(unsafePublishDemo.getArr()));
-		}
+    public String[] getArr() {
+        return arr;
+    }
 }

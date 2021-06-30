@@ -2,6 +2,7 @@ package com.kay.concurrency.practice.threadsafe;
 
 import com.kay.concurrency.annotations.NotThreadSafe;
 import com.kay.concurrency.annotations.ThreadSafe;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,65 +21,65 @@ import java.util.Map;
 @ThreadSafe
 public class MonitorVehicleTracker {
 
-  private final Map<String, MutablePoint> locations;
+    private final Map<String, MutablePoint> locations;
 
-  public MonitorVehicleTracker(Map<String, MutablePoint> locations) {
-    this.locations = deepCopy(locations);
-  }
-
-  public synchronized Map<String, MutablePoint> getLocations() {
-    return deepCopy(locations);
-  }
-
-  /**
-   * 每次返回新的对象，对对象的修改不会反应到 MonitorVehicleTracker 的内部状态中
-   */
-  public synchronized MutablePoint getLocation(String id) {
-    MutablePoint point = locations.get(id);
-    return point == null ? null : new MutablePoint(point);
-  }
-
-  /**
-   * 修改只改变封装对象的属性。传递的是形参，而不是一个对象
-   */
-  public synchronized void setLocation(String id, int x, int y) {
-    MutablePoint loc = locations.get(id);
-    if (loc == null) {
-      throw new IllegalArgumentException("No such ID:" + id);
-    }
-    loc.x = x;
-    loc.y = y;
-  }
-
-  private Map<String, MutablePoint> deepCopy(Map<String, MutablePoint> map) {
-    Map<String, MutablePoint> result = new HashMap<>();
-    for (String id : map.keySet()) {
-      result.put(id, new MutablePoint(map.get(id)));
-    }
-    return Collections.unmodifiableMap(result);
-  }
-
-  @NotThreadSafe
-  static class MutablePoint {
-
-    public int x, y;
-
-    MutablePoint() {
-      this.x = 0;
-      this.y = 0;
+    public MonitorVehicleTracker(Map<String, MutablePoint> locations) {
+        this.locations = deepCopy(locations);
     }
 
-    MutablePoint(MutablePoint point) {
-      this.x = point.x;
-      this.y = point.y;
+    public synchronized Map<String, MutablePoint> getLocations() {
+        return deepCopy(locations);
     }
 
-    @Override
-    public String toString() {
-      return "MutablePoint{" +
-          "x=" + x +
-          ", y=" + y +
-          '}';
+    /**
+     * 每次返回新的对象，对对象的修改不会反应到 MonitorVehicleTracker 的内部状态中
+     */
+    public synchronized MutablePoint getLocation(String id) {
+        MutablePoint point = locations.get(id);
+        return point == null ? null : new MutablePoint(point);
     }
-  }
+
+    /**
+     * 修改只改变封装对象的属性。传递的是形参，而不是一个对象
+     */
+    public synchronized void setLocation(String id, int x, int y) {
+        MutablePoint loc = locations.get(id);
+        if (loc == null) {
+            throw new IllegalArgumentException("No such ID:" + id);
+        }
+        loc.x = x;
+        loc.y = y;
+    }
+
+    private Map<String, MutablePoint> deepCopy(Map<String, MutablePoint> map) {
+        Map<String, MutablePoint> result = new HashMap<>();
+        for (String id : map.keySet()) {
+            result.put(id, new MutablePoint(map.get(id)));
+        }
+        return Collections.unmodifiableMap(result);
+    }
+
+    @NotThreadSafe
+    static class MutablePoint {
+
+        public int x, y;
+
+        MutablePoint() {
+            this.x = 0;
+            this.y = 0;
+        }
+
+        MutablePoint(MutablePoint point) {
+            this.x = point.x;
+            this.y = point.y;
+        }
+
+        @Override
+        public String toString() {
+            return "MutablePoint{" +
+                    "x=" + x +
+                    ", y=" + y +
+                    '}';
+        }
+    }
 }

@@ -18,28 +18,28 @@ import java.util.concurrent.TimeUnit;
  */
 public class DivTaskWithTraceStackBest implements Runnable {
 
-  int a, b;
+    int a, b;
 
-  public DivTaskWithTraceStackBest(int a, int b) {
-    this.a = a;
-    this.b = b;
-  }
-
-  @Override
-  public void run() {
-    double r = a / b;
-    System.out.println(r);
-  }
-
-  public static void main(String[] args) {
-    ThreadPoolExecutor pool = new TraceThreadPoolExecutor(0, Integer.MAX_VALUE, 0L,
-        TimeUnit.MILLISECONDS, new SynchronousQueue());
-
-    /**
-     * 在错误信息中可以看到 任务提交的入口
-     */
-    for (int i = 0; i < 5; i++) {
-      pool.execute(new DivTaskWithTraceStackBest(100, i));
+    public DivTaskWithTraceStackBest(int a, int b) {
+        this.a = a;
+        this.b = b;
     }
-  }
+
+    public static void main(String[] args) {
+        ThreadPoolExecutor pool = new TraceThreadPoolExecutor(0, Integer.MAX_VALUE, 0L,
+                TimeUnit.MILLISECONDS, new SynchronousQueue());
+
+        /**
+         * 在错误信息中可以看到 任务提交的入口
+         */
+        for (int i = 0; i < 5; i++) {
+            pool.execute(new DivTaskWithTraceStackBest(100, i));
+        }
+    }
+
+    @Override
+    public void run() {
+        double r = a / b;
+        System.out.println(r);
+    }
 }

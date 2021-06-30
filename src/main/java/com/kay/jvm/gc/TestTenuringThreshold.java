@@ -22,16 +22,16 @@ package com.kay.jvm.gc;
  */
 public class TestTenuringThreshold {
 
-		private final static int _1MB = 1024 * 1024;
+    private final static int _1MB = 1024 * 1024;
 
 
-		public static void main(String[] args) {
-				byte[] arr1, arr2, arr3, arr4;
-				arr1 = new byte[_1MB / 4]; // 256K
-				arr2 = new byte[_1MB * 4]; // 4096K
-				arr3 = new byte[_1MB * 4];
-				arr3 = null;
+    public static void main(String[] args) {
+        byte[] arr1, arr2, arr3, arr4;
+        arr1 = new byte[_1MB / 4]; // 256K
+        arr2 = new byte[_1MB * 4]; // 4096K
+        arr3 = new byte[_1MB * 4];
+        arr3 = null;
 
-				arr3 = new byte[_1MB * 4];
-		}
+        arr3 = new byte[_1MB * 4];
+    }
 }

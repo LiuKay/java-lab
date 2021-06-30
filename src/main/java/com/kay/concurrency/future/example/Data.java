@@ -5,5 +5,5 @@ package com.kay.concurrency.future.example;
  */
 public interface Data {
 
-		public String getResult();
+    String getResult();
 }

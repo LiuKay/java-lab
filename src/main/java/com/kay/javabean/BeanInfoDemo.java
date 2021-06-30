@@ -8,26 +8,26 @@ import java.util.Arrays;
 
 public class BeanInfoDemo {
 
-		public static void main(String[] args) throws IntrospectionException {
+    public static void main(String[] args) throws IntrospectionException {
 
-				Person bean = new Person();
+        Person bean = new Person();
 
-				BeanInfo beanInfo = Introspector.getBeanInfo(Person.class, Object.class);
-				Arrays.stream(beanInfo.getPropertyDescriptors())
-						.forEach(propertyDescriptor -> {
-								System.out.println(propertyDescriptor.getName());
-								propertyDescriptor.setPropertyEditorClass(StringToIntegerPropertyEditor.class);
-						});
+        BeanInfo beanInfo = Introspector.getBeanInfo(Person.class, Object.class);
+        Arrays.stream(beanInfo.getPropertyDescriptors())
+                .forEach(propertyDescriptor -> {
+                    System.out.println(propertyDescriptor.getName());
+                    propertyDescriptor.setPropertyEditorClass(StringToIntegerPropertyEditor.class);
+                });
 
-		}
+    }
 
-		static class StringToIntegerPropertyEditor extends PropertyEditorSupport {
+    static class StringToIntegerPropertyEditor extends PropertyEditorSupport {
 
-				@Override
-				public void setAsText(String text) throws IllegalArgumentException {
-						Integer value = Integer.valueOf(text);
-						setValue(value);
-				}
-		}
+        @Override
+        public void setAsText(String text) throws IllegalArgumentException {
+            Integer value = Integer.valueOf(text);
+            setValue(value);
+        }
+    }
 
 }

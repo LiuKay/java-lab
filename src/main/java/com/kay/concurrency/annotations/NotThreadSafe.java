@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface NotThreadSafe {
 
-		String value() default "";
+    String value() default "";
 }

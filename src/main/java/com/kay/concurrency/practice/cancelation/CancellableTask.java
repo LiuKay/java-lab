@@ -5,7 +5,7 @@ import java.util.concurrent.RunnableFuture;
 
 interface CancellableTask<T> extends Callable<T> {
 
-  void cancel();
+    void cancel();
 
-  RunnableFuture<T> newTask();
+    RunnableFuture<T> newTask();
 }
