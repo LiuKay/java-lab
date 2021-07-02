@@ -3,6 +3,8 @@ package com.kay.io.buffer;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
+import static com.kay.io.buffer.BufferCreateDemo.printBuffers;
+
 public class BufferWriteReadDemo {
 
     public static void main(String[] args) {
