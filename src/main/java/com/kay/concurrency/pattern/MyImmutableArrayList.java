@@ -1,4 +1,4 @@
-package com.kay.concurrency.design;
+package com.kay.concurrency.pattern;
 
 import java.util.*;
 import java.util.function.Consumer;

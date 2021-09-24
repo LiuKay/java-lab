@@ -1,4 +1,4 @@
-package com.kay.concurrency.design;
+package com.kay.concurrency.pattern;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;

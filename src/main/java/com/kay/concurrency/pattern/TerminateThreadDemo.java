@@ -1,4 +1,4 @@
-package com.kay.concurrency.design;
+package com.kay.concurrency.pattern;
 
 import com.kay.concurrency.utils.Utils;
 import lombok.extern.log4j.Log4j2;

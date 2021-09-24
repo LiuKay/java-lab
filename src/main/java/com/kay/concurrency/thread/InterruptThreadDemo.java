@@ -1,6 +1,6 @@
 package com.kay.concurrency.thread;
 
-import com.kay.concurrency.design.TerminateThreadDemo;
+import com.kay.concurrency.pattern.TerminateThreadDemo;
 import lombok.extern.log4j.Log4j2;
 
 /**

@@ -1,4 +1,4 @@
-package com.kay.concurrency.design;
+package com.kay.concurrency.pattern;
 
 import com.google.common.util.concurrent.RateLimiter;
 import lombok.extern.log4j.Log4j2;

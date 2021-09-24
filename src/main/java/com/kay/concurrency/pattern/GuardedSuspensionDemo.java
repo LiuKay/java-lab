@@ -1,4 +1,4 @@
-package com.kay.concurrency.design;
+package com.kay.concurrency.pattern;
 
 import com.kay.concurrency.utils.NamedThreadFactory;
 import lombok.AllArgsConstructor;
