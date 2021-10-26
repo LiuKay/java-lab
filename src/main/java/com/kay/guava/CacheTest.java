@@ -8,7 +8,6 @@ import com.google.common.cache.Weigher;
 import org.apache.logging.log4j.util.Strings;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 public class CacheTest {
 
@@ -17,15 +16,16 @@ public class CacheTest {
     private ConcurrentHashMap<String, String> backMap = new ConcurrentHashMap<>();
 
     public CacheTest() {
-        CacheLoader<String,String> cacheLoader= new CacheLoader<>() {
+        CacheLoader<String, String> cacheLoader = new CacheLoader<String, String>() {
             @Override
             public String load(String s) {
                 System.out.println(String.format("load:%s", s));
                 return s;
             }
         };
-        RemovalListener<String,String> removalListener= removalNotification -> {
-            System.out.println("-----------removalListener触发:" + removalNotification.getCause() +" >> " + removalNotification);
+        RemovalListener<String, String> removalListener = removalNotification -> {
+            System.out.println(
+                    "-----------removalListener触发:" + removalNotification.getCause() + " >> " + removalNotification);
             if (removalNotification.wasEvicted()) {
                 String name = removalNotification.getCause().name();
                 if (Strings.isNotBlank(name)) {

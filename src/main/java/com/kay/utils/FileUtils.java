@@ -11,8 +11,8 @@ public final class FileUtils {
 
     public static String getClassPathFilePath(String path) {
         return Optional.ofNullable(Thread.currentThread().getContextClassLoader().getResource(path))
-                .orElseThrow()
-                .getFile();
+                       .orElseThrow(IllegalArgumentException::new)
+                       .getFile();
     }
 
 
