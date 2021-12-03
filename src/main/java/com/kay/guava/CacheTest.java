@@ -2,13 +2,16 @@ package com.kay.guava;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalCause;
 import com.google.common.cache.RemovalListener;
 import com.google.common.cache.Weigher;
-import org.apache.logging.log4j.util.Strings;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+@Log4j2
 public class CacheTest {
 
     private LoadingCache<String, String> cache;
@@ -16,25 +19,35 @@ public class CacheTest {
     private ConcurrentHashMap<String, String> backMap = new ConcurrentHashMap<>();
 
     public CacheTest() {
-        CacheLoader<String, String> cacheLoader = new CacheLoader<String, String>() {
+        CacheLoader<String, String> cacheLoader = new CacheLoader<>() {
             @Override
             public String load(String s) {
-                System.out.println(String.format("load:%s", s));
+                log.info("load {}", s);
+                if (backMap.containsKey(s)) {
+                    return backMap.get(s);
+                }
+
                 return s;
             }
         };
+
         RemovalListener<String, String> removalListener = removalNotification -> {
-            System.out.println(
-                    "-----------removalListener触发:" + removalNotification.getCause() + " >> " + removalNotification);
+            final RemovalCause cause = removalNotification.getCause();
+            log.info("RemovalListener:{}", removalNotification);
+
             if (removalNotification.wasEvicted()) {
-                String name = removalNotification.getCause().name();
-                if (Strings.isNotBlank(name)) {
-                    save(removalNotification.getKey(), removalNotification.getValue());
-                }
+                final String key = removalNotification.getKey();
+                log.info("store key:{}, cause:{}", removalNotification.getKey(), cause);
+                save(key, removalNotification.getValue());
             }
         };
 
-        Weigher<String, String> weigher = (s, s2) -> s.length();
+        Weigher<String, String> weigher = (k, v) -> {
+            final int length = v.length();
+            log.info("weigher for {}={}, weigher:{}", k, v, length);
+            return length;
+        };
+
         this.cache = CacheBuilder.newBuilder()
                                  .maximumWeight(3)
                                  .weigher(weigher)
@@ -50,29 +63,32 @@ public class CacheTest {
         return this.cache.getUnchecked(key);
     }
 
-    public void updateCache(String key,String value) {
-        System.out.println(">>> updateCache for:" + key + ",value:" + value);
-
-        System.out.println(String.format("1.invoke invalidate:%s", key));
-        cache.invalidate(key);  //wasEvicted=false,will not trigger
-//
-//        System.out.println(String.format("2.invoke put:[%s:%s]", key, value));
-//        cache.put(key, value);
-//        System.out.println("<<< updateCache");
+    void updateCache(String key,String value) {
+        log.info("update cache for:{}={}", key, value);
+        backMap.remove(key);
+        cache.put(key, value);
     }
 
     public static void main(String[] args) {
         CacheTest cacheTest = new CacheTest();
-        cacheTest.getCache("aa");
+        cacheTest.getCache("a");
         cacheTest.getCache("b");
         cacheTest.getCache("c");
+        cacheTest.updateCache("d","d");
+        cacheTest.updateCache("a","ee");
 
-        cacheTest.updateCache("aaa","cccc");
+        cacheTest.cache.invalidate("a");
 
-        System.out.println("end");
-        System.out.println(">>>>remain:" + cacheTest.cache.asMap());
-        System.out.println(">>>>back:" + cacheTest.backMap);
+        log.info(">>>>remain:" + cacheTest.cache.asMap());
+        log.info(">>>>back:" + cacheTest.backMap);
 
-        System.out.println("get 'aaa' return:" + cacheTest.getCache("aaa"));
+        log.info(cacheTest.getCache("a"));
+        cacheTest.updateCache("a","gg");
+
+    }
+
+    static class CacheEntry{
+        long size;
+        String object;
     }
 }
