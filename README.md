@@ -1,22 +1,30 @@
-> Java learning demo code, concurrent, IO/NIO, JVM...
-
 # java-lab
+
+> This repo is a collection of java skills learning records. It contains almost every aspect in java language.
 
 ### Concurrency
 
 - [Java并发编程](docs/Java%20并发编程.md)
-
 - [并发设计模式](docs/并发设计模式.md)
-
 - [管程模型](docs/管程模型.md)
+- ForkJoin
+- Future/CompletableFuture/CompletionService
+- synchronizers
+- ...
 
 ### Generic Type
 
-### IO/NIO
+###  IO/NIO
 
 ### JavaBean
 
 ### JVM
+
+- class loader
+- java agent
+- gc
+- oom
+- ...
 
 ### References:
 
@@ -29,5 +37,5 @@ Java 内存模型
 - [tyma-paulmultithreaded](https://www.slideshare.net/e456/tyma-paulmultithreaded)
 - [Java并发编程实战](https://github.com/LiuKay/JavaProfessional/blob/master/docs/JAVA%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AE%9E%E8%B7%B5(%E4%B8%AD%E6%96%87%E7%89%88).pdf)
 - [Java8虚拟机规范](https://github.com/LiuKay/JavaProfessional/blob/master/docs/jvms8.pdf)
-
+- [The Java® Language Specification (oracle.com)](https://docs.oracle.com/javase/specs/jls/se11/html/index.html)
 
