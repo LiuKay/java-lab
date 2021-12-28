@@ -13,6 +13,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Log4j2
 public class BestEffortInTimeForTaskDemo {
@@ -24,32 +25,32 @@ public class BestEffortInTimeForTaskDemo {
         ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 
         final Future<?> future = pool.submit(() -> {
-            final WorkTask workTask = new WorkTask(10);
+            final WorkTask workTask = new WorkTask(2);
             TimeCheckTask timeCheckTask = new TimeCheckTask(workTask);
             final ScheduledFuture<?> schedule = scheduledExecutorService.schedule(timeCheckTask, 10, TimeUnit.SECONDS);
             workTask.process();
 
-            if (!workTask.isTimeOver()) {
+            if (!workTask.isTimeout()) {
                 //end before timeout
                 log.info("task end before timeout.");
                 schedule.cancel(false);
             }
-
         });
 
         future.get();
 
+        pool.shutdown();
+        scheduledExecutorService.shutdown();
         log.info("End.");
     }
 
     static class WorkTask {
-        private String id;
+        private volatile boolean timeout = false;
+        private final Random random = new Random();
 
-        private volatile boolean timeOver = false;
-        private volatile boolean finish = false;
-
-        private Random random = new Random();
-        private int num;
+        private final String id;
+        private final int num;
+        private AtomicInteger stopAt = new AtomicInteger(0);
 
         public WorkTask(int num) {
             this.num = num;
@@ -57,46 +58,51 @@ public class BestEffortInTimeForTaskDemo {
         }
 
         void process() {
-            for (int i = 0; i < this.num; i++) {
-                if (!timeOver) {
-                    final int nextInt = random.nextInt(5);
-                    try {
-                        TimeUnit.SECONDS.sleep(nextInt);
-                    } catch (InterruptedException e) {
-                        log.warn("interrupt");
-                        Thread.currentThread().interrupt();
-                    }
-                    log.info("ended task[" + i + "].(cost {}s)",nextInt);
-                } else {
-                    log.info("time exceed. stop at task[" + i + "]. (not started)");
+            while (!timeout && stopAt.get() <= num) { // normal case: stopAt = num+1
+                final int nextInt = random.nextInt(5);
+                try {
+                    //mock some time cost operation, maybe a blocking operation,an interruptable invoke.
+                    TimeUnit.SECONDS.sleep(nextInt);
+                    log.info("ended task[" + stopAt + "].(cost {}s)", nextInt);
+                    stopAt.getAndIncrement();
+                } catch (InterruptedException e) {
+                    //response to interruptable invoke
+                    Thread.currentThread().interrupt();
+                    log.warn("got interrupted at task[{}]", stopAt);
                     break;
                 }
             }
-            this.finish = true;
 
-            if (timeOver) {
+            if (timeout) {
                 actionAfterTimeout();
             }
         }
 
         void actionAfterTimeout(){
+            log.info("task stop at task[{}](NOT STARTED) due to timeout.", getStopAt());
+            //some logic
             log.info("do some last job after timeout.");
         }
 
         void timeout() {
-            this.timeOver = true;
+            Thread.currentThread().interrupt();
+            this.timeout = true;
         }
 
         boolean isFinished() {
-            return finish;
+            return stopAt.intValue() > num;
         }
 
-        boolean isTimeOver() {
-            return this.timeOver;
+        boolean isTimeout() {
+            return this.timeout;
         }
 
         public String getId() {
             return id;
+        }
+
+        public int getStopAt() {
+            return stopAt.intValue();
         }
     }
 
@@ -109,13 +115,12 @@ public class BestEffortInTimeForTaskDemo {
 
         @Override
         public void run() {
-            log.info("time's up for task({})", workTask.getId());
+            log.info("Time's up for WorkTask({})", workTask.getId());
             if (workTask.isFinished()) {
-                log.info("task finished before timeout.");
+                log.info("WorkTask finished before timeout.");
                 return;
             }
             workTask.timeout();
-            log.info("task stopped by timeout.");
         }
     }
 
