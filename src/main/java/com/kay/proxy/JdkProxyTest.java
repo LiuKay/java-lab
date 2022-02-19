@@ -1,10 +1,14 @@
 package com.kay.proxy;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.reflect.*;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 public class JdkProxyTest {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         HelloServiceImpl service = new HelloServiceImpl();
 
@@ -13,12 +17,35 @@ public class JdkProxyTest {
                 new AopHandler(service)
         );
 
-        System.out.println("is proxy class: " + Proxy.isProxyClass(proxyInstance.getClass()));
-
         proxyInstance.say();
-//        proxyInstance.h();
-//        String toString = proxyInstance.toString();
-//        System.out.println(toString);
+        proxyInstance.h();
+
+//output the proxy to file
+//        outputProxyClassToFile(service);
+    }
+
+    private static void outputProxyClassToFile(HelloServiceImpl service) throws Exception {
+        String name = "java.lang.reflect.ProxyGenerator";
+        ClassLoader classLoader = JdkProxyTest.class.getClassLoader();
+        Class<?> aClass = classLoader.loadClass(name);
+        Method method = aClass.getDeclaredMethod("generateProxyClass", String.class, Class[].class);
+        AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
+            method.setAccessible(true);
+            return null;
+        });
+        byte[] bytes = (byte[]) method.invoke(null, "com.kay.proxy.$Proxy0", service.getClass().getInterfaces());
+        outputClass(bytes, "$Proxy0");
+    }
+
+    public static void outputClass(byte[] bytes, String className) {
+        final String currentPath = System.getProperty("user.dir");
+        String path = currentPath + File.separator + className + ".class";
+        try (FileOutputStream out = new FileOutputStream(path)) {
+            System.out.println("output proxy class to path:" + path);
+            out.write(bytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     static class AopHandler implements InvocationHandler {
