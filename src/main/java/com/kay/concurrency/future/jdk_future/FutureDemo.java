@@ -1,13 +1,20 @@
 package com.kay.concurrency.future.jdk_future;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
  * Created by kay on 2017/9/6.
  */
+@Log4j2
 public class FutureDemo {
 
     public static void main(String[] args) throws Exception {
@@ -30,7 +37,7 @@ public class FutureDemo {
                 e.printStackTrace();
             }
             return null;
-        }).forEach(System.out::println);
+        }).forEach(log::info);
 
         service.shutdown();
     }

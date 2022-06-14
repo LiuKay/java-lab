@@ -1,6 +1,7 @@
 package com.kay.concurrency.atomic;
 
 import com.kay.concurrency.annotations.ThreadSafe;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -12,6 +13,7 @@ import java.util.concurrent.atomic.LongAdder;
  * Created by kay on 2018/5/27. LongAdder
  */
 
+@Log4j2
 @ThreadSafe
 public class LongAdderDemo {
 
@@ -46,7 +48,7 @@ public class LongAdderDemo {
 
         countDownLatch.await();
         executorService.shutdown();
-        System.out.println("请求完毕，count:" + count);
+        log.info("请求完毕，count:" + count);
     }
 
     private static void add() {

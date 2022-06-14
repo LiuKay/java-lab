@@ -1,5 +1,7 @@
 package com.kay.jvm.classloader;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+@Log4j2
 public class ClassLoaderTest {
 
     public static void main(String[] args) throws ClassNotFoundException {
@@ -16,13 +19,13 @@ public class ClassLoaderTest {
 
     public static void printClassLoaders() throws ClassNotFoundException {
 
-        System.out.println("Classloader of this class:"
+        log.info("Classloader of this class:"
                 + ClassLoaderTest.class.getClassLoader());
 
-        System.out.println("Classloader of Logger:"
+        log.info("Classloader of Logger:"
                 + Logger.class.getClassLoader());
 
-        System.out.println("Classloader of ArrayList:"
+        log.info("Classloader of ArrayList:"
                 + ArrayList.class.getClassLoader());
     }
 

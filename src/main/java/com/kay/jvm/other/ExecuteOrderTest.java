@@ -1,11 +1,14 @@
 package com.kay.jvm.other;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 public class ExecuteOrderTest {
 
     public static void main(String[] args) {
         Son son = new Son();
         son.say();
-        System.out.println("Done");
+        log.info("Done");
     }
 
     private static class Father {
@@ -13,20 +16,20 @@ public class ExecuteOrderTest {
         private final String instanceWord = "father instance word";
 
         static {
-            System.out.println(word);
-            System.out.println("father static code");
+            log.info(word);
+            log.info("father static code");
         }
 
         {
-            System.out.println("father instance code");
+            log.info("father instance code");
         }
 
         public Father() {
-            System.out.println("father constructor code");
+            log.info("father constructor code");
         }
 
         void say() {
-            System.out.println(instanceWord);
+            log.info(instanceWord);
         }
     }
 
@@ -36,20 +39,20 @@ public class ExecuteOrderTest {
 
 
         static {
-            System.out.println(word);
-            System.out.println("son static code");
+            log.info(word);
+            log.info("son static code");
         }
 
         {
-            System.out.println("son instance code");
+            log.info("son instance code");
         }
 
         public Son() {
-            System.out.println("son constructor code");
+            log.info("son constructor code");
         }
 
         void say() {
-            System.out.println(instanceWord);
+            log.info(instanceWord);
         }
     }
 

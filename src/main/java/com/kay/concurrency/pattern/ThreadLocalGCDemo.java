@@ -1,5 +1,7 @@
 package com.kay.concurrency.pattern;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,12 +13,13 @@ import java.util.concurrent.Executors;
  * 线程池使用 ThreadLocal 内存泄漏 GC 回收 ThreadLocal 对象，但是无法回收 ThreadLocalMap 中以 ThreadLocal为键，以
  * SimpleDateFormat为值的对象 切记在 finally 中 threadLocal.remove();
  */
+@Log4j2
 public class ThreadLocalGCDemo {
 
     public static volatile ThreadLocal<SimpleDateFormat> threadLocal = new ThreadLocal<SimpleDateFormat>() {
         @Override
         protected void finalize() throws Throwable {
-            System.out.println("info ：GC 收回 threadLocal 对象");
+            log.info("info ：GC 收回 threadLocal 对象");
         }
     };
 
@@ -29,10 +32,10 @@ public class ThreadLocalGCDemo {
             pool.execute(new ThreadLocalGCDemo.DateParse(i));
         }
         countDown.await();
-        System.out.println("info : 执行完成，开始GC");
+        log.info("info : 执行完成，开始GC");
         threadLocal = null;
         System.gc();
-        System.out.println("第一次GC完成");
+        log.info("第一次GC完成");
 
         //threadLocal = new ThreadLocal<SimpleDateFormat>();
         //countDown = new CountDownLatch(10000);
@@ -43,7 +46,7 @@ public class ThreadLocalGCDemo {
         //Thread.sleep(2000);
         //threadLocal=null;
         //System.gc();
-        //System.out.println("第二次GC完成");
+        //log.info("第二次GC完成");
 
     }
 
@@ -62,7 +65,7 @@ public class ThreadLocalGCDemo {
                     threadLocal.set(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss") {
                         @Override
                         protected void finalize() throws Throwable {
-                            System.out.println("info : GC 收回 SimpleDateFormat 对象");
+                            log.info("info : GC 收回 SimpleDateFormat 对象");
                         }
                     });
                     System.out

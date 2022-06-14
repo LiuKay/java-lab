@@ -1,5 +1,7 @@
 package com.kay.concurrency.practice.cancelation;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -14,6 +16,7 @@ import java.net.Socket;
  * socket; thus interrupting a ReaderThread makes it stop what it is doing whether it is blocked in
  * read or in an interruptible blocking method
  */
+@Log4j2
 class ReaderThread extends Thread {
 
     private static final int BUFFER_SIZE = 2048;
@@ -53,6 +56,6 @@ class ReaderThread extends Thread {
     }
 
     private void processBuff(byte[] buf, int count) {
-        System.out.println("process the buf.");
+        log.info("process the buf.");
     }
 }

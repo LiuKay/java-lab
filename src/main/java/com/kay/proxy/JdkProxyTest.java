@@ -1,11 +1,14 @@
 package com.kay.proxy;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.*;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
+@Log4j2
 public class JdkProxyTest {
 
     public static void main(String[] args) throws Exception {
@@ -59,7 +62,7 @@ public class JdkProxyTest {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             //before invocation
-            System.out.println("before");
+            log.info("before");
 
             try {
                 makeAccessible(method, target);
@@ -67,7 +70,7 @@ public class JdkProxyTest {
                 Object result = method.invoke(target, args);
 
                 //after invocation
-                System.out.println("after");
+                log.info("after");
 
                 return result;
             } catch (InvocationTargetException exception) {
@@ -94,13 +97,13 @@ public class JdkProxyTest {
     static class HelloServiceImpl implements HelloService {
         @Override
         public void say() {
-            System.out.println("hello!");
+            log.info("hello!");
             throw new RuntimeException();
         }
 
         @Override
         public void h() {
-            System.out.println("h");
+            log.info("h");
         }
     }
 

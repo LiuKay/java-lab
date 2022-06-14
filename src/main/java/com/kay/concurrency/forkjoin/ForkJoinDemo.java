@@ -26,7 +26,7 @@ public class ForkJoinDemo {
         pool.submit(fibonacci);
 
         Integer integer = fibonacci.get();
-        System.out.println(integer);
+        log.info(integer);
     }
 
     void testWordCount() {
@@ -41,7 +41,7 @@ public class ForkJoinDemo {
         WordCount wordCount = new WordCount(lines, 0, lines.length);
         Map<String, Long> result = pool.invoke(wordCount);
 
-        result.forEach((key, value) -> System.out.println(key + ":" + value));
+        result.forEach((key, value) -> log.info(key + ":" + value));
     }
 
     class Fibonacci extends RecursiveTask<Integer> {

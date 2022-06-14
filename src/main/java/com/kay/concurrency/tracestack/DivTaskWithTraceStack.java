@@ -1,5 +1,7 @@
 package com.kay.concurrency.tracestack;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -12,9 +14,11 @@ import java.util.concurrent.TimeUnit;
  * java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) at
  * java.lang.Thread.run(Thread.java:745) 100.0 25.0 50.0 33.0
  */
+@Log4j2
 public class DivTaskWithTraceStack implements Runnable {
 
-    int a, b;
+    int a;
+    int b;
 
     public DivTaskWithTraceStack(int a, int b) {
         this.a = a;
@@ -23,7 +27,7 @@ public class DivTaskWithTraceStack implements Runnable {
 
     public static void main(String[] args) {
         ThreadPoolExecutor pool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 0L,
-                TimeUnit.MILLISECONDS, new SynchronousQueue());
+                TimeUnit.MILLISECONDS, new SynchronousQueue<>());
 
         for (int i = 0; i < 5; i++) {
             pool.execute(new DivTaskWithTraceStack(100, i));
@@ -33,6 +37,6 @@ public class DivTaskWithTraceStack implements Runnable {
     @Override
     public void run() {
         double r = a / b;
-        System.out.println(r);
+        log.info(r);
     }
 }

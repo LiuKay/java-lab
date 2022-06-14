@@ -36,11 +36,11 @@ public class InterruptThreadDemo {
         public void run() {
             while (true) {
                 if (Thread.interrupted()) {
-                    System.out.println(Thread.currentThread().getName() + " is interrupted.");
+                    log.info(Thread.currentThread().getName() + " is interrupted.");
                     break;
                 }
 
-                System.out.println(Thread.currentThread().getName() + " is running.");
+                log.info(Thread.currentThread().getName() + " is running.");
 
                 try {
                     Thread.sleep(500);
@@ -65,7 +65,7 @@ public class InterruptThreadDemo {
         @Override
         public void run() {
             while (!stop) {
-                System.out.println(Thread.currentThread().getName() + " is running.");
+                log.info(Thread.currentThread().getName() + " is running.");
 
                 // 如果 Task B 阻塞在一个操作上，并且这个操作不能响应中断，那设置 stop 没有啥意义，因为线程永远也没有机会去检查
                 try {

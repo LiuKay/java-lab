@@ -1,8 +1,11 @@
 package com.kay.concurrency.practice.threadsafe;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@Log4j2
 public class TestVehicleTracker {
 
     public static void main(String[] args) {
@@ -22,14 +25,14 @@ public class TestVehicleTracker {
         Map<String, DelegatingVehicleTracker.Point> locationsMap = tracker.getLocations();
 
         locationsMap.forEach((id, p) -> {
-            System.out.println(id + ":" + p);
+            log.info(id + ":" + p);
         });
 
         tracker.setLocation("p2", 111, 222);
 
-        System.out.println("After update");
+        log.info("After update");
         locationsMap.forEach((id, p) -> {
-            System.out.println(id + ":" + p);
+            log.info(id + ":" + p);
         });
     }
 }

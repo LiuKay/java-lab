@@ -1,8 +1,11 @@
 package com.kay.utils;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
+@Log4j2
 public class SimpleSnowId {
 
     private int workId = 123;
@@ -34,12 +37,12 @@ public class SimpleSnowId {
 
     public static void main(String[] args) {
         SimpleSnowId snowID = new SimpleSnowId();
-        System.out.println(Long.toBinaryString(snowID.newID()));
-        System.out.println(Long.toBinaryString(snowID.newID()));
-        System.out.println(Long.toBinaryString(snowID.newID()));
-        System.out.println(Long.toBinaryString(snowID.newID()));
-        System.out.println(Long.toBinaryString(snowID.newID()));
-        System.out.println(Long.toBinaryString(snowID.newID()));
-        System.out.println(Long.toBinaryString(snowID.newID()));
+        log.info(Long.toBinaryString(snowID.newID()));
+        log.info(Long.toBinaryString(snowID.newID()));
+        log.info(Long.toBinaryString(snowID.newID()));
+        log.info(Long.toBinaryString(snowID.newID()));
+        log.info(Long.toBinaryString(snowID.newID()));
+        log.info(Long.toBinaryString(snowID.newID()));
+        log.info(Long.toBinaryString(snowID.newID()));
     }
 }

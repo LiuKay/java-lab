@@ -1,5 +1,6 @@
 package com.kay.jvm.lock;
 
+import lombok.extern.log4j.Log4j2;
 import org.openjdk.jol.info.ClassLayout;
 
 import java.util.concurrent.TimeUnit;
@@ -16,12 +17,13 @@ import java.util.concurrent.TimeUnit;
  * unused(1)+分代年龄(4)+偏向模式(1)+对象锁状态(2)
  * 对象锁状态有： 01(未锁定/可偏向)，00(轻量级锁)，10(重量级锁)，11(GC标记)，
  */
+@Log4j2
 public class SynchronizedMarkWordTest {
 
     private static final Object object = new Object();
 
     public static void main(String[] args) throws InterruptedException {
-//        System.out.println(VM.current().details());
+//        log.info(VM.current().details());
 
 //        ClassLayoutTest.showClassLayout();
 //        ClassLayoutTest.showObjectLayout();
@@ -32,13 +34,13 @@ public class SynchronizedMarkWordTest {
 
     private static class ClassLayoutTest {
         static void showClassLayout() {
-            System.out.println(ClassLayout.parseClass(ClassLayoutTest.class).toPrintable());
+            log.info(ClassLayout.parseClass(ClassLayoutTest.class).toPrintable());
         }
 
         static void showObjectLayout() {
-            System.out.println(ClassLayout.parseInstance(object).toPrintable());
-            System.out.println("===set hash code:" + System.identityHashCode(object));
-            System.out.println(ClassLayout.parseInstance(object).toPrintable());
+            log.info(ClassLayout.parseInstance(object).toPrintable());
+            log.info("===set hash code:" + System.identityHashCode(object));
+            log.info(ClassLayout.parseInstance(object).toPrintable());
         }
     }
 
@@ -48,19 +50,19 @@ public class SynchronizedMarkWordTest {
             Thread.sleep(3000);
 
             Object lock = new Object();
-            System.out.println("before lock");
-            System.out.println(ClassLayout.parseInstance(lock).toPrintable());
+            log.info("before lock");
+            log.info(ClassLayout.parseInstance(lock).toPrintable());
 
             //计算 hash code 之后就不能使用偏向锁了
-            System.out.println("hash code:" + lock.hashCode());
+            log.info("hash code:" + lock.hashCode());
 
             synchronized (lock) {
-                System.out.println("locking");
-                System.out.println(ClassLayout.parseInstance(lock).toPrintable());
+                log.info("locking");
+                log.info(ClassLayout.parseInstance(lock).toPrintable());
             }
 
-            System.out.println("after lock");
-            System.out.println(ClassLayout.parseInstance(lock).toPrintable());
+            log.info("after lock");
+            log.info(ClassLayout.parseInstance(lock).toPrintable());
 
         }
 
@@ -68,30 +70,30 @@ public class SynchronizedMarkWordTest {
             TimeUnit.SECONDS.sleep(5);
             Object lock = new Object();
 
-            System.out.println("lock initial layout:");
-            System.out.println(ClassLayout.parseInstance(lock).toPrintable());
+            log.info("lock initial layout:");
+            log.info(ClassLayout.parseInstance(lock).toPrintable());
 
             Thread thread1 = new Thread(() -> {
                 synchronized (lock) {
-                    System.out.println("thread1 获得偏向锁");
-                    System.out.println(ClassLayout.parseInstance(lock).toPrintable());
-                    System.out.println("当前线程ID:" + Thread.currentThread().getId());
+                    log.info("thread1 获得偏向锁");
+                    log.info(ClassLayout.parseInstance(lock).toPrintable());
+                    log.info("当前线程ID:" + Thread.currentThread().getId());
                     try {
                         //让线程晚点儿死亡，造成锁的竞争
                         TimeUnit.SECONDS.sleep(6);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    System.out.println("thread2 获取锁失败导致锁升级,此时thread1还在执行");
-                    System.out.println("当前线程：" + Thread.currentThread().getName());
-                    System.out.println(ClassLayout.parseInstance(lock).toPrintable());
+                    log.info("thread2 获取锁失败导致锁升级,此时thread1还在执行");
+                    log.info("当前线程：" + Thread.currentThread().getName());
+                    log.info(ClassLayout.parseInstance(lock).toPrintable());
                 }
             }, "t1");
 
             Thread thread2 = new Thread(() -> {
                 synchronized (lock) {
-                    System.out.println("thread2 获取重量锁成功");
-                    System.out.println(ClassLayout.parseInstance(lock).toPrintable());
+                    log.info("thread2 获取重量锁成功");
+                    log.info(ClassLayout.parseInstance(lock).toPrintable());
                     try {
                         TimeUnit.SECONDS.sleep(3);
                     } catch (InterruptedException e) {
@@ -112,8 +114,8 @@ public class SynchronizedMarkWordTest {
 
             Thread t3 = new Thread(() -> {
                 synchronized (lock) {
-                    System.out.println("thread3 去获取锁 => 轻量级锁");
-                    System.out.println(ClassLayout.parseInstance(lock).toPrintable());
+                    log.info("thread3 去获取锁 => 轻量级锁");
+                    log.info(ClassLayout.parseInstance(lock).toPrintable());
                 }
             }, "t3");
 

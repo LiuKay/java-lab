@@ -1,9 +1,11 @@
 package com.kay.concurrency.future.completable;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-
+@Log4j2
 public class CompletableFutureTest {
 
     public static void main(String[] args) {
@@ -31,7 +33,7 @@ public class CompletableFutureTest {
                     }
                 });
 
-        System.out.println(future.join());
+        log.info(future.join());
     }
 
     void upperCase() {
@@ -39,40 +41,40 @@ public class CompletableFutureTest {
                 .thenApply(s -> s + " Kay")
                 .thenApply(String::toUpperCase);
 
-        System.out.println(future.join());
+        log.info(future.join());
     }
 
     void drinkTea() {
         // 串行
         CompletableFuture<Void> f1 = CompletableFuture.runAsync(() -> {
-            System.out.println("T1 洗水壶");
+            log.info("T1 洗水壶");
             sleep(1, TimeUnit.SECONDS);
 
         }).thenRun(() -> {
-            System.out.println("T1 烧开水");
+            log.info("T1 烧开水");
             sleep(2, TimeUnit.SECONDS);
         });
 
         CompletableFuture<String> f2 = CompletableFuture.runAsync(() -> {
-            System.out.println("T2 洗茶壶");
+            log.info("T2 洗茶壶");
             sleep(1, TimeUnit.SECONDS);
         }).thenRun(() -> {
-            System.out.println("T2 洗茶杯");
+            log.info("T2 洗茶杯");
             sleep(2, TimeUnit.SECONDS);
         }).thenApply((arg) -> {
-            System.out.println("T2 拿茶叶");
+            log.info("T2 拿茶叶");
             sleep(2, TimeUnit.SECONDS);
             return "龙井";
         });
 
         CompletableFuture<String> f3 = f1.thenCombine(f2, (__, tf) -> {
-            System.out.println("T1 拿到茶叶:" + tf);
-            System.out.println("T1 泡茶。。。");
+            log.info("T1 拿到茶叶:" + tf);
+            log.info("T1 泡茶。。。");
             return "上茶:" + tf;
         });
 
         // wait for f3
-        System.out.println(f3.join());
+        log.info(f3.join());
     }
 
     void sleep(int t, TimeUnit unit) {

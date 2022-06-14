@@ -1,6 +1,9 @@
 package com.kay.concurrency.lockissues;
 
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 class BadLockOnMethod implements Runnable {
 
     static int count = 0;
@@ -13,7 +16,7 @@ class BadLockOnMethod implements Runnable {
         t2.start();
         t1.join();
         t2.join();
-        System.out.println(count);
+        log.info(count);
 
     }
 

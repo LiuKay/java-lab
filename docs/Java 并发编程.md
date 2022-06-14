@@ -65,7 +65,7 @@ static class VisibilityAndAtomic {
       e.printStackTrace();
     }
 
-    System.out.println(visibility.count); // count is less than 2000000
+    log.info(visibility.count); // count is less than 2000000
   }
 }
 ```

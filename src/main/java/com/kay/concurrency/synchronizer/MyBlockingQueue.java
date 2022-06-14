@@ -1,5 +1,7 @@
 package com.kay.concurrency.synchronizer;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
@@ -11,6 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @param <T>
  */
+@Log4j2
 public class MyBlockingQueue<T> {
 
     private final Queue<T> queue;
@@ -35,7 +38,7 @@ public class MyBlockingQueue<T> {
             while (true) {
                 sleep();
                 String pop = myQueue.pop();
-                System.out.println(pop);
+                log.info(pop);
             }
         }, "TAKEN1");
 
@@ -62,13 +65,13 @@ public class MyBlockingQueue<T> {
         lock.lock();
         try {
             while (capacity == queue.size()) { // condition not match, then await
-                System.out.println(Thread.currentThread().getName()
+                log.info(Thread.currentThread().getName()
                         + ": queue is full, wait on notFull condition...");
                 notFull.await();
             }
             queue.add(t);
             //add success, signal waiting threads
-            System.out.println(Thread.currentThread().getName() + ": Add queue success.");
+            log.info(Thread.currentThread().getName() + ": Add queue success.");
             notEmpty.signalAll();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -82,13 +85,13 @@ public class MyBlockingQueue<T> {
         try {
             lock.lock();
             while (queue.size() == 0) { // condition not match, then await
-                System.out.println(Thread.currentThread().getName()
+                log.info(Thread.currentThread().getName()
                         + ": queue is empty. wait on notEmpty condition...");
                 notEmpty.await();
             }
             t = queue.poll();
 
-            System.out.println(Thread.currentThread().getName() + ": Poll queue success.");
+            log.info(Thread.currentThread().getName() + ": Poll queue success.");
             notFull.signalAll();
         } catch (InterruptedException e) {
             e.printStackTrace();

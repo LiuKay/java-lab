@@ -1,5 +1,7 @@
 package com.kay.jvm;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * Test JHSDB
  * <p>
@@ -12,6 +14,7 @@ package com.kay.jvm;
  * 4. scanoops from_address to_address com.kay.jvm.JHSDB_TestCase$ObjectHolder
  * 5. Tools->Inspector
  */
+@Log4j2
 public class JHSDB_TestCase {
 
     static ObjectHolder staticObject = new ObjectHolder();
@@ -22,7 +25,7 @@ public class JHSDB_TestCase {
         ObjectHolder localObject = new ObjectHolder();
 
         //breakpoint
-        System.out.println("Done");
+        log.info("Done");
     }
 
 

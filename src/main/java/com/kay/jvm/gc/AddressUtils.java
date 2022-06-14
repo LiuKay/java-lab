@@ -1,10 +1,12 @@
 package com.kay.jvm.gc;
 
 
+import lombok.extern.log4j.Log4j2;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 
+@Log4j2
 public class AddressUtils {
 
     private static Unsafe unsafe;
@@ -40,12 +42,4 @@ public class AddressUtils {
         return (Long.toHexString(objectAddress));
     }
 
-
-    public static void printBytes(long objectAddress, int num) {
-        for (long i = 0; i < num; i++) {
-            int cur = unsafe.getByte(objectAddress + i);
-            System.out.print((char) cur);
-        }
-        System.out.println();
-    }
 }

@@ -1,5 +1,7 @@
 package com.kay.concurrency.pattern;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.concurrent.Executors;
 /**
  * Created by kay on 2017/9/5. SimpleDateFormat 不是线程安全的 这里采用ThreadLocal来改造
  */
+@Log4j2
 public class ThreadLocalDemo {
 
     //public static  SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -40,7 +43,7 @@ public class ThreadLocalDemo {
                 }
                 SimpleDateFormat format = simpleDateFormat.get();
                 Date d = format.parse("2017-9-5 11:07:" + i % 60);
-                System.out.println(d);
+                log.info(d);
 
             } catch (ParseException e) {
                 e.printStackTrace();

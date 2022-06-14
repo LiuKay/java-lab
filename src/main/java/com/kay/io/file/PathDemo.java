@@ -1,5 +1,7 @@
 package com.kay.io.file;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
@@ -10,19 +12,20 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 
+@Log4j2
 public class PathDemo {
 
     public static void main(String[] args) throws IOException {
         Path toAbsolutePath = Paths.get("").toAbsolutePath();
-        System.out.println("Current path is :" + toAbsolutePath);
+        log.info("Current path is :" + toAbsolutePath);
 
         Path path = Paths.get("src/main/java/com/kay////io").normalize(); //  normalize for ///
         Path absolutePath = path.toAbsolutePath();
-        System.out.println("absolutePath:" + absolutePath);
+        log.info("absolutePath:" + absolutePath);
 
 
-        System.out.println("Root:" + absolutePath.getRoot());
-        System.out.println("Parent:" + absolutePath.getParent());
+        log.info("Root:" + absolutePath.getRoot());
+        log.info("Parent:" + absolutePath.getParent());
 
         //visit dictionary
         Files.walkFileTree(absolutePath, new MyFileVisitor());
@@ -51,7 +54,7 @@ public class PathDemo {
 
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-            System.out.println(file.getFileName());
+            log.info(file.getFileName());
             return super.visitFile(file, attrs);
         }
     }

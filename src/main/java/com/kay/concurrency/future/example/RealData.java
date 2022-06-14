@@ -1,8 +1,11 @@
 package com.kay.concurrency.future.example;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * Created by kay on 2017/9/6.
  */
+@Log4j2
 public class RealData implements Data {
 
     protected final String result;
@@ -19,7 +22,7 @@ public class RealData implements Data {
             try {
 
                 //模拟耗时操作
-                System.out.println(Thread.currentThread().getName() + "-异步获取数据..");
+                log.info(Thread.currentThread().getName() + "-异步获取数据..");
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();

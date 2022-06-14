@@ -1,5 +1,7 @@
 package com.kay.jvm.other;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * javap Dispatch.class:
  * <p>
@@ -33,6 +35,7 @@ package com.kay.jvm.other;
  * 38: return
  * }
  */
+@Log4j2
 class Dispatch {
 
     public static void main(String[] args) {
@@ -46,24 +49,24 @@ class Dispatch {
 
     static class Father {
         public void show(A a) {
-            System.out.println("父类showA");
+            log.info("父类showA");
         }
 
         //method overload show(A a)
         public void show(B b) {
-            System.out.println("父类showB");
+            log.info("父类showB");
         }
     }
 
     static class Son extends Father {
         @Override
         public void show(A a) {
-            System.out.println("子类showA");
+            log.info("子类showA");
         }
 
         @Override
         public void show(B b) {
-            System.out.println("子类showB");
+            log.info("子类showB");
         }
     }
 

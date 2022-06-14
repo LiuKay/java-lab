@@ -1,10 +1,13 @@
 package com.kay.io.buffer;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 import static com.kay.io.buffer.BufferCreateDemo.printBuffers;
 
+@Log4j2
 public class BufferWriteReadDemo {
 
     public static void main(String[] args) {
@@ -14,7 +17,7 @@ public class BufferWriteReadDemo {
         ByteBuffer byteBuffer = buffer.put("Hello".getBytes(StandardCharsets.UTF_8));
         printBuffers(byteBuffer);
 
-        System.out.println("----flip------");
+        log.info("----flip------");
 //				limit = position, position = 0
 //				byteBuffer.limit(byteBuffer.position()).position(0);
         byteBuffer.flip();
@@ -23,36 +26,36 @@ public class BufferWriteReadDemo {
         byte[] newBytes = new byte[10];
         for (int i = 0; byteBuffer.hasRemaining(); i++) {
             byte b = byteBuffer.get();
-            System.out.println(b);
+            log.info(b);
             newBytes[i] = b;
         }
         printBuffers(byteBuffer);
 
-        System.out.println("------rewind------");
+        log.info("------rewind------");
         byteBuffer.rewind();
         printBuffers(byteBuffer);
 
-        System.out.println("------mark---------");
+        log.info("------mark---------");
         byteBuffer.mark();
         printBuffers(byteBuffer);
 
-        System.out.println("------get one--------");
+        log.info("------get one--------");
         byteBuffer.get();
         printBuffers(byteBuffer);
 
-        System.out.println("------reset---------");
+        log.info("------reset---------");
         byteBuffer.reset();
         printBuffers(byteBuffer);
 
-        System.out.println("------get one--------");
+        log.info("------get one--------");
         byteBuffer.get();
         printBuffers(byteBuffer);
 
-        System.out.println("-----compact-----");
+        log.info("-----compact-----");
         byteBuffer.compact();
         printBuffers(byteBuffer);
 
-        System.out.println("-------clear-----");
+        log.info("-------clear-----");
         byteBuffer.clear();
         printBuffers(byteBuffer);
     }

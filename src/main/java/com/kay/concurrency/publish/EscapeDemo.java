@@ -2,6 +2,7 @@ package com.kay.concurrency.publish;
 
 import com.kay.concurrency.annotations.NotRecommend;
 import com.kay.concurrency.annotations.NotThreadSafe;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Created by kay on 2018/5/27.
@@ -14,6 +15,7 @@ import com.kay.concurrency.annotations.NotThreadSafe;
  */
 @NotThreadSafe
 @NotRecommend
+@Log4j2
 public class EscapeDemo {
 
     private int count = 0;
@@ -30,7 +32,7 @@ public class EscapeDemo {
     private class InnerClass {
 
         public InnerClass() {
-            System.out.println(EscapeDemo.this.count);
+            log.info(EscapeDemo.this.count);
         }
     }
 }

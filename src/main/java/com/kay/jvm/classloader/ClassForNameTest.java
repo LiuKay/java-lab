@@ -1,5 +1,8 @@
 package com.kay.jvm.classloader;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 public class ClassForNameTest {
 
     public static void main(String[] args) throws ClassNotFoundException {
@@ -10,7 +13,7 @@ public class ClassForNameTest {
         // will initialize the class (invoke static)
         Class.forName("com.kay.jvm.classloader.ClassToLoad");
 
-//        System.out.println(ClassToLoad.staticWord);
+//        log.info(ClassToLoad.staticWord);
     }
 
 }

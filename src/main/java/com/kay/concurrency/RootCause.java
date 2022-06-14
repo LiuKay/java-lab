@@ -1,8 +1,11 @@
 package com.kay.concurrency;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * Root cause for concurrency
  */
+@Log4j2
 public class RootCause {
 
     public static void main(String[] args) {
@@ -50,7 +53,7 @@ public class RootCause {
                 e.printStackTrace();
             }
 
-            System.out.println(visibility.count); // count is less than 2000000
+            log.info(visibility.count); // count is less than 2000000
         }
     }
 

@@ -1,11 +1,14 @@
 package com.kay.io.reactor;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 
+@Log4j2
 public class Handler implements Runnable {
 
     static final int READING = 0, SENDING = 1;
@@ -56,7 +59,7 @@ public class Handler implements Runnable {
     }
 
     private void process() {
-        System.out.println("process...");
+        log.info("process...");
     }
 
     boolean inputIsComplete() {

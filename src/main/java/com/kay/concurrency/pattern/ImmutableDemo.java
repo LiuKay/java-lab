@@ -2,6 +2,7 @@ package com.kay.concurrency.pattern;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Immutability 模式需要注意的2个问题： 1. 不变的边界在哪里,是否要求属性也不可修改，对象的所有属性都是 final 的，并不能保证不可变性.
  * 例如属性是一个集合类，集合的引用无法修改，但是其中的元素却是可以改变的。 2. 正确的发布对象
  */
+@Log4j2
 public class ImmutableDemo {
 
     public static void main(String[] args) {
@@ -31,7 +33,7 @@ public class ImmutableDemo {
 //        list.add("D"); // UnsupportedOperationException
         Iterator<String> iterator = list.iterator();
         while (iterator.hasNext()) {
-            System.out.println(iterator.next());
+            log.info(iterator.next());
 //            iterator.remove(); // UnsupportedOperationException
         }
     }

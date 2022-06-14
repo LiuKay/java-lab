@@ -27,7 +27,7 @@ public class MultiRecursiveTaskDemo {
                 false);
         CustomRecursiveTask task = new CustomRecursiveTask(arr);
         Integer integer = pool.invoke(task);
-        System.out.println(integer);
+        log.info(integer);
     }
 
     static class CustomRecursiveTask extends RecursiveTask<Integer> {

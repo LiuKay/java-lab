@@ -1,5 +1,7 @@
 package com.kay.io.buffer;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import static com.kay.utils.FileUtils.getClassPathFilePath;
 /**
  * Created by kay on 2017/9/6. NIO 基本例子 读写文件，以及写文件时如何追加到文件末尾
  */
+@Log4j2
 public class NIOReadWriteFile {
 
     public static void main(String[] args) {
@@ -25,7 +28,7 @@ public class NIOReadWriteFile {
         try (FileChannel channel = new RandomAccessFile(file, "rw").getChannel()) {
             ByteBuffer buffer = ByteBuffer.allocate(1024);
             int byteRead = channel.read(buffer);
-            System.out.println(byteRead);
+            log.info(byteRead);
             while (byteRead != -1) {
                 buffer.flip();
                 while (buffer.hasRemaining()) {
@@ -49,7 +52,7 @@ public class NIOReadWriteFile {
             buffer.put(arr);
             buffer.flip();
             while (buffer.hasRemaining()) {
-                System.out.println(buffer);
+                log.info(buffer);
                 channel.write(buffer);
             }
             buffer.clear();

@@ -1,5 +1,7 @@
 package com.kay.io.bio;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -9,11 +11,12 @@ import java.net.Socket;
 /**
  * Blocking Socket I/O Demo Start server first, run Client later
  */
+@Log4j2
 public class BlockingServer {
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(8888);
-        System.out.println("Server is on accept...");
+        log.info("Server is on accept...");
         // server is blocking on accept()
         Socket socket = serverSocket.accept();
 
@@ -22,7 +25,7 @@ public class BlockingServer {
 
         //block reading
         String s = inputStream.readUTF();
-        System.out.println("Server Read:" + s);
+        log.info("Server Read:" + s);
 
         DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
         //block writing

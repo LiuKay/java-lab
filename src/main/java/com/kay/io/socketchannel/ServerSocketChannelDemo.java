@@ -1,5 +1,7 @@
 package com.kay.io.socketchannel;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -9,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 //telnet localhost 8888
+@Log4j2
 public class ServerSocketChannelDemo {
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -28,7 +31,7 @@ public class ServerSocketChannelDemo {
             ssc.configureBlocking(false); // configure no-blocking I/O
 
             while (true) {
-                System.out.println("waiting for connections...");
+                log.info("waiting for connections...");
                 SocketChannel sc = ssc.accept(); // if no connections will return null
                 if (sc == null) {
                     TimeUnit.SECONDS.sleep(1);
@@ -38,11 +41,11 @@ public class ServerSocketChannelDemo {
                     while (sc.read(byteBuffer) > 0) {
                         byteBuffer.flip();
                         while (byteBuffer.hasRemaining()) {
-                            System.out.println(byteBuffer.get());
+                            log.info(byteBuffer.get());
                         }
                         byteBuffer.clear();
                     }
-                    System.out.println(
+                    log.info(
                             "Incoming connection from: " + sc.socket().getRemoteSocketAddress());
                     wrap.rewind();
                     sc.write(wrap);

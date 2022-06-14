@@ -1,11 +1,14 @@
 package com.kay.javabean;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyEditorSupport;
 import java.util.Arrays;
 
+@Log4j2
 public class BeanInfoDemo {
 
     public static void main(String[] args) throws IntrospectionException {
@@ -15,7 +18,7 @@ public class BeanInfoDemo {
         BeanInfo beanInfo = Introspector.getBeanInfo(Person.class, Object.class);
         Arrays.stream(beanInfo.getPropertyDescriptors())
                 .forEach(propertyDescriptor -> {
-                    System.out.println(propertyDescriptor.getName());
+                    log.info(propertyDescriptor.getName());
                     propertyDescriptor.setPropertyEditorClass(StringToIntegerPropertyEditor.class);
                 });
 

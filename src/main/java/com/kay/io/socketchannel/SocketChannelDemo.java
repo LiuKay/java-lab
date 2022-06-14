@@ -1,9 +1,12 @@
 package com.kay.io.socketchannel;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 
+@Log4j2
 public class SocketChannelDemo {
 
     public static void main(String[] args) throws IOException {
@@ -20,11 +23,11 @@ public class SocketChannelDemo {
 
             while (!socketChannel.finishConnect()) {
                 //do sth. else
-                System.out.println("Do sth. else.");
+                log.info("Do sth. else.");
             }
 
             //connection is ready, do sth. with socketChannel
-            System.out.println("Connection is ready.");
+            log.info("Connection is ready.");
         }
     }
 }

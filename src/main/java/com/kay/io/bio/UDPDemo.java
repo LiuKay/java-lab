@@ -1,6 +1,7 @@
 package com.kay.io.bio;
 
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -8,6 +9,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
 
+@Log4j2
 public class UDPDemo {
 
 
@@ -71,11 +73,11 @@ public class UDPDemo {
             packet = new DatagramPacket(buffer, buffer.length);
             socket.receive(packet);
             String received = new String(packet.getData(), 0, packet.getLength());
-            System.out.println("client received:" + received);
+            log.info("client received:" + received);
 
             if (received.equals("end")) {
                 socket.close();
-                System.out.println("client closed.");
+                log.info("client closed.");
             }
 
         }

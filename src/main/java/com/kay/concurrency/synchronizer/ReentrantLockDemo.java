@@ -1,11 +1,14 @@
 package com.kay.concurrency.synchronizer;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by kay on 2017/9/1. 重入锁示例 特点：1.中断响应 lockInterruptibly() 2.超时等待 tryLock(long waitTime)
  * 3.可以设置公平锁 ReentrantLock(true)
  */
+@Log4j2
 public class ReentrantLockDemo implements Runnable {
 
     public static ReentrantLock lock = new ReentrantLock();
@@ -19,7 +22,7 @@ public class ReentrantLockDemo implements Runnable {
         t2.start();
         t1.join();
         t2.join();
-        System.out.println(count);
+        log.info(count);
     }
 
     @Override

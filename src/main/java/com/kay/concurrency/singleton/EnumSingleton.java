@@ -2,6 +2,7 @@ package com.kay.concurrency.singleton;
 
 import com.kay.concurrency.annotations.Recommend;
 import com.kay.concurrency.annotations.ThreadSafe;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Created by kay on 2018/5/28.
@@ -10,6 +11,7 @@ import com.kay.concurrency.annotations.ThreadSafe;
  */
 @ThreadSafe
 @Recommend
+@Log4j2
 public class EnumSingleton {
 
     private EnumSingleton() {
@@ -21,8 +23,8 @@ public class EnumSingleton {
     }
 
     public static void main(String[] args) {
-        System.out.println(EnumSingleton.getSingleton());
-        System.out.println(EnumSingleton.getSingleton());
+        log.info(EnumSingleton.getSingleton());
+        log.info(EnumSingleton.getSingleton());
 
     }
 

@@ -4,6 +4,7 @@ import com.kay.concurrency.annotations.ThreadSafe;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
@@ -11,6 +12,7 @@ import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
  * Created by kay on 2018/5/27. AtomicIntegerFieldUpdater AtomicIntegerFieldUpdater 指定摸个对象的属性原子性更新
  */
 
+@Log4j2
 @ThreadSafe
 @NoArgsConstructor
 public class AtomicIntegerFieldUpdaterDemo {
@@ -30,15 +32,15 @@ public class AtomicIntegerFieldUpdaterDemo {
         AtomicIntegerFieldUpdaterDemo example = new AtomicIntegerFieldUpdaterDemo();
 
         if (updater.compareAndSet(example, 10, 15)) {
-            System.out.println(("1:更新成功，count:" + example.getCount()));
+            log.info(("1:更新成功，count:" + example.getCount()));
         } else {
-            System.out.println("1:更新失败，count:" + example.getCount());
+            log.info("1:更新失败，count:" + example.getCount());
         }
 
         if (updater.compareAndSet(example, 10, 15)) {
-            System.out.println("2:更新成功，count:" + example.getCount());
+            log.info("2:更新成功，count:" + example.getCount());
         } else {
-            System.out.println("2:更新失败，count:" + example.getCount());
+            log.info("2:更新失败，count:" + example.getCount());
         }
 
     }

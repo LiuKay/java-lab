@@ -1,8 +1,11 @@
 package com.kay.generic;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * Generic Method
  */
+@Log4j2
 public class GenericMethodTest {
 
     // generic method printArray
@@ -11,7 +14,7 @@ public class GenericMethodTest {
         for (E element : inputArray) {
             System.out.printf("%s ", element);
         }
-        System.out.println();
+        log.info("===");
     }
 
     public static void main(String[] args) {
@@ -20,13 +23,13 @@ public class GenericMethodTest {
         Double[] doubleArray = {1.1, 2.2, 3.3, 4.4};
         Character[] charArray = {'H', 'E', 'L', 'L', 'O'};
 
-        System.out.println("Array integerArray contains:");
+        log.info("Array integerArray contains:");
         printArray(intArray);   // pass an Integer array
 
-        System.out.println("\nArray doubleArray contains:");
+        log.info("\nArray doubleArray contains:");
         printArray(doubleArray);   // pass a Double array
 
-        System.out.println("\nArray characterArray contains:");
+        log.info("\nArray characterArray contains:");
         printArray(charArray);   // pass a Character array
     }
 }

@@ -1,5 +1,7 @@
 package com.kay.io.timesocket;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -8,6 +10,7 @@ import java.nio.channels.SocketChannel;
 /**
  * Created by kay on 2017/9/8.
  */
+@Log4j2
 public class TimeClient {
 
     //连接超时时间
@@ -34,7 +37,7 @@ public class TimeClient {
                     buffer.flip();
                     byte[] response = new byte[buffer.remaining()];
                     buffer.get(response);
-                    System.out.println("receive response:" + new String(response));
+                    log.info("receive response:" + new String(response));
                     buffer.clear();
                 }
                 Thread.sleep(5000);

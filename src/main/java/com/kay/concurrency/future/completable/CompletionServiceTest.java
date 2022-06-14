@@ -1,9 +1,17 @@
 package com.kay.concurrency.future.completable;
 
 import com.kay.concurrency.utils.Utils;
+import lombok.extern.log4j.Log4j2;
 
-import java.util.concurrent.*;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
 
+@Log4j2
 public class CompletionServiceTest {
 
     static ExecutorService executorService = Executors.newFixedThreadPool(10);
@@ -36,9 +44,9 @@ public class CompletionServiceTest {
         executorService.submit(f3);
 
         // all the task can return until the previous task get return
-        System.out.println(f1.get());
-        System.out.println(f2.get());
-        System.out.println(f3.get());
+        log.info(f1.get());
+        log.info(f2.get());
+        log.info(f3.get());
     }
 
     /**
@@ -61,7 +69,7 @@ public class CompletionServiceTest {
 
         for (int i = 0; i < 3; i++) {
             String s = service.take().get();
-            System.out.println(s);
+            log.info(s);
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.kay.io.buffer;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -21,6 +23,7 @@ import java.nio.channels.FileChannel;
  * <p>
  * 底层相关代码：{@link sun.nio.ch.IOUtil #getTemporaryDirectBuffer(int)}
  */
+@Log4j2
 public class ReadByHeapByteBufferTest {
 
     public static void main(String[] args) throws Exception {
@@ -48,7 +51,7 @@ public class ReadByHeapByteBufferTest {
             }).start();
         }
 
-        System.out.println("test end");
+        log.info("test end");
     }
 
     //拿 DirectByteBuffer 来作为一个载体

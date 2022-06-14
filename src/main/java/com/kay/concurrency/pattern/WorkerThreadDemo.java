@@ -1,13 +1,20 @@
 package com.kay.concurrency.pattern;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
+import java.util.concurrent.TimeUnit;
 
 import static com.kay.concurrency.utils.NamedThreadFactory.namedThreadFactory;
 import static com.kay.concurrency.utils.Utils.sleep;
@@ -17,6 +24,7 @@ import static com.kay.concurrency.utils.Utils.sleep;
  * <p>
  * 实际上线程池便是 Worker Thread 模式最好的例子
  */
+@Log4j2
 public class WorkerThreadDemo {
 
     public static void main(String[] args) throws InterruptedException {
@@ -32,7 +40,7 @@ public class WorkerThreadDemo {
         //L1 阶段的闭锁
         CountDownLatch l1 = new CountDownLatch(2);
         for (int i = 0; i < 2; i++) {
-            System.out.println("L1");
+            log.info("L1");
             // 执行 L1 阶段任务
             es.execute(() -> {
                 //L2 阶段的闭锁
@@ -40,7 +48,7 @@ public class WorkerThreadDemo {
                 // 执行 L2 阶段子任务
                 for (int j = 0; j < 2; j++) {
                     es.execute(() -> {
-                        System.out.println("L2");
+                        log.info("L2");
                         l2.countDown();
                     });
                 }
@@ -86,7 +94,7 @@ public class WorkerThreadDemo {
         }
         // 等着 L1 阶段任务执行完
         l1.await();
-        System.out.println("end");
+        log.info("end");
     }
 
 

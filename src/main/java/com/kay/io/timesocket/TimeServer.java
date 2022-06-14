@@ -1,5 +1,7 @@
 package com.kay.io.timesocket;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -22,6 +24,7 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * 真正意义上实现了一个线程服务于多个client
  */
+@Log4j2
 public class TimeServer {
 
     private static final ExecutorService executor = new ThreadPoolExecutor(5, 10, 10, TimeUnit.SECONDS,
@@ -53,7 +56,7 @@ public class TimeServer {
                 servChannel.configureBlocking(false);    //设置非阻塞模式
                 servChannel.bind(new InetSocketAddress(port));  //绑定端口
                 servChannel.register(selector, SelectionKey.OP_ACCEPT); //监听准备连接
-                System.out.println("TimeServer 正在监听端口：" + port);
+                log.info("TimeServer 正在监听端口：" + port);
             } catch (IOException e) {
                 e.printStackTrace();
                 //初始化失败则推出，例如端口占用等
@@ -111,7 +114,7 @@ public class TimeServer {
                         ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
                         SocketChannel sc = ssc.accept();
                         sc.configureBlocking(false);
-                        System.out.println("--新请求接入,开始监听它发来的消息...");
+                        log.info("--新请求接入,开始监听它发来的消息...");
                         sc.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
                     }
 

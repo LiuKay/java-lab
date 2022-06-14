@@ -1,5 +1,7 @@
 package com.kay.concurrency.synchronizer;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -10,7 +12,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.kay.concurrency.utils.Utils.sleep;
 
-
+@Log4j2
 public class ReadWriteLockDemo {
 
     private static final ReentrantLock lock = new ReentrantLock();
@@ -47,7 +49,7 @@ public class ReadWriteLockDemo {
         countDownLatch.await();
         long end = System.nanoTime();
         executor.shutdown();
-        System.out.println("testRead:" + (end - start) / 1000);
+        log.info("testRead:" + (end - start) / 1000);
     }
 
     static void testNormalRead(ReadWriteLockDemo demo) throws InterruptedException {
@@ -63,7 +65,7 @@ public class ReadWriteLockDemo {
         countDownLatch.await();
         long end = System.nanoTime();
         executor.shutdown();
-        System.out.println("normalRead:" + (end - start) / 1000);
+        log.info("normalRead:" + (end - start) / 1000);
     }
 
     static void testWrite(ReadWriteLockDemo demo) throws InterruptedException {
@@ -79,7 +81,7 @@ public class ReadWriteLockDemo {
         countDownLatch.await();
         long end = System.nanoTime();
         executor.shutdown();
-        System.out.println("testWrite:" + (end - start) / 1000);
+        log.info("testWrite:" + (end - start) / 1000);
     }
 
     public int normalRead() {
@@ -163,7 +165,7 @@ public class ReadWriteLockDemo {
             }
 
             try {
-                System.out.println("do sth.");
+                log.info("do sth.");
 //                use(data);
             } finally {
                 rwl.readLock().unlock();

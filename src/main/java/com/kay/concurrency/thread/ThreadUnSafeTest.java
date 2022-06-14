@@ -58,7 +58,7 @@ public class ThreadUnSafeTest {
 
         countDownLatch.await();
         executorService.shutdown();
-        System.out.println("请求完毕");
+        log.info("请求完毕");
     }
 
 

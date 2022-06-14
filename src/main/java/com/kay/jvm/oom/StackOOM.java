@@ -1,10 +1,13 @@
 package com.kay.jvm.oom;
 
+import lombok.extern.log4j.Log4j2;
+
 /**
  * VM Args:-Xss128k
  * <p>
  * StackOverflow: max stack length OutOfMemory: cannot create native threads
  */
+@Log4j2
 public class StackOOM {
 
     private int stackLength = 1;
@@ -14,7 +17,7 @@ public class StackOOM {
         try {
             oom.stackLeak();
         } catch (Throwable e) {
-            System.out.println("stack length:" + oom.stackLength);
+            log.info("stack length:" + oom.stackLength);
             throw e;
         }
     }

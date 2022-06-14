@@ -1,8 +1,11 @@
 package com.kay.io.buffer;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 
+@Log4j2
 public class BufferCreateDemo {
 
     public static void main(String[] args) {
@@ -20,7 +23,7 @@ public class BufferCreateDemo {
 
     public static void printBuffers(Buffer... buffers) {
         for (Buffer buffer : buffers) {
-            System.out.println("capacity=" + buffer.capacity()
+            log.info("capacity=" + buffer.capacity()
                     + ",limit=" + buffer.limit()
                     + ",position=" + buffer.position()
                     + ",hasRemaining:" + buffer.hasArray()

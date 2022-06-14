@@ -1,5 +1,7 @@
 package com.kay.concurrency.singleton;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -8,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * 单例注册表，可被继承
  */
+@Log4j2
 public class SingletonReg {
 
     private final static Map<String, Object> singletonObjects = new ConcurrentHashMap<String, Object>(
@@ -38,8 +41,8 @@ public class SingletonReg {
 
     public static void main(String[] args) {
 
-        System.out.println(getInstance(null));
-        System.out.println(getInstance(null));
+        log.info(getInstance(null));
+        log.info(getInstance(null));
 
     }
 }
